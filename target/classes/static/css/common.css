@@ -1,0 +1,42 @@
+*{
+    /* --color-1:#72A2FF; */
+    --color-1:rgba(72,A2,FF,00);
+    --color-2:#0F1A3E;
+    --color-3:#3F51B5;
+    --color-4:#0C1633;
+    --color-5:#FFFFFF;
+}
+
+#sidebar_open{
+    position: absolute;
+    width: 260px;
+    height: 100vh;
+    left: 0px;
+    top: 0px;
+}
+
+#sidebar_open li{
+    width:80px;
+    height:80px;
+}
+
+#sidebar_open li * {
+    margin: auto;
+}
+
+#sidebar_open li img{
+    width: 24px;
+    height: 24px;
+}
+
+#sidebar_open li p{
+    font-size: 10px;
+}
+
+#sidebar_close{
+    position: absolute;
+    width: 80px;
+    height: 100vh;
+    left: 0px;
+    top: 0px;
+}

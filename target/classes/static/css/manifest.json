@@ -1,0 +1,13 @@
+{
+	"short_name": "WP",
+	"name": "WebPortal",
+	"start_url": "/",
+	"display": "standalone",
+	"icons": [
+		{
+			"src": "/img/favicon.ico",
+			"sizes": "16x16",
+			"type": "image/png"
+		}
+	]
+}
