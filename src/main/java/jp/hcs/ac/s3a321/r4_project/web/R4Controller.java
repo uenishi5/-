@@ -1,4 +1,4 @@
-package jp.hcs.ac.s3a321.r4_project;
+package jp.hcs.ac.s3a321.r4_project.web;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

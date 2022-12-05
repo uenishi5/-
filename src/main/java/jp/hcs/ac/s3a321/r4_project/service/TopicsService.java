@@ -1,4 +1,4 @@
-package jp.hcs.ac.s3a321.r4_project;
+package jp.hcs.ac.s3a321.r4_project.service;
 /*
  * Copyright (c) 2012 Google Inc.
  *
@@ -56,7 +56,7 @@ import java.util.regex.Pattern;
  *
  * @author Jeremy Walker
  */
-public class Topics {
+public class TopicsService {
 
     /** Global instance properties filename. */
     private static String PROPERTIES_FILENAME = "youtube.properties";
@@ -89,7 +89,7 @@ public class Topics {
         // Read the developer key from youtube.properties
         Properties properties = new Properties();
         try {
-            InputStream in = Topics.class.getResourceAsStream("/" + PROPERTIES_FILENAME);
+            InputStream in = TopicsService.class.getResourceAsStream("/" + PROPERTIES_FILENAME);
             properties.load(in);
 
         } catch (IOException e) {
