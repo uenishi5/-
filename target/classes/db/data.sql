@@ -2,6 +2,7 @@
 DELETE FROM user_m;
 DELETE FROM task_t;
 
+
 /* ユーザマスタのデータ（ADMIN権限） PASS:hcs2022 */
 INSERT INTO user_m (user_id, encrypted_password, user_name, role, enabled)
 VALUES('taro@xxx.co.jp', '$2a$10$yLURcbhXoVslVn5I0yQr3eBu088EP1XRfyYXpjGCEt993zbVmbjES', '情報太郎', 'ROLE_ADMIN', true);

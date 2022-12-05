@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="youtube">
+    <CLASSES>
+      <root url="file://$USER_HOME$/Downloads/youtube" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$USER_HOME$/Downloads/youtube" />
+    </SOURCES>
+    <jarDirectory url="file://$USER_HOME$/Downloads/youtube" recursive="false" />
+    <jarDirectory url="file://$USER_HOME$/Downloads/youtube" recursive="false" type="SOURCES" />
+  </library>
+</component>
