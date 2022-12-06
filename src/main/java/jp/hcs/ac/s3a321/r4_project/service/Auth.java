@@ -1,4 +1,4 @@
-package jp.hcs.ac.s3a321.r4_project;
+package jp.hcs.ac.s3a321.r4_project.service;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.auth.oauth2.StoredCredential;
