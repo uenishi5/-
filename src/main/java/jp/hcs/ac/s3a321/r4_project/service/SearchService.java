@@ -78,21 +78,7 @@ public class SearchService {
         return null;
     }
 
-    //ユーザーに検索内容を入力してもらう
-//    private static String getInputQuery() throws IOException {
-//
-//        String inputQuery = "";
-//
-//        System.out.print("Please enter a search term: ");
-//        BufferedReader bReader = new BufferedReader(new InputStreamReader(System.in));
-//        inputQuery = bReader.readLine();
-//
-//        if (inputQuery.length() < 1) {
-//            // If nothing is entered, defaults to "YouTube Developers Live."
-//            inputQuery = "YouTube Developers Live";
-//        }
-//        return inputQuery;
-//    }
+
     private static ArrayList<SearchResult> acquisition(Iterator<com.google.api.services.youtube.model.SearchResult> iteratorSearchResults, String query) {
         ArrayList<SearchResult> results = new ArrayList<>();
 
