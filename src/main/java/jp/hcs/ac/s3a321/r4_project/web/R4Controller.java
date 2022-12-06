@@ -13,8 +13,7 @@ public class R4Controller {
     private SearchService service;
 
     @GetMapping("/r4project/r4Index")
-    public String showList(Model model,String detail) {
-        model.addAttribute("youtubeList",service.getList(detail));
+    public String showList(Model model) {
         return "/projects/selectProject";
     }
 }
