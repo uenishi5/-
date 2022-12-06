@@ -1,4 +1,4 @@
-package jp.hcs.ac.s3a321.r4_project;
+package jp.hcs.ac.s3a321.r4_project.service;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpRequest;
@@ -17,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -75,7 +76,7 @@ public class Search {
             // Get query term from user.
             String queryTerm = getInputQuery();
 
-            YouTube.Search.List search = youtube.search().list("id,snippet");
+            YouTube.Search.List search = youtube.search().list(Collections.singletonList("id,snippet"));
             /*
              * It is important to set your API key from the Google Developer Console for
              * non-authenticated requests (found under the Credentials tab at this link:
@@ -88,7 +89,7 @@ public class Search {
              * We are only searching for videos (not playlists or channels). If we were searching for
              * more, we would add them as a string like this: "video,playlist,channel".
              */
-            search.setType("video");
+            search.setType(Collections.singletonList("video"));
             /*
              * This method reduces the info returned to only the fields we need and makes calls more
              * efficient.
