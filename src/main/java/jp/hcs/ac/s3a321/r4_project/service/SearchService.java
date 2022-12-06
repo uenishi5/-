@@ -10,17 +10,14 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.ResourceId;
 import com.google.api.services.youtube.model.SearchListResponse;
-import com.google.api.services.youtube.model.SearchResult;
 import com.google.api.services.youtube.model.Thumbnail;
+import jp.hcs.ac.s3a321.r4_project.entity.SearchResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +32,7 @@ public class SearchService {
 
     Properties properties = new Properties();
 
-    public void getList(String queryTerm){
+    public ArrayList<SearchResult> getList(String queryTerm){
         this.queryTerm = queryTerm;
         try{
             InputStream in = SearchService.class.getResourceAsStream("/" + PROPERTIES_FILENAME);
@@ -65,10 +62,10 @@ public class SearchService {
             //APIの実行と思われる
             SearchListResponse searchResponse = search.execute();
 
-            List<SearchResult> searchResultList = searchResponse.getItems();
+            List<com.google.api.services.youtube.model.SearchResult> searchResultList = searchResponse.getItems();
 
             if(searchResultList != null) {
-                prettyPrint(searchResultList.iterator(), queryTerm);
+                return acquisition(searchResultList.iterator(), queryTerm);
             }
 
             }catch (GoogleJsonResponseException e){
@@ -78,6 +75,7 @@ public class SearchService {
             }catch (Throwable e){
 //            return e;
         }
+        return null;
     }
 
     //ユーザーに検索内容を入力してもらう
@@ -95,12 +93,8 @@ public class SearchService {
 //        }
 //        return inputQuery;
 //    }
-    private static void prettyPrint(Iterator<SearchResult> iteratorSearchResults, String query) {
-
-        System.out.println("\n=============================================================");
-        System.out.println(
-                "   First " + NUMBER_OF_VIDEOS_RETURNED + " videos for search on \"" + query + "\".");
-        System.out.println("=============================================================\n");
+    private static ArrayList<SearchResult> acquisition(Iterator<com.google.api.services.youtube.model.SearchResult> iteratorSearchResults, String query) {
+        ArrayList<SearchResult> results = new ArrayList<>();
 
         if (!iteratorSearchResults.hasNext()) {
             System.out.println(" There aren't any results for your query.");
@@ -108,18 +102,20 @@ public class SearchService {
 
         while (iteratorSearchResults.hasNext()) {
 
-            SearchResult singleVideo = iteratorSearchResults.next();
+            com.google.api.services.youtube.model.SearchResult singleVideo = iteratorSearchResults.next();
             ResourceId rId = singleVideo.getId();
 
             // Double checks the kind is video.
             if (rId.getKind().equals("youtube#video")) {
                 Thumbnail thumbnail = (Thumbnail) singleVideo.getSnippet().getThumbnails().get("default");
 
-                System.out.println(" Video Id" + rId.getVideoId());
-                System.out.println(" Title: " + singleVideo.getSnippet().getTitle());
-                System.out.println(" Thumbnail: " + thumbnail.getUrl());
-                System.out.println("\n-------------------------------------------------------------\n");
+                SearchResult result = new SearchResult();
+                result.setVideoId(rId.getVideoId());
+                result.setTitle(singleVideo.getSnippet().getTitle());
+                result.setThumbnail(thumbnail.getUrl());
+                results.add(result);
             }
         }
+        return results;
     }
 }
