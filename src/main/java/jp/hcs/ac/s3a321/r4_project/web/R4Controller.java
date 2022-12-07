@@ -5,15 +5,25 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
+@RequestMapping("/r4project")
 @RequiredArgsConstructor
 public class R4Controller {
-    private SearchService service;
+    private final SearchService service;
 
-    @GetMapping("/r4project/r4Index")
-    public String showList(Model model) {
-        return "/r4project/r4Index";
+    @GetMapping("/r4Index")
+    public String showList() {
+        return "r4project/r4Index";
+    }
+
+    @PostMapping("/search")
+    public String SearchResult(@RequestParam String detail, Model model){
+        model.addAttribute("searchLists",service.getList(detail));
+        return "r4project/searchResult";
     }
 }

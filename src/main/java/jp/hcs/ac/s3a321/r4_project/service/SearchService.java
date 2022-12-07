@@ -25,6 +25,7 @@ public class SearchService {
     private  static final String PROPERTIES_FILENAME = "youtube.properties";
     private  static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     private static final JsonFactory JSON_FACTORY = new JacksonFactory();
+    //取得する動画の数
     private static final long NUMBER_OF_VIDEOS_RETURNED = 25;
     private static YouTube youtube;
 
