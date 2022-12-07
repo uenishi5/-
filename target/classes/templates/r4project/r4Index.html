@@ -1,15 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<div th:replace="common :: common-head"></div>
+<div th:replace="common :: common-script"></div>
+
 <head>
     <meta charset="UTF-8">
     <title>R4サイト</title>
 </head>
 <body>
+<div th:replace="common :: common-nav"></div>
+<div class="container">
+    <div class="row">
+
 <h1>youtube検索</h1>
 
 
 <iframe width="480" height="270" src="https://www.youtube.com/embed/M2cckDmNLMI"
         frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media;
         gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div></div>
 </body>
 </html>
