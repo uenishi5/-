@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>R4サイト</title>
@@ -11,5 +11,13 @@
 <iframe width="480" height="270" src="https://www.youtube.com/embed/M2cckDmNLMI"
         frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media;
         gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+<form action="#" th:action="@{/r4project/search}" method="post">
+    <label>
+        検索：<input type="text" name="detail"><br>
+    </label>
+    <input type="submit">
+</form>
 </body>
 </html>
