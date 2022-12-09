@@ -1,23 +1,37 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(~{::title}, ~{::body})}">
 <head>
-    <meta charset="UTF-8">
     <title>R4サイト</title>
 </head>
 <body>
-<h1>youtube検索</h1>
+<div class="title-font">
+<h1 class="mt-4">youtube検索</h1>
 
-
-<iframe width="480" height="270" src="https://www.youtube.com/embed/M2cckDmNLMI"
-        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media;
-        gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-
-<form action="#" th:action="@{/r4project/search}" method="post">
-    <label>
-        検索：<input type="text" name="detail"><br>
-    </label>
-    <input type="submit">
+<form action="#" th:action="@{/r4project/r4Index}" method="post" class="mt-6">
+    <div class="container">
+    <div class="row">
+        <div class="col-4">
+            <input type="text" class="form-control" name="detail" placeholder="好きな音楽を検索してください">
+        </div>
+        <div class="col-2">
+            <button type="submit" class="btn btn-primary">検索</button>
+        </div>
+    </div>
+    </div>
 </form>
+</div><br><br>
+<table>
+    <tr th:each="list : ${searchLists}">
+        <td class="mt-4">
+            <iframe width="240" height="135" th:src="@{https://www.youtube.com/embed/{id}(id=${list.videoId})}"
+                    frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media;
+                    gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </td>
+        <td th:text="${list.title}"></td>
+        <td><button type="button" class="btn btn-dark">＋</button></td>
+
+    </tr>
+</table>
 </body>
 </html>

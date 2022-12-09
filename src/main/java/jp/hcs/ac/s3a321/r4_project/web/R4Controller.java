@@ -21,9 +21,9 @@ public class R4Controller {
         return "r4project/r4Index";
     }
 
-    @PostMapping("/search")
+    @PostMapping("/r4Index")
     public String SearchResult(@RequestParam String detail, Model model){
         model.addAttribute("searchLists",service.getList(detail));
-        return "r4project/searchResult";
+        return "r4project/r4Index";
     }
 }

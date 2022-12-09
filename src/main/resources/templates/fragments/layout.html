@@ -4,16 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:replace="${title}">(default title)</title>
-    <link th:href="@{/css/inputField.css}" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script th:src="@{/js/inputField.js}"></script>
 </head>
 <body>
-<link th:href="@{/css/index.css}" rel="styleSheet" type="text/css">
+<link th:href="@{/css/r4header.css}" rel="styleSheet" type="text/css">
+<link th:href="@{/css/r4Index.css}" rel="styleSheet" type="text/css">
+<script th:src="@{/js/r4header.js}"></script>
+<header>
+        <h1>R4 YouTube mp4 Downloader</h1>
+        <nav>
+            <a href="#">ホーム</a>
+            <a href="#">検索</a>
+            <a href="#">プレイリスト</a>
+            <a href="#">音楽リスト</a>
+            <a href="/logout.html" th:href="@{/logout}"  class="btn btn-outline-primary">ログアウト</a>
+        </nav>
+</header>
 <div class="container" th:insert="${content}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
 <script src="https://kit.fontawesome.com/fc1acf5cb1.js" crossorigin="anonymous"></script>
 </body>

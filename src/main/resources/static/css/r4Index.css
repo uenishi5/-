@@ -1,0 +1,9 @@
+div.row{
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+
+}
+form{
+    display: flex;
+}
