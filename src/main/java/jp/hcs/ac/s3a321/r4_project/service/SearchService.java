@@ -34,13 +34,14 @@ public class SearchService {
     Properties properties = new Properties();
 
     public ArrayList<SearchResult> getList(String queryTerm){
+        ArrayList<SearchResult> searchResultLst = new ArrayList();
+        
         this.queryTerm = queryTerm;
-        try{
-            InputStream in = SearchService.class.getResourceAsStream("/" + PROPERTIES_FILENAME);
+        
+        try(InputStream in = SearchService.class.getResourceAsStream("/" + PROPERTIES_FILENAME)){
             properties.load(in);
         } catch (IOException e){
-            System.err.println("There was an error reading " + PROPERTIES_FILENAME + ": " + e.getCause()
-                    + " : " + e.getMessage());
+            System.err.println("There was an error reading " + PROPERTIES_FILENAME + ": " + e.getCause() + " : " + e.getMessage());
             System.exit(1);
         }
 
@@ -50,33 +51,32 @@ public class SearchService {
             }).setApplicationName("youtube-cmdline-search-sample").build();
 
             YouTube.Search.List search = youtube.search().list(Collections.singletonList("id,snippet"));
-
-            //APIキーを設定する
-            String apiKey = properties.getProperty("youtube.apikey");
+            String apiKey = properties.getProperty("youtube.apikey");//APIキーを設定する
+            System.out.println("apiKey=" + apiKey);
+            
             search.setKey(apiKey);
             search.setQ(queryTerm);
-
             search.setType(Collections.singletonList("video"));
-
             search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/default/url)");
             search.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
+            
             //APIの実行と思われる
             SearchListResponse searchResponse = search.execute();
-
             List<com.google.api.services.youtube.model.SearchResult> searchResultList = searchResponse.getItems();
 
             if(searchResultList != null) {
-                return acquisition(searchResultList.iterator(), queryTerm);
+                searchResultLst.addAll(acquisition(searchResultList.iterator(), queryTerm));
+                return searchResultLst;
             }
 
             }catch (GoogleJsonResponseException e){
-             //return e;
+                 //問題なし
             }catch (IOException e){
-//            return e;
+                 //問題なし
             }catch (Throwable e){
-//            return e;
+                 //問題なし
         }
-        return null;
+        return searchResultLst;
     }
 
 
