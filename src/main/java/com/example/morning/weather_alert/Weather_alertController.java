@@ -5,7 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.morning.main.MainController;
-
+/**警報注意報のコントローラー*/
 @Controller
 public class Weather_alertController {
 	@RequestMapping("/Weather_alert")
