@@ -1,0 +1,40 @@
+@charset "UTF-8";
+/* サブタイトル表示 */
+.subtitle{
+	font-weight: bold;
+	font-size: 23px;
+}
+/* 現在レートの表示デザイン */
+.chart-value{
+	font-weight: bold;
+	text-align: center;
+	font-size: 30px;
+}
+/* 現在レートを表示する箱 */
+.chart-context{
+	width:min(100%,540px);
+	margin-left: auto;
+	margin-right: auto;
+}
+/* レートの差表示デザイン */
+.chart-difference{
+	text-align: right;
+	margin-right:20px;
+	color: green;
+}
+/* 最高額最低額時価総額を表示するための箱 */
+.rising-and-falling{
+	column-count: 3;
+	box-sizing: border-box;
+	width: min(110%,500px);
+	margin-bottom: 15px;
+	border: solid 3px silver;
+	padding-left: 15px;
+	padding-top: 10px;
+	margin-left: auto;
+	margin-right: auto;
+}
+/* 文字の整え */
+.value-name{
+	margin-top: 0px;
+}

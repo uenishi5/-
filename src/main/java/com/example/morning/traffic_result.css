@@ -1,0 +1,32 @@
+@charset "UTF-8";
+
+.result_table th{
+	border: solid 1px #ccc;
+}
+.result_table td{
+	border: solid 1px #ccc;
+}
+.result_name {
+	background-color: #66FF99;
+}
+.result_table {
+	margin-left: auto;
+	margin-right: auto;
+}
+/* 交通情報デザイン */
+.result_table p {
+	margin: 1px;
+	font-size: 18px;
+}
+/* theadデザイン */
+.result_name span{
+	font-size: 18px;
+	padding: 1px;
+}
+
+/* 交通情報なし */
+.nashi {
+	font-size: 56px;
+	font-weight: bold;
+	text-align: center;
+}

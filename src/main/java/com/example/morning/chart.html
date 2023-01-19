@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Moring チャート画面</title>
+</head>
+<link rel="stylesheet" th:href="@{/css/chart.css}"
+	href="../static/css/chart.css">
+<link rel="stylesheet" th:href="@{/css/stay.css}"
+	href="../static/css/stay.css">
+<body>
+
+	<!-- メニューバー -->
+	<div class="menu-bar">
+		<div class="menu-today"><script src="js/days.js"></script></div>
+		<div class="menu-bar-menu">
+		<table>
+			<td><nobr><a th:href="@{/Weather}">天気</a></nobr>
+			<nobr><a th:href="@{/Weather_alert}">警報・注意報</a></nobr>
+			<td><nobr><p class="menu-bar-title"><a th:href="@{/main}"><img src="img/Morning.png"/></a></p></nobr>
+			<td><nobr><a th:href="@{/Horoscope}">占い</a></nobr>
+			<nobr><a th:href="@{/Traffic}">交通</a></nobr>
+			<nobr><a th:href="@{/Chart}">チャート</a></nobr>
+		</table>
+		</div>
+		<!-- 台的なもの -->
+		<footer class="platform">
+			<p>© 2022 - 2023  HCS CORPORATION.</p>
+		</footer>
+	</div>
+	<div class="speace"><p>error</p></div>
+	
+	<!-- チャートメイン画面 -->
+	<nobr><p class="title">BitCoinチャート情報</p></nobr>
+	<div class="title-space"></div>
+		
+	<!-- チャート情報context -->
+	<div class="chart-context" th:object="${ChartEntity.chartList[0]}">
+		<nobr><p class="subtitle">・ビットコイン（Bitcoin）/日本円のチャート</p></nobr>
+		<!-- 現在チャートの表示 -->
+		<p class="chart-value"><span th:text="*{bitcoin}"></span></p>
+		<p class="chart-difference"><span th:text="*{rate}"></span>%</p>
+	</div>
+	
+	<!-- レートの上がり下がりの表示 -->
+	<div class="rising-and-falling" th:object="${ChartEntity.chartList[0]}">
+	
+		<p class="value-name">最高値(24時間)</p>
+		<p class="value-name">最安値(24時間)</p>      
+		<p class="value-name">時間総額</p> 
+	
+	<!-- 最高値 -->
+		<p><span th:text="*{maxrate}"></span></p>
+	<!-- 最安値 -->
+		<p><span th:text="*{minrate}"></span></p> 
+	<!-- 時価総額 -->
+		<p><span th:text="*{market_capitalization}"></span></p>
+			
+		<p>円</p>
+		<p>円</p>
+		<p>円</p>
+	</div>
+	<!-- 下のスペース -->
+	<div class="bottom-space"></div>
+</body>
+</html>

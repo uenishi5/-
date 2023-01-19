@@ -1,0 +1,62 @@
+@charset "UTF-8";
+
+/* 天気を表示する地域名を表示するデザイン */
+.specify-city{
+	font-size: 2.7em;
+	font-weight: bold;
+}
+/* 箱をまとめる箱 */
+.weather-menu{
+	display: flex;
+   	flex-wrap: wrap;
+   	width: min(120%,1000px);
+   	margin-left: auto;
+   	margin-right: auto;
+}
+/* その日の天気の情報の箱 */
+.weather-box{
+	margin-left: 15px;
+	margin-bottom: 15px;
+	width: 300px;
+	border: solid 3px #000000;
+}
+/* imgのデザイン */
+.weather-box img{
+	width: 300px;
+}
+/* 仕切り線 */
+.weather-box hr{
+	border: solid 1px #000000;
+}
+/* 日付のデザイン */
+.weather-day{
+	text-align: center;
+	font-size: 23px;
+	margin-bottom: -5px;
+	margin-top: 5px;
+}
+/* 天気の名 */
+.weather{
+	font-size: 25px;
+	font-weight: bold;
+	margin-left: 30px;
+	margin-bottom: -10px;
+}
+
+/* 降水量 */
+.precipitation-amount{
+	text-align: right;
+	margin-right: 25px;
+}
+/* 最高気温 */
+.high-temperature{
+	text-align: right;
+	color: red;
+	margin-right: 25px;
+}
+/* 最低気温 */
+.low-temperature{
+	color: blue;
+	text-align: right;
+	margin-right: 25px;
+}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Morning 交通情報</title>
+</head>
+<link rel="stylesheet" th:href="@{/css/traffic.css}"
+	href="../static/css/traffic.css">
+<link rel="stylesheet" th:href="@{/css/stay.css}"
+	href="../static/css/stay.css">
+<body >
+
+	<!-- メニューバー -->
+	<div class="menu-bar">
+		<div class="menu-today"><script src="js/days.js"></script></div>
+		<div class="menu-bar-menu">
+		<table>
+			<td><nobr><a th:href="@{/Weather}">天気</a></nobr>
+			<nobr><a th:href="@{/Weather_alert}">警報・注意報</a></nobr>
+			<td><nobr><p class="menu-bar-title"><a th:href="@{/main}"><img src="img/Morning.png"/></a></p></nobr>
+			<td><nobr><a th:href="@{/Horoscope}">占い</a></nobr>
+			<nobr><a th:href="@{/Traffic}">交通</a></nobr>
+			<nobr><a th:href="@{/Chart}">チャート</a></nobr>
+		</table>
+		</div>
+		<!-- 台的なもの -->
+		<footer class="platform">
+			<p>© 2022 - 2023  HCS CORPORATION.</p>
+		</footer>
+	</div>
+	<div class="speace"><p>error</p></div>
+	
+	<p class="title">バス交通情報</p>
+
+	<!-- バス交通情報 -->
+	<div class="traffic-bus">
+		<p class="subtitle"><nobr>・札幌・小樽・空知方面　市内・郊外線</nobr></p>
+	<form method="get" th:action="@{/TrafficBus}">
+		<table class="tbl-bus">
+  			<tr>
+    		<th><p>札幌<br>
+    		<nobr>石狩・北広島・千歳・江別</nobr></p></th>
+    			<td>
+    			<nobr><button value="0" name="bus">札幌北・石狩方面</button></nobr></td>
+    			<td><nobr><button value="1" name="bus">札幌南・北広島・千歳・江別方面</button></nobr></td>
+  			</tr>
+  			<tr>
+    		<th><p>小樽</p></th>
+    			<td><button value="2" name="bus">小樽市内線</button></td>
+    			<td><button value="3" name="bus">小樽郊外線</button></td>
+  			</tr>
+  			<tr class="last">
+    		<th><p>滝川・岩見沢</p></th>
+    			<td><button value="4" name="bus">滝川地区</button></td>
+    			<td><button value="5" name="bus">岩見沢地区</button></td>
+  			</tr>
+		</table>
+	</form>
+	</div>
+	<!-- 下のスペース -->
+	<div class="bottom-space"></div>
+</body>
+</html>

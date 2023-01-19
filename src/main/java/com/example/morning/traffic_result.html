@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<link rel="stylesheet" th:href="@{/css/traffic_result.css}"
+	href="../static/css/traffic.css">
+<link rel="stylesheet" th:href="@{/css/stay.css}"
+	href="../static/css/stay.css">
+<body>
+
+	<!-- メニューバー -->
+	<div class="menu-bar">
+		<div class="menu-today"><script src="js/days.js"></script></div>
+		<div class="menu-bar-menu">
+		<table>
+			<td><nobr><a th:href="@{/Weather}">天気</a></nobr>
+			<nobr><a th:href="@{/Weather_alert}">警報・注意報</a></nobr>
+			<td><nobr><p class="menu-bar-title"><a th:href="@{/main}"><img src="img/Morning.png"/></a></p></nobr>
+			<td><nobr><a th:href="@{/Horoscope}">占い</a></nobr>
+			<nobr><a th:href="@{/Traffic}">交通</a></nobr>
+			<nobr><a th:href="@{/Chart}">チャート</a></nobr>
+		</table>
+		</div>
+		<!-- 台的なもの -->
+		<footer class="platform">
+			<p>© 2022 - 2023  HCS CORPORATION.</p>
+		</footer>
+	</div>
+	<div class="speace"><p>error</p></div>
+	
+	<!-- タイトル -->
+	<p class="title">バス交通情報</p>
+	
+	<!-- 交通情報有りの場合 -->
+	<th:block th:if="!${flg}">
+	<!-- バス情報結果画面表 -->
+	<table class="result_table">
+		<thead>
+			<tr class="result_name">
+				<th><span>路線名</span></th>
+				<th>
+					<span>方面</span>
+				</th>
+				<th>
+					<nobr><span>運行状況</span></nobr>
+				</th>
+				<th>
+					<span>備考</span>
+				</th>
+			</tr>
+		</thead>
+		
+		<th:block th:each="result : ${TrafficEntity.trafficrosenList}">
+			<th:block th:if="${result.rosen != null}">
+			<tbody>
+			</th:block>
+				<tr>
+					<th:block th:if="${result.rosen != null}">
+						<th rowspan="2"><nobr><p th:text="${result.rosen}"></p></nobr></th>
+					</th:block>
+					<td><nobr><p th:text="${result.houmen}"></p></nobr></td>
+					<td><nobr><p th:text="${result.situation}"></p></nobr></td>
+					<td><p th:text="${result.remarks}"></p></td>
+				</tr>
+			<th:block th:if="${result.rosen == null}">
+			</tbody>
+			</th:block>
+		</th:block>
+	</table>
+	</th:block>
+	
+	<!-- 交通情報なしの場合 -->
+	<th:block th:if="${flg}">
+	<!-- 交通情報なしの画面 -->
+		<p class="nashi">交通情報なし</p>
+	</th:block>
+
+	<br>
+	<a href="" onclick="window.history.back(); return false;">＜＜前のページに戻る</a>
+</body>
+</html>

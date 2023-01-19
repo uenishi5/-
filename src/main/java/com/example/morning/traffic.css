@@ -1,0 +1,68 @@
+@charset "UTF-8";
+
+/* バスの交通情報の箱 */
+.traffic-bus{
+	width: min(200%,650px);
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 15px;
+}
+/* サブタイトルの表示デザイン */
+.subtitle{
+	margin-left: 10px;
+	font-size: 25px;
+}
+/* 交通情報の現状表記 */
+.comment {
+	margin-left: 10px;
+}
+
+
+.subtitle {
+  font-size: 27px;
+  font-weight: bold;
+  text-align: center;
+  margin: 60px auto 40px;
+}
+.tbl-bus table {
+  margin: 20px auto;
+}
+.tbl-bus th {
+  background: #000;
+  border: solid 1px #ccc;
+  color: #fff;
+  padding: 10px;
+  font-size: 23px;
+}
+.tbl-bus td {
+  border: solid 1px #ccc;
+  padding: 10px;
+}
+.tbl-bus button {
+	background-color: white;
+	font-size: 20px;
+	border: none;
+	text-decoration: underline;
+	color: #4B0082;
+}
+ 
+@media screen and (max-width: 640px) {
+  .last td:last-child {
+    border-bottom: solid 1px #ccc;
+    width: 100%;
+  }
+  .tbl-bus {
+    width: 80%;
+  }
+  .tbl-bus th,
+  .tbl-bus td {
+	border-bottom: none;
+    display: block;
+    width: 100%;
+  }
+}
+
+.tbl-bus a,
+.tbl-bus p{
+	font-size: 20px;
+}

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Morning 注意報・警報画面</title>
+</head>
+<link rel="stylesheet" th:href="@{/css/alert.css}"
+	href="../static/css/alert.css">
+<link rel="stylesheet" th:href="@{/css/stay.css}"
+	href="../static/css/stay.css">
+<body>
+
+	<!-- メニューバー -->
+	<div class="menu-bar">
+		<div class="menu-today"><script src="js/days.js"></script></div>
+		<div class="menu-bar-menu">
+		<table>
+			<td><nobr><a th:href="@{/Weather}">天気</a></nobr>
+			<nobr><a th:href="@{/Weather_alert}">警報・注意報</a></nobr>
+			<td><nobr><p class="menu-bar-title"><a th:href="@{/main}"><img src="img/Morning.png"/></a></p></nobr>
+			<td><nobr><a th:href="@{/Horoscope}">占い</a></nobr>
+			<nobr><a th:href="@{/Traffic}">交通</a></nobr>
+			<nobr><a th:href="@{/Chart}">チャート</a></nobr>
+		</table>
+		</div>
+		<!-- 台的なもの -->
+		<footer class="platform">
+			<p>© 2022 - 2023  HCS CORPORATION.</p>
+		</footer>
+	</div>
+	<div class="speace"><p>error</p></div>
+	
+	<!-- タイトル -->
+	<p class="title">札幌市の警報・注意報</p>
+	<div class="title-space"></div>
+	
+	<!-- アラートcontext -->
+	<div class="comment-block">
+	<table>
+		<td><p class="now-alert">現在の警報・注意報</p></td>
+	
+	<!-- 現在の注意報警報 -->
+	<th:block th:each="alert : ${Weather_alert.weather_alertnameList}">
+		<td><p th:class="${alert.alert_color}"><span th:text="${alert.name}"></span></p>
+	</th:block>
+	</table>
+	<br>
+	</div>
+
+	<!-- 今日と明日午前までの警報・注意報-- 時間ごと -->
+	<th:block th:if="!${flg}">
+	<table class="alert-context">
+	<tbody>
+	
+		<!-- 日付の表示 -->
+		<tr class="day-box">
+			<th>日付</th>
+			<th colspan="5">
+			<span>今日</span>
+			</th>
+			<th colspan="5">
+			<span>明日</span>
+			</th>
+		</tr>
+		
+		<!-- 時間帯の表示 -->
+		<tr class="day-time" th:object="${Weather_alert.weather_dateList[0]}">
+		<th>時間</th>
+			<th><span th:text="*{date1}"></span></th>
+			<th><span th:text="*{date2}"></span></th>
+			<th><span th:text="*{date3}"></span></th>
+			<th><span th:text="*{date4}"></span></th>
+			<th><span th:text="*{date5}"></span></th>
+			<th><span th:text="*{date6}"></span></th>
+			<th><span th:text="*{date7}"></span></th>
+			<th><span th:text="*{date8}"></span></th>
+			<th><span th:text="*{date9}"></span></th>
+			<th><span th:text="*{date10}"></span></th>
+			
+		</tr>
+		
+		<!-- 災害の表示いつまで続くかの表示 -->
+		<th:block th:each="alert : ${Weather_alert.weather_alertList}">
+		<tr class="disaster">
+		<th class="dis"><span th:text="${alert.name}"></span></th>
+			<th th:class="${alert.alertdata1class}"><small hidden th:text="${alert.alertdata1}" class="line"></small></th>
+			<th th:class="${alert.alertdata2class}"><small hidden th:text="${alert.alertdata2}" class="line"></small></th>
+			<th th:class="${alert.alertdata3class}"><small hidden th:text="${alert.alertdata3}" class="line"></small></th>
+			<th th:class="${alert.alertdata4class}"><small hidden th:text="${alert.alertdata4}" class="line"></small></th>
+			<th th:class="${alert.alertdata5class}"><small hidden th:text="${alert.alertdata5}" class="line"></small></th>
+			<th th:class="${alert.alertdata6class}"><small hidden th:text="${alert.alertdata6}" class="line"></small></th>
+			<th th:class="${alert.alertdata7class}"><small hidden th:text="${alert.alertdata7}" class="line"></small></th>
+			<th th:class="${alert.alertdata8class}"><small hidden th:text="${alert.alertdata8}" class="line"></small></th>
+			<th th:class="${alert.alertdata9class}"><small hidden th:text="${alert.alertdata9}" class="line"></small></th>
+			<th th:class="${alert.alertdata10class}"><small hidden th:text="${alert.alertdata10}" class="line"></small></th>
+		</tr>
+		</th:block>
+	</tbody>
+	</table>
+	</th:block>
+	<!-- 今日と明日午前までの警報・注意報-- 時間ごと -->
+	<th:block th:if="!${flg}">
+	<table class="alert-context2">
+	<tbody>	
+		<!-- 日付帯の表示 -->
+		<tr class="day-time" th:object="${Weather_alert.weather_dateList[0]}">
+		<th>日付</th>
+			<th><nobr><span th:text="*{alertdaydate1}"></span></nobr></th>
+			<th><nobr><span th:text="*{alertdaydate2}"></span></nobr></th>
+			<th><span th:text="*{alertdaydate3}"></span></th>
+			<th><span th:text="*{alertdaydate4}"></span></th>
+			
+		</tr>
+		
+		<!-- 災害の表示いつまで続くかの表示 -->
+		<th:block th:each="alert : ${Weather_alert.weather_alert2List}">
+		<tr class="disaster">
+		<th class="dis"><span th:text="${alert.name}"></span></th>
+			<th th:class="${alert.dayalertdata1class}"><small hidden th:text="${alert.alert1}"></small></th>
+			<th th:class="${alert.dayalertdata2class}"><small hidden th:text="${alert.alert2}"></small></th>
+			<th th:class="${alert.dayalertdata3class}"><small hidden th:text="${alert.alert3}"></small></th>
+			<th th:class="${alert.dayalertdata4class}"><small hidden th:text="${alert.alert4}"></small></th>
+		</tr>
+		</th:block>
+	</tbody>
+	</table>
+	</th:block>
+	<!-- 上記注意報警報の説明 -->
+	<div class="alert-explanation">
+		<ul class="alert-type">
+			<li><span class="special-alarm"><span>特別警報</span></span></li>
+			<li><span class="alarm"><span>　警報　</span></span></li>
+			<li><span class="advisory"><span>注 意 報</span></span></li>
+			<li><span class="none-alert"><span>発表なし</span></span></li>
+		</ul>
+		<hr>
+		<div class="special-type">
+			<p><span class="alarm"><span>　警　報　!　</span></span>
+			　今後、特別警報に切り替える可能性が高い警報</p>
+			
+			<p><span class="advisory"><span>　注 意 報 !　</span></span>
+			　今後、警報に切り替える可能性が高い注意報</p>
+		</div>
+	</div>
+	<!-- 下のスペース -->
+	<div class="bottom-space"></div>
+	
+	<script src="js/line.js"></script>
+</body>
+</html>

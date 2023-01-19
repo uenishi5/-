@@ -1,0 +1,71 @@
+@charset "UTF-8";
+
+/* タイトル */
+.title{
+	font-size: 45px;
+	padding-top: 20px;
+	padding-left: 10px;
+	font-weight: bold;
+}
+/* メニューバー */
+.menu-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #CC9966;
+  text-align:center;
+}
+/* メニューバースペース */
+.speace {
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  text-align:center;
+  font-size: 2.5em;
+}
+/* 遷移ボタンのデザイン */
+.menu-bar a {
+	float: center;
+    padding: 20px 30px;
+    text-align: center;
+    color: #444;
+    font-size: 1.8em;
+}
+.menu-bar-menu {
+	margin-left: auto;
+	margin-right: auto;
+	width: min(110%,1100px);
+}
+
+.menu-bar-title {
+	font-size: 1.8em;
+}
+/* 今日の日付の表示y/m/d/w */
+.menu-today{
+	font-size: 30px;
+	text-align: right;
+	color: white;
+	margin-top: 5px;
+	margin-bottom: -40px;
+	margin-right: 5px;
+}
+
+/* 台的なもの */
+.platform{
+	background-color: #CC9966;
+	width: 100%;
+	height: 50px;
+	bottom: 0;
+	position: fixed;
+}
+/* 社名 */
+.platform p{
+	color: #555;
+	text-align: left;
+	margin-left: 15px;
+}
+.bottom-space {
+	height: 100px;
+}

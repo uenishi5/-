@@ -1,0 +1,163 @@
+@charset "UTF-8";
+/* アラート画面 時間ごと */
+.alert-context{
+   	width: 800px;
+   	margin-left: auto;
+   	margin-right: auto;
+	border: solid 3px #000000;
+	margin-bottom: 20px;
+}
+/* アラート画面 日ごと */
+.alert-context2 {
+   	width: 550px;
+   	margin-left: auto;
+   	margin-right: auto;
+	border: solid 3px #000000;
+	margin-bottom: 20px;
+}
+/* コメントのずらし */
+.comment-block{
+	margin-left: auto;
+	margin-right: auto;
+	width: 800px;
+}
+/* 現在の警報注意報デザイン */
+.now-alert {
+	font-size: 25px;
+}
+/* 災害に対するコメント */
+.comment {
+	font-size: 20px;
+	margin-left: 30px;
+	margin-top:0;
+}
+/* 災害のライン */
+th {
+	border: 1px solid rgb(190, 190, 190);
+}
+/* 現在の警報注意報の箱 */
+.alert-type li{
+	display: inline-block;
+    vertical-align: middle;
+    border: 1px solid #000;
+    margin-right: 10px;
+}
+/* ゆとり作成 */
+.alert-type span{
+	margin: 1px;
+}
+/* ------------
+	説明エリア
+--------------*/
+/* 説明の箱 */
+.alert-explanation {
+	width: min(100%,600px);
+   	margin-left: auto;
+   	margin-right: auto;
+	border: solid 3px #000000;
+	margin-bottom: 20px;
+}
+/* ------------------------- 
+	災害の警告パターンの色別
+------------------------- */
+/* 特別警報デザイン */
+.special-alarm {
+	background-color: black;
+	color: white;
+}
+/* 警報デザイン */
+.alarm {
+	background-color: red;
+	color: white;
+}
+/* 注意報デザイン */
+.advisory {
+	background-color: yellow;
+}
+/* 発表なしデザイン */
+.none-alert{
+	background-color: whitesmoke;
+}
+/* ボーダーライン */
+hr {
+	border: solid 1px #BBBBBB;
+}
+/* 文字のゆとり */
+.special-type {
+	padding-left: 10px;
+}
+/* 区切り線 */
+.special-type span span{
+	border: 1px solid #000;
+}
+small {
+	font-size: .8125rem;
+    line-height: 1.35em!important;
+}
+/* 災害　色 */
+.yellow{
+	background-color: yellow;
+	font-size: 20px;
+	width: 60px;
+	margin-left: 15px;
+	text-align: center;
+	border: 2px solid #000000;
+}
+.red{
+	background-color: red;
+	color: white;
+	font-size: 20px;
+	width: 60px;
+	margin-left: 15px;
+	text-align: center;
+	border: 2px solid #000000;
+}
+.black{
+	background-color: black;
+	color: white;
+	font-size: 20px;
+	width: 60px;
+	margin-left: 15px;
+	text-align: center;
+	border: 2px solid #000000;
+}
+.white{
+	background-color: white;
+	color: black;
+	font-size: 20px;
+	width: 85px;
+	margin-left: 15px;
+	text-align: center;
+	border: 2px solid #000000;
+}
+
+/* 災害ライン */
+
+.disaster .yellow {
+	color: yellow;
+	background-color: yellow;
+	border: none;
+}
+.disaster .red {
+	color: red;
+	background-color: red;
+	border: none;
+}
+.disaster .black{
+	color: black;
+	background-color: black;
+	border: none;
+}
+.disaster .white{
+	color: white;
+	background-color: white;
+	border: none;
+}
+/* 日ごとの調節 */
+.day-time th {
+	width: 100px;
+}
+/* 時間ごとの調節 */
+.day-box th {
+	width: 150px;
+}

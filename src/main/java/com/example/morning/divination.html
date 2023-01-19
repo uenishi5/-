@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Morning 占い画面</title>
+</head>
+<link rel="stylesheet" th:href="@{/css/divination.css}"
+	href="../static/css/divination.css">
+<link rel="stylesheet" th:href="@{/css/stay.css}"
+	href="../static/css/stay.css">
+<body>
+
+	<!-- メニューバー -->
+	<div class="menu-bar">
+		<div class="menu-today"><script src="js/days.js"></script></div>
+		<div class="menu-bar-menu">
+		<table>
+			<td><nobr><a th:href="@{/Weather}">天気</a></nobr>
+			<nobr><a th:href="@{/Weather_alert}">警報・注意報</a></nobr>
+			<td><nobr><p class="menu-bar-title"><a th:href="@{/main}"><img src="img/Morning.png"/></a></p></nobr>
+			<td><nobr><a th:href="@{/Horoscope}">占い</a></nobr>
+			<nobr><a th:href="@{/Traffic}">交通</a></nobr>
+			<nobr><a th:href="@{/Chart}">チャート</a></nobr>
+		</table>
+		</div>
+		<!-- 台的なもの -->
+		<footer class="platform">
+			<p>© 2022 - 2023  HCS CORPORATION.</p>
+		</footer>
+	</div>
+	<div class="speace"><p>error</p></div>
+	
+	<!-- タイトル表示 -->
+	<p class="title">星座占い一覧</p>
+	<div class="title-space"></div>
+	
+	<!-- 12星座の箱 -->
+	<div class="divination-context">
+		<!-- 順位表示 -->
+		<th:block th:each="divination : ${HoroscopeEntity.horoscopeList}">
+		<div class="constellations-menu">
+			<table>
+				<!-- 順位・星座の表示 -->
+				<td><nobr><p class="rank">第<span th:text="${divination.rank}"></span>位.<span th:text=${divination.sign}></span></p></nobr>
+				<!-- コメント表示 -->
+				<p class="comment">コメント：<span th:text="${divination.content}"></span></p>
+				<!-- ラッキーアイテムの表示 -->
+				<nobr><p class="lackyitem">ラッキーアイテム：<span th:text="${divination.lucky_item}"></span></p></nobr>
+				<!-- 評価 -->
+				<p class="comprehensive-evaluation">総合評価：<span th:text="${divination.total}"></span>／5</p>
+				<!-- 星座のimg表示 -->
+				<td><img th:src="${divination.photopath}">
+			</table>
+		</div>
+		</th:block>
+	</div>
+	<!-- 下のスペース -->
+	<div class="bottom-space"></div>
+</body>
+</html>
