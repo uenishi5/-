@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(~{::title}, ~{::body})}">
+<head>
+    <title>プレイリスト</title>
+</head>
+<body>
+<table>
+    <button type="submit" class="btn btn-dark right mt-3">一括ダウンロード ↓</button><br><br>
+    <tr th:each="list : ${playListentity}">
+        <td>
+            <iframe width="240" height="135" th:src="@{https://www.youtube.com/embed/{id}(id=${list.videoId})}"
+                    frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media;
+                    gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </td>
+        <td th:text="${list.title}"></td>
+        <td><button type="submit" class="btn btn-dark">↓</button></td>
+
+    </tr>
+</table>
+</body>
+</html>

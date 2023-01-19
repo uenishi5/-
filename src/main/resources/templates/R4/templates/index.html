@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(~{::title}, ~{::body})}">
+<head>
+    <title>YouTube動画一覧</title>
+</head>
+<body>
+<div class="title-font">
+<h1 class="mt-4">youtube検索</h1>
+<form action="#" th:action="@{/index}" method="post" class="m-auto" style="width:80%;">
+	<div class="d-flex w-100" style="height: 3rem;">
+		<input type="text" class="form-control" name="detail" placeholder="好きな音楽を検索してください">
+		<button type="submit" class="btn btn-primary w-auto" style="white-space: nowrap;">検索</button>
+	</div>
+</form>
+</div><br><br>
+<table>
+    <tr th:each="list : ${searchLists}">
+        <td class="mt-4">
+            <iframe width="240" height="135" th:src="@{https://www.youtube.com/embed/{id}(id=${list.videoId})}"
+                    frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media;
+                    gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </td>
+        <td th:text="${list.title}"></td>
+        <form action="#" th:action="@{/unti}" method="post">
+            <input name="videoId" th:value="${list.videoId}" hidden="hidden">
+            <input name="title" th:value="${list.title}" hidden="hidden">
+            <td><button type="submit" class="btn btn-dark">＋</button></td>
+        </form>
+    </tr>
+</table>
+</body>
+</html>
