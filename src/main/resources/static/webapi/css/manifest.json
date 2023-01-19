@@ -1,11 +1,11 @@
 {
-	"short_name": "WP",
-	"name": "WebPortal",
+	"short_name": "AP",
+	"name": "ASAP",
 	"start_url": "/",
 	"display": "standalone",
 	"icons": [
 		{
-			"src": "/img/favicon.ico",
+			"src": "/static/favicon.ico",
 			"sizes": "16x16",
 			"type": "image/png"
 		}
