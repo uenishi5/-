@@ -1,12 +1,13 @@
-package jp.hcs.ac.s3a321;
+package com.example.youtubeDownload;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class WebportalApplication {
+public class YoutubeDownloadApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(WebportalApplication.class, args);
+		SpringApplication.run(YoutubeDownloadApplication.class, args);
 	}
+
 }
