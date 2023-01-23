@@ -55,6 +55,6 @@ public class MainController {
 		}else {
 			model.addAttribute("flg", false);
 		}
-		return "main";
+		return "morning/main";
 	}
 }

@@ -17,6 +17,6 @@ public class WeatherController {
 		
 		entity = service.getWeatherData();
 		model.addAttribute("WeatherEntity", entity);
-		return "weather";
+		return "morning/weather";
 	}
 }

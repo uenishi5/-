@@ -27,7 +27,7 @@ public class Weather_alertController {
 			model.addAttribute("errormessage","エラーが発生しました。");
 			main.getMainData(model);
 		}
-		return "alert";
+		return "morning/alert";
 	}
 		
 }

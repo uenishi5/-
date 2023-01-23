@@ -3,6 +3,8 @@ package com.example.morning.weather_alert;
 import java.io.IOException;
 
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 /** 警報注意報を取得するクラス */
 @Service

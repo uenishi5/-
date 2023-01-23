@@ -35,9 +35,9 @@ public class WeatherService {
 			}
 
 			// 結果をデータに変換
-			System.out.println("ok");
+
 			entity = this.convert(result);
-			System.out.println(entity);
+
 			in.close();
 			connection.disconnect();
 		} catch (Exception e) {

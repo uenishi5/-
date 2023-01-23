@@ -14,10 +14,10 @@ public class TrafficController {
 //		//結果を取得
 //		TrafficEntity entity = trafficService.getMainTrafficData();
 
-		return "traffic";
+		return "morning/traffic";
 	}
 	/** 交通情報を取得*/
-	@GetMapping("/TrafficBusData")
+	@GetMapping("/TrafficBus")
 	public String getTrafficData(Model model, @RequestParam("bus") int no) {
 		TrafficService service = new TrafficService();
 		TrafficEntity entity  = new TrafficEntity();
@@ -31,7 +31,7 @@ public class TrafficController {
 		}
 		model.addAttribute("TrafficEntity",entity);
 		
-		return "traffic_result";
+		return "morning/traffic_result";
 	}
 }
 

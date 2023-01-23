@@ -12,6 +12,6 @@ public class ChartController {
 		ChartService service = new ChartService();
 		entity = service.getChartData();
 		model.addAttribute("ChartEntity",entity);
-		return "chart";
+		return "morning/chart";
 	}
 }

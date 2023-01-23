@@ -131,29 +131,29 @@ public class HoroscopeService {
 				data.setSign(horosortlist[idx][8]);
 				String sign = horosortlist[idx][8];
 				if (sign.equals("牡羊座")) {
-					data.setPhotopath("img/ohitsuji.png");
+					data.setPhotopath("morning/ohitsuji.png");
 				} else if (sign.equals("乙女座")) {
-					data.setPhotopath("img/otome.png");
+					data.setPhotopath("morning/otome.png");
 				} else if (sign.equals("天秤座")) {
-					data.setPhotopath("img/tenbin.png");
+					data.setPhotopath("morning/tenbin.png");
 				} else if (sign.equals("双子座")) {
-					data.setPhotopath("img/futago.png");
+					data.setPhotopath("morning/futago.png");
 				} else if (sign.equals("牡牛座")) {
-					data.setPhotopath("img/oushi.png");
+					data.setPhotopath("morning/oushi.png");
 				} else if (sign.equals("獅子座")) {
-					data.setPhotopath("img/shishi.png");
+					data.setPhotopath("morning/shishi.png");
 				} else if (sign.equals("蠍座")) {
-					data.setPhotopath("img/sasori.png");
+					data.setPhotopath("morning/sasori.png");
 				} else if (sign.equals("蟹座")) {
-					data.setPhotopath("img/kani.png");
+					data.setPhotopath("morning/kani.png");
 				} else if (sign.equals("射手座")) {
-					data.setPhotopath("img/ite.png");
+					data.setPhotopath("morning/ite.png");
 				} else if (sign.equals("山羊座")) {
-					data.setPhotopath("img/yagi.png");
+					data.setPhotopath("morning/yagi.png");
 				} else if (sign.equals("水瓶座")) {
-					data.setPhotopath("img/mizugame.png");
+					data.setPhotopath("morning/mizugame.png");
 				} else if (sign.equals("魚座")) {
-					data.setPhotopath("img/uo.png");
+					data.setPhotopath("morning/uo.png");
 				}else {
 					data.setPhotopath("null");
 				}

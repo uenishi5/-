@@ -14,7 +14,7 @@ public class HoroscopeController {
 		/** 全ての星座情報をリストで、昇順に格納する。*/
 		entity = service.getHoroscopeData();
 		model.addAttribute("HoroscopeEntity",entity);
-		return "divination";
+		return "morning/divination";
 	}
 //	/**
 //	 * 
