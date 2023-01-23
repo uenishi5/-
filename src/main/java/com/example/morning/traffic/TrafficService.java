@@ -20,11 +20,10 @@ public class TrafficService {
 	private static final String SOUTH_SAPPORO_NORTH_HIROSHIMA_CHITOSE_EBETSU = "https://www.chuo-bus.co.jp/support/stop/?ope=list&g=17";
 	private static final String OTARU_SHINAI = "https://www.chuo-bus.co.jp/support/stop/?ope=list&g=12";
 	private static final String OTARU_HOUMEN = "https://www.chuo-bus.co.jp/support/stop/?ope=list&g=13";
-	private static final String YOICHI_SHAKOTAN = "https://www.chuo-bus.co.jp/support/stop/?ope=list&g=14";
 	private static final String TAKIGAWA = "https://www.chuo-bus.co.jp/support/stop/?ope=list&g=11";
 	private static final String IWAMIZAWA = "https://www.chuo-bus.co.jp/support/stop/?ope=list&g=10";
 	private static final String BUSLIST[] = { NORTH_SAPPORO_ISHIKARI, SOUTH_SAPPORO_NORTH_HIROSHIMA_CHITOSE_EBETSU,
-			OTARU_SHINAI, OTARU_HOUMEN, YOICHI_SHAKOTAN, TAKIGAWA, IWAMIZAWA };
+			OTARU_SHINAI, OTARU_HOUMEN, TAKIGAWA, IWAMIZAWA };
 	/** 高速道路交通情報*/
 	private static final String DOUOU = "https://roadway.yahoo.co.jp/traffic/pref/1/road/1001001/list";
 	private static final String SASSON = "https://roadway.yahoo.co.jp/traffic/pref/1/road/1003001/list";
