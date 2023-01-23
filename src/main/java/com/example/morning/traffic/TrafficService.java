@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -49,7 +46,7 @@ public class TrafficService {
 			BIHORO_BAIPASU, HOROTOMI_BAIPASU, TOYOTOMI_BAIPASU, KUSHIRO_GAIKANJOU, NEMURO, TOKACHI_OHOTUKU };
 
 
-// 指定された交通情報を取得するメソッド
+/** 指定された交通情報を取得するメソッド*/
 	public TrafficEntity getBusdata(int no) {
 		TrafficEntity entity = new TrafficEntity();
 		TrafficData flg = new TrafficData();

@@ -3,7 +3,7 @@ package com.example.morning.chart;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+/**チャート情報を表示するコントローラー*/
 @Controller
 public class ChartController {
 	@RequestMapping("/Chart")

@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-// 天気情報を取得するクラス
+/** 天気情報を取得するクラス */
 @Service
 public class WeatherService {
 	/** エンドポイント */
 	private static final String WEATHERURL = "https://weather.tsukumijima.net/api/forecast/city/016010";
 
-	// 天気情報を取得するメソッド
+	/** 天気情報を取得するメソッド */
 	public WeatherEntity getWeatherData() {
 		WeatherEntity entity = new WeatherEntity();
 		String result = "";
@@ -48,7 +48,7 @@ public class WeatherService {
 		return entity;
 	}
 
-	// データをリストに格納するメソッド
+	/** データをリストに格納するメソッド */
 	private WeatherEntity convert(String json) {
 		ObjectMapper objectMapper = new ObjectMapper();
 

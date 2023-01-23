@@ -3,18 +3,17 @@ package com.example.morning.weather_alert;
 import java.io.IOException;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
-// 警報注意報を取得するクラス
+/** 警報注意報を取得するクラス */
 @Service
 public class Weather_alertService {
-	// 警報注意報を取得するメソッド
+	/** 警報注意報を取得するメソッド */
 	public Weather_alertEntity getWeather_alertData() {
 		Document document;
 		Weather_alertEntity entity = new Weather_alertEntity();
 		entity.setError(false);
 		try {
+			// URL指定
 			document = Jsoup.connect("https://typhoon.yahoo.co.jp/weather/jp/warn/1b/1100/").get();
 
 			Elements getalert = document.select(".warnDetail_head");
@@ -33,6 +32,7 @@ public class Weather_alertService {
 
 			Elements day = document.select(".warnDetail_timeTable_row-day");
 			String[] days = day.text().split(" ");
+			// 警報があるかの確認
 			if (alert[1].equals("発表なし")) {
 				Weather_alertData data = new Weather_alertData();
 				data.setName(alert[1]);
@@ -67,6 +67,7 @@ public class Weather_alertService {
 					}
 					entity.getWeather_alertnameList().add(data);
 				}
+				// データの取得
 				if (weatherflg && alertfirst) {
 					date.setAlertdaydate1(days[1]);
 					date.setAlertdaydate2(days[2]);
