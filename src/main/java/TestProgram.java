@@ -5,7 +5,7 @@ import java.nio.file.Paths;
 
 import org.springframework.boot.system.SystemProperties;
 
-public class a {
+public class TestProgram {
 
 	public static void main(String[] args) throws URISyntaxException {
 
