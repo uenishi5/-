@@ -20,6 +20,13 @@
 			<id>jitpack.io</id>
 			<url>https://jitpack.io</url>
 		</repository>
+		
+		
+		<repository>
+			<id>github</id>
+			<name>my github repository</name>
+			<url>https://raw.githubusercontent.com/ren130302/web-api/main/</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -248,12 +255,6 @@
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
 			<version>2.12.2</version>
-		</dependency>
-
-		<dependency>
-			<groupId>io.github.ren130302</groupId>
-			<artifactId>web-api</artifactId>
-			<version>1.5.5-RELEASE</version>
 		</dependency>
 	</dependencies>
 
