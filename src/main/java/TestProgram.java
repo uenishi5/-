@@ -17,21 +17,25 @@ public class TestProgram {
 			builder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
 			builder.redirectError(ProcessBuilder.Redirect.INHERIT);
 
-			// 現在のプロジェクト相対パスから絶対パスに変換
-			final Path absolutePath = Paths.get("").toAbsolutePath();
-			System.out.println(absolutePath);
-			// ディレクトリの設定
-			builder.directory(absolutePath.toFile());
-
 			// 使用しているOSを調べる
 			final String osName = SystemProperties.get("os.name");
 			final boolean isWindows = osName.startsWith("Windows");
-			final String exeFile = isWindows ? "youtube-dl.exe" : "youtube-dl";
-
 			System.out.println(String.format("OS name=%S, isWindows=%B", osName, isWindows));
 
+			if (isWindows) {
+				// 現在のプロジェクト相対パスから絶対パスに変換
+				final Path absolutePath = Paths.get("").toAbsolutePath();
+				System.out.println(absolutePath);
+
+				// ディレクトリの設定
+				builder.directory(absolutePath.toFile());
+			}
+
 			// 実行するコマンドの設定
-			builder.command(exeFile, "https://www.youtube.com/watch?v=nOEWheGx-ig");
+			builder.command("youtube-dl", "https://www.youtube.com/watch?v=nOEWheGx-ig");
+			builder.command().forEach(System.out::println);
+
+			// youtube-dl https://www.youtube.com/watch?v=nOEWheGx-ig
 
 			// コマンドを実行する
 			Process process = builder.start();
