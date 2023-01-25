@@ -253,7 +253,7 @@
 		<dependency>
 			<groupId>io.github.ren130302</groupId>
 			<artifactId>web-api</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.5.5-RELEASE</version>
 		</dependency>
 	</dependencies>
 
