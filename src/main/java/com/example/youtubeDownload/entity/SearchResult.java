@@ -6,11 +6,11 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class SearchResult {
-    private String videoId;
-    private String title;
-    private String thumbnail;
+	private String videoId;
+	private String title;
+	private String thumbnail;
 
-    public SearchResult() {
+	public SearchResult() {
 
-    }
+	}
 }

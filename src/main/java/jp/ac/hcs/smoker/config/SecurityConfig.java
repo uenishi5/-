@@ -3,7 +3,6 @@ package jp.ac.hcs.smoker.config;
 import java.util.Collections;
 
 import javax.servlet.SessionTrackingMode;
-import javax.sql.DataSource;
 
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
@@ -14,8 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @EnableWebSecurity
@@ -36,24 +33,7 @@ public class SecurityConfig {
 		// ログイン不要ページの設定
 		http.authorizeHttpRequests()
 			// css js アクセス全部許可
-			.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-
-			// ホーム画面はアクセス全部許可
-			.anyRequest().permitAll();
-		// .anyRequest().authenticated();
-
-		// // ログイン処理
-		// http.formLogin().loginProcessingUrl("/signin") // ログイン処理のパス
-		// .loginPage("/signin") // ログインページの指定
-		// .failureUrl("/signin") // ログイン失敗時の遷移先
-		// .usernameParameter("user_id") // ログインページのユーザID
-		// .passwordParameter("password") // ログインページのパスワード
-		// .defaultSuccessUrl(HomeController.MAPPING_HOME, true); // ログイン成功後の遷移先
-
-		// // ログアウト処理
-		// http.logout().logoutRequestMatcher(new
-		// AntPathRequestMatcher("/signout")).logoutUrl("/signout") // ログアウト処理のパス
-		// .logoutSuccessUrl("/signin"); // ログアウト成功後の遷移先
+			.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll().anyRequest().permitAll();
 
 		// (開発用)CSRF対策 無効設定
 		// XXX h2-console使用時は有効にする.
@@ -61,14 +41,6 @@ public class SecurityConfig {
 		http.headers().frameOptions().disable();
 
 		return http.build();
-	}
-
-	@Bean
-	public UserDetailsManager users(DataSource dataSource) {
-		JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
-		users.setUsersByUsernameQuery("");
-		users.setAuthoritiesByUsernameQuery("");
-		return users;
 	}
 
 	/**

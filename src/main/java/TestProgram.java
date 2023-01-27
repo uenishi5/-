@@ -1,13 +1,14 @@
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.boot.system.SystemProperties;
 
 public class TestProgram {
 
-	public static void main(String[] args) throws URISyntaxException {
+	public static void download(String url, boolean toMp3) {
 
 		try {
 			// コマンド実行のためのビルダー
@@ -33,12 +34,22 @@ public class TestProgram {
 
 			// 実行するコマンドの設定
 			// -v : debug mode
-			// -x : (–extract-audio) で音声のみダウンロード
-			// –audio-format mp3: mp3 形式にフォーマット
-			builder.command("youtube-dl", "-v", "https://www.youtube.com/watch?v=nOEWheGx-ig");
-			builder.command().forEach(System.out::println);
+			// -x : (--extract-audio) で音声のみダウンロード
+			// --audio-format mp3: mp3 形式にフォーマット
+			List<String> command = new ArrayList<>();
+			command.add("youtube-dl");
+			command.add("-v");
+			command.add(url);
 
-			// youtube-dl https://www.youtube.com/watch?v=nOEWheGx-ig
+			if (toMp3) {
+				System.out.println("Extract Audio");
+				command.add("--extract-audio");
+				command.add("--audio-format");
+				command.add("mp3");
+			}
+
+			builder.command("youtube-dl", "-v", url);
+			builder.command().forEach(System.out::println);
 
 			// コマンドを実行する
 			Process process = builder.start();
@@ -47,5 +58,9 @@ public class TestProgram {
 			e.printStackTrace();
 		}
 
+	}
+
+	public static void main(String[] args) {
+		download("", false);
 	}
 }
