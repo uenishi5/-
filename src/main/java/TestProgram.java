@@ -96,7 +96,7 @@ public class TestProgram {
 	public static String testAClassToJson() {
 		// クラス から 文字列 に変換するプログラム
 
-		// フロントからの渡されるjson形式のデータ
+		// クラスの初期化
 		TestA testA = new TestA();
 		testA.setId(2);
 		testA.setLabel("testLabelTest");
@@ -107,7 +107,8 @@ public class TestProgram {
 		try {
 			// "TestClassA クラス" から "json形式の文字列"に変換
 			// 必ず JsonProcessingException をキャッチする
-			return objectMapper.writeValueAsString(testA);
+			// writerWithDefaultPrettyPrinterメソッドは人が見やすいようにフォーマットする設定
+			return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(testA);
 		}
 		catch (JsonProcessingException e) {
 			// JSON コンテンツを処理（パース、生成）する際に発生する（直訳）
