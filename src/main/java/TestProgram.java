@@ -25,14 +25,17 @@ public class TestProgram {
 			if (isWindows) {
 				// 現在のプロジェクト相対パスから絶対パスに変換
 				final Path absolutePath = Paths.get("").toAbsolutePath();
-				System.out.println(absolutePath);
-
 				// ディレクトリの設定
 				builder.directory(absolutePath.toFile());
 			}
 
+			System.out.println(String.format("Directory=%S", builder.directory()));
+
 			// 実行するコマンドの設定
-			builder.command("youtube-dl", "https://www.youtube.com/watch?v=nOEWheGx-ig");
+			// -v : debug mode
+			// -x : (–extract-audio) で音声のみダウンロード
+			// –audio-format mp3: mp3 形式にフォーマット
+			builder.command("youtube-dl", "-v", "https://www.youtube.com/watch?v=nOEWheGx-ig");
 			builder.command().forEach(System.out::println);
 
 			// youtube-dl https://www.youtube.com/watch?v=nOEWheGx-ig
