@@ -15,7 +15,6 @@ import lombok.Data;
 public class TestProgram {
 
 	public static void download(String url, boolean toMp3) {
-
 		try {
 			// コマンド実行のためのビルダー
 			final ProcessBuilder builder = new ProcessBuilder();
@@ -54,7 +53,7 @@ public class TestProgram {
 				command.add("mp3");
 			}
 
-			builder.command("youtube-dl", "-v", url);
+			builder.command(command);
 			builder.command().forEach(System.out::println);
 
 			// コマンドを実行する
@@ -66,11 +65,8 @@ public class TestProgram {
 
 	}
 
-	public static TestA jsonToTestAClass() {
+	public static TestA jsonToTestAClass(String json) {
 		// 文字列 から クラス に変換するプログラム
-
-		// フロントからの渡されるjson形式のデータ
-		String json = "{\"label\":\"testLabel\", \"id\":1}";
 
 		// インスタンス生成
 		final ObjectMapper objectMapper = new ObjectMapper();
@@ -125,10 +121,6 @@ public class TestProgram {
 	}
 
 	public static void main(String[] args) {
-
-		System.out.println(jsonToTestAClass());
-		System.out.println(testAClassToJson());
-
-		// download("", false);
+		download("", false);
 	}
 }

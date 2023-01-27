@@ -22,6 +22,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.api.services.youtube.model.ResourceId;
+import com.google.api.services.youtube.model.SearchResult;
+import com.google.api.services.youtube.model.SearchResultSnippet;
+import com.google.api.services.youtube.model.Thumbnail;
 import com.ren130302.utils.DateUtils;
 import com.ren130302.utils.DateUtils.Unit;
 import com.ren130302.webapi.newsapi.NewsApiClient;
@@ -173,14 +177,22 @@ public class HomeController {
 			private String publishBy;
 			private String publishAt;
 
-			public static Content map(Article article) {
-				Content content = new Content();
-				content.setOriginalUrl(article.getUrl());
-				content.setIconUrl(article.getUrlToImage());
-				content.setTitle(article.getTitle());
-				content.setSource(article.getUrl());
-				content.setPublishBy(article.getAuthor());
-				content.setPublishAt(article.getPublishedAt());
+			public static Content map(SearchResult searchResult) {
+				final Content content = new Content();
+
+				final ResourceId resourceId = searchResult.getId();
+				final SearchResultSnippet searchResultSnippet = searchResult.getSnippet();
+				final Thumbnail thumbnailDefault = searchResultSnippet.getThumbnails().getDefault();
+
+				final SearchResult result = new SearchResult();
+				searchResult.getSnippet().getChannelTitle();
+
+				content.setOriginalUrl(String.format("https://www.youtube.com/watch?v=%S", resourceId));
+				content.setIconUrl(thumbnailDefault.getUrl());
+				content.setTitle(searchResultSnippet.getTitle());
+				content.setSource(String.format("https://www.youtube.com/watch?v=%S", resourceId));
+				content.setPublishBy(searchResult.getSnippet().getChannelTitle());
+				content.setPublishAt(searchResult.getSnippet().getPublishedAt().toString());
 				return content;
 			}
 
@@ -221,7 +233,11 @@ public class HomeController {
 			}
 
 			public void setPublishAt(String value) {
-				final Period period = new Period(DateTime.parse(value), DateTime.now());
+				this.setPublishAt(DateTime.parse(value));
+			}
+
+			public void setPublishAt(DateTime value) {
+				final Period period = new Period(value, DateTime.now());
 
 				final String timeAgo = DateUtils.of(period).add(Unit.YEARS, "year", "years").add(Unit.MONTHS, "month", "months").add(Unit.WEEKS, "week", "weeks").add(Unit.DAYS, "day", "days").add(Unit.HOURS, "hour", "hours").add(Unit.MINUTES, "minute", "minutes").add(Unit.SECONDS, "second", "seconds").print();
 				final String time = timeAgo.isBlank() ? "today" : String.format("%s %s", timeAgo, "ago");
