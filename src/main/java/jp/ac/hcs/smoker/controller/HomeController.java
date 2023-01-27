@@ -30,7 +30,8 @@ import com.ren130302.webapi.pornhubapi.PornhubApiClient;
 import com.ren130302.webapi.pornhubapi.response.SearchResponse;
 import com.ren130302.webapi.pornhubapi.response.VideoResponse;
 
-import jp.ac.hcs.smoker.config.Holder;
+import jp.ac.hcs.config.ApiKeyHolder;
+import jp.ac.hcs.config.Mapping;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import retrofit2.Response;
@@ -39,25 +40,19 @@ import retrofit2.Response;
 @Controller
 public class HomeController {
 
-	public static final String MAPPING_HOME = "/";
-	public static final String MAPPING_NEWSAPI = MAPPING_HOME + "newsapi";
-	public static final String MAPPING_PORNHUBAPI = MAPPING_HOME + "pornhubapi";
-
-	public static final String RESOURCE_HOME = "index";
-
 	@Autowired
-	private Holder holder;
+	private ApiKeyHolder holder;
 
-	@GetMapping(MAPPING_HOME)
+	@GetMapping(Mapping.MAPPING_ROOT)
 	public String getHome(Principal principal, Model model, Pageable pageable) {
-		log.debug("GET {}", MAPPING_HOME);
-		return RESOURCE_HOME;
+		log.debug("GET {}", Mapping.MAPPING_ROOT);
+		return Mapping.RESOURCE_ROOT;
 	}
 
-	@PostMapping(MAPPING_NEWSAPI)
+	@PostMapping(Mapping.MAPPING_NEWSAPI)
 	@ResponseBody
-	public String postNewsApi(Pageable pageable, @Validated NewsApiForm form, BindingResult bindingResult) {
-		log.debug("POST {}", MAPPING_NEWSAPI);
+	public String postNewsApi(Pageable pageable, @Validated NewsForm form, BindingResult bindingResult) {
+		log.debug("POST {}", Mapping.MAPPING_NEWSAPI);
 		log.debug("Request params:{}", form);
 		log.debug("page={}, size={}", pageable.getPageNumber(), pageable.getPageSize());
 
@@ -70,7 +65,7 @@ public class HomeController {
 
 		// NewsApi問い合わせ
 		try {
-			Response<Article.Response> response = NewsApiClient.EVERYTHING.ready(this.holder.getApiKey(), b -> form.query(b).page(pageable.getPageNumber()).pageSize(pageable.getPageSize())).execute();
+			Response<Article.Response> response = NewsApiClient.EVERYTHING.ready(this.holder.getNews(), b -> form.query(b).page(pageable.getPageNumber()).pageSize(pageable.getPageSize())).execute();
 			log.debug("{}", response.raw().request().url().toString());
 
 			if (response.isSuccessful()) {
@@ -90,10 +85,46 @@ public class HomeController {
 		return responseBodyContents.json();
 	}
 
-	@PostMapping(MAPPING_PORNHUBAPI)
+	@PostMapping(Mapping.MAPPING_PORNHUBAPI)
 	@ResponseBody
 	public String postPornHub(Pageable pageable, @Validated PornhubForm form, BindingResult bindingResult) {
-		log.debug("POST {}", MAPPING_PORNHUBAPI);
+		log.debug("POST {}", Mapping.MAPPING_PORNHUBAPI);
+		log.debug("Request params:{}", form);
+		log.debug("page={}, size={}", pageable.getPageNumber(), pageable.getPageSize());
+
+		final ResponseBodyContents responseBodyContents = new ResponseBodyContents();
+
+		if (bindingResult.hasErrors()) {
+			responseBodyContents.setAllErrors(bindingResult.getAllErrors());
+			return responseBodyContents.json();
+		}
+
+		// PornhubApi問い合わせ
+		try {
+			Response<SearchResponse> response = PornhubApiClient.SEARCH.ready(b -> form.query(b).page(pageable.getPageNumber())).execute();
+			log.debug("{}", response.raw().request().url().toString());
+
+			if (response.isSuccessful()) {
+				final SearchResponse searchResponse = Objects.nonNull(response.body()) ? response.body() : new SearchResponse();
+				responseBodyContents.map(searchResponse);
+				return responseBodyContents.json();
+			}
+			else {
+				log.debug("{}", response.errorBody().string());
+			}
+
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return responseBodyContents.json();
+	}
+
+	@PostMapping(Mapping.MAPPING_YOUTUBEAPI)
+	@ResponseBody
+	public String postYoutube(Pageable pageable, @Validated YoutubeForm form, BindingResult bindingResult) {
+		log.debug("POST {}", Mapping.MAPPING_YOUTUBEAPI);
 		log.debug("Request params:{}", form);
 		log.debug("page={}, size={}", pageable.getPageNumber(), pageable.getPageSize());
 
@@ -141,6 +172,17 @@ public class HomeController {
 			private String source;
 			private String publishBy;
 			private String publishAt;
+
+			public static Content map(Article article) {
+				Content content = new Content();
+				content.setOriginalUrl(article.getUrl());
+				content.setIconUrl(article.getUrlToImage());
+				content.setTitle(article.getTitle());
+				content.setSource(article.getUrl());
+				content.setPublishBy(article.getAuthor());
+				content.setPublishAt(article.getPublishedAt());
+				return content;
+			}
 
 			public static Content map(Article article) {
 				Content content = new Content();

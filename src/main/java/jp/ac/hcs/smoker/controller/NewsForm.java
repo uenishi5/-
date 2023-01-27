@@ -7,7 +7,7 @@ import com.ren130302.webapi.newsapi.request.Everything;
 import lombok.Data;
 
 @Data
-public class NewsApiForm {
+public class NewsForm {
 	private String q;
 	private NewsSort sort = NewsSort.PUBLISHED_AT;
 

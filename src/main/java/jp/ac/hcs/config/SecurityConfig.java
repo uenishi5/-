@@ -1,4 +1,4 @@
-package jp.ac.hcs.smoker.config;
+package jp.ac.hcs.config;
 
 import java.util.Collections;
 

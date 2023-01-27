@@ -39,7 +39,7 @@ public class SearchService {
 
 	Properties properties = new Properties();
 
-	public ArrayList<SearchResult> getList(String queryTerm) {
+	public List<com.google.api.services.youtube.model.SearchResult> getList(String queryTerm) {
 		this.queryTerm = queryTerm;
 		try {
 			InputStream in = SearchService.class.getResourceAsStream("/" + PROPERTIES_FILENAME);
@@ -63,18 +63,34 @@ public class SearchService {
 			String apiKey = this.properties.getProperty("youtube.apikey");
 			search.setKey(apiKey);
 			search.setQ(queryTerm);
-
 			search.setType(Collections.singletonList("video"));
-
 			search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/default/url)");
 			search.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
+
 			// APIの実行と思われる
 			SearchListResponse searchResponse = search.execute();
 
 			List<com.google.api.services.youtube.model.SearchResult> searchResultList = searchResponse.getItems();
 
 			if (searchResultList != null) {
-				return acquisition(searchResultList.iterator(), queryTerm);
+				List<SearchResult> results = new ArrayList<>();
+
+				if (searchResultList.isEmpty()) {
+					System.out.println(" There aren't any results for your query.");
+					return searchResultList;
+				}
+
+				searchResultList.stream().map(singleVideo -> {
+					ResourceId rId = singleVideo.getId();
+					Thumbnail thumbnail = (Thumbnail) singleVideo.getSnippet().getThumbnails().get("default");
+
+					SearchResult result = new SearchResult();
+					result.setVideoId(rId.getVideoId());
+					result.setTitle(singleVideo.getSnippet().getTitle());
+					result.setThumbnail(thumbnail.getUrl());
+
+					return thumbnail;
+				}).toList();
 			}
 
 		}

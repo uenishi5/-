@@ -239,6 +239,7 @@ a {
 
 .item .iconUrl {
     grid-area: a;
+    justify-self: center;
     align-self: start;
     max-width: 100%;
 }
