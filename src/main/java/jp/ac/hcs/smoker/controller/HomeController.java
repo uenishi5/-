@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,7 +23,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.ResourceId;
+import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
 import com.google.api.services.youtube.model.SearchResultSnippet;
 import com.google.api.services.youtube.model.Thumbnail;
@@ -74,8 +79,7 @@ public class HomeController {
 
 			if (response.isSuccessful()) {
 				final Article.Response articleResponse = Objects.nonNull(response.body()) ? response.body() : new Article.Response();
-				responseBodyContents.map(articleResponse);
-				return responseBodyContents.json();
+				return responseBodyContents.map(articleResponse).json();
 			}
 			else {
 				log.debug("{}", response.errorBody().string());
@@ -110,8 +114,7 @@ public class HomeController {
 
 			if (response.isSuccessful()) {
 				final SearchResponse searchResponse = Objects.nonNull(response.body()) ? response.body() : new SearchResponse();
-				responseBodyContents.map(searchResponse);
-				return responseBodyContents.json();
+				return responseBodyContents.map(searchResponse).json();
 			}
 			else {
 				log.debug("{}", response.errorBody().string());
@@ -139,26 +142,32 @@ public class HomeController {
 			return responseBodyContents.json();
 		}
 
-		// PornhubApi問い合わせ
 		try {
-			Response<SearchResponse> response = PornhubApiClient.SEARCH.ready(b -> form.query(b).page(pageable.getPageNumber())).execute();
-			log.debug("{}", response.raw().request().url().toString());
-
-			if (response.isSuccessful()) {
-				final SearchResponse searchResponse = Objects.nonNull(response.body()) ? response.body() : new SearchResponse();
-				responseBodyContents.map(searchResponse);
-				return responseBodyContents.json();
-			}
-			else {
-				log.debug("{}", response.errorBody().string());
-			}
-
+			final SearchListResponse searchListResponse = YouTubeInstance.singleton().search().list(Collections.singletonList("id,snippet")).setKey(this.holder.getYoutube()).setQ(form.getQ()).setType(Collections.singletonList("video")).setOrder(EnumYoutubeSort.DATE.name().toLowerCase()).setFields("items(id/kind, id/videoId, snippet/title, snippet/publishedAt, snippet/thumbnails/high/url)").setMaxResults((long) pageable.getPageSize()).execute();
+			return responseBodyContents.map(searchListResponse).json();
 		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		return responseBodyContents.json();
+	}
+
+	public static class YouTubeInstance {
+		private static YouTube instance = null;
+
+		public static YouTube singleton() {
+			if (Objects.isNull(instance)) {
+				instance = build();
+			}
+
+			return instance;
+		}
+
+		private static YouTube build() {
+			return new YouTube.Builder(new NetHttpTransport(), GsonFactory.getDefaultInstance(),
+					request -> {}).setApplicationName("youtube-cmdline-search-sample").build();
+		}
 	}
 
 	@Data
@@ -182,17 +191,14 @@ public class HomeController {
 
 				final ResourceId resourceId = searchResult.getId();
 				final SearchResultSnippet searchResultSnippet = searchResult.getSnippet();
-				final Thumbnail thumbnailDefault = searchResultSnippet.getThumbnails().getDefault();
+				final Thumbnail thumbnail = searchResultSnippet.getThumbnails().getHigh();
 
-				final SearchResult result = new SearchResult();
-				searchResult.getSnippet().getChannelTitle();
-
-				content.setOriginalUrl(String.format("https://www.youtube.com/watch?v=%S", resourceId));
-				content.setIconUrl(thumbnailDefault.getUrl());
+				content.setOriginalUrl(String.format("https://www.youtube.com/watch?v=%s", resourceId.getVideoId()));
+				content.setIconUrl(thumbnail.getUrl());
 				content.setTitle(searchResultSnippet.getTitle());
-				content.setSource(String.format("https://www.youtube.com/watch?v=%S", resourceId));
-				content.setPublishBy(searchResult.getSnippet().getChannelTitle());
-				content.setPublishAt(searchResult.getSnippet().getPublishedAt().toString());
+				content.setSource(String.format("https://www.youtube.com/embed/%s", resourceId.getVideoId()));
+				content.setPublishBy(searchResultSnippet.getChannelTitle());
+				content.setPublishAt(searchResultSnippet.getPublishedAt().toString());
 				return content;
 			}
 
@@ -254,6 +260,11 @@ public class HomeController {
 				e.printStackTrace();
 			}
 			return "";
+		}
+
+		public ResponseBodyContents map(SearchListResponse searchListResponse) {
+			this.setContents(searchListResponse.getItems().stream().map(Content::map).toList());
+			return this;
 		}
 
 		public ResponseBodyContents map(SearchResponse searchResponse) {

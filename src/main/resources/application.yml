@@ -1,3 +1,6 @@
+server:
+  port: 8080
+  
 apikey:
-	news:"bb9f2ecdbb9a4882b51cf5a4b98b86a6"
-	youtube:"AIzaSyCjuwztNVVR54iLOc1WMa61hi5LJpV5hvI"
+  news: "bb9f2ecdbb9a4882b51cf5a4b98b86a6"
+  youtube: "AIzaSyCjuwztNVVR54iLOc1WMa61hi5LJpV5hvI"

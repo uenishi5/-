@@ -130,7 +130,7 @@ $("#search-form").on("submit", function (e) {
 
     e.preventDefault();  // デフォルトのイベント(ページの遷移やデータ送信など)を無効にする
     $.ajax({
-        url: "/newsapi",
+        url: "/youtubeapi",
         type: "POST",
         dataType: "json",
         data: {
