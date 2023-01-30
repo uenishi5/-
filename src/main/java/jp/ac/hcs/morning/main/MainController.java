@@ -55,6 +55,13 @@ public class MainController {
 		}else {
 			model.addAttribute("flg", false);
 		}
+		/** Jr情報取得*/
+		boolean jrflg = mainService.getMainJrData();
+		if(jrflg) {
+			model.addAttribute("jrflg",true);
+		}else {
+			model.addAttribute("jrflg",false);
+		}
 		return "morning/main";
 	}
 }
