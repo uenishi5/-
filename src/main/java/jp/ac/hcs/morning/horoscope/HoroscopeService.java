@@ -199,7 +199,7 @@ public class HoroscopeService {
 //		}
 //		return entity;
 //	}
-
+/** 日付の取得を行う */
 	private String simpleDateFormat() {
 		Calendar cl = Calendar.getInstance();
 

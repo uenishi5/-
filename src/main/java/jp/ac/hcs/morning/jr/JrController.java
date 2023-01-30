@@ -5,7 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-
+/** JR交通情報を取得するコントローラー*/
 public class JrController {
 	@RequestMapping("/Jr")
 	public String mainTrafficData(Model model) {

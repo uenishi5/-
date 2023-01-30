@@ -8,7 +8,6 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 /**
  * Bitcoinのチャート情報を取得するサービス
- * @author s20203068
  *
  */
 @Service
