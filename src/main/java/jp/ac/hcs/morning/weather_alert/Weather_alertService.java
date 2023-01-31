@@ -98,6 +98,7 @@ public class Weather_alertService {
 					date.setDate10(datelabel[10]);
 				}
 				entity.getWeather_dateList().add(date);
+				//１段目のデータを取得する（存在する場合)
 				while (true) {
 					if (alertfirst) {
 						break;
@@ -263,6 +264,7 @@ public class Weather_alertService {
 					alertnamecount = alertnamecount + 26;
 					alertlabel = alertlabel + 8;
 				}
+				//2段目の取得（データが存在する場合)
 				while (weatherflg) {
 					Weather_alertData data = new Weather_alertData();
 

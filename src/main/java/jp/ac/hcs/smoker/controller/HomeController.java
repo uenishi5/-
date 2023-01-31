@@ -1,9 +1,15 @@
 package jp.ac.hcs.smoker.controller;
 
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -11,7 +17,11 @@ import java.util.Objects;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.system.SystemProperties;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,6 +41,8 @@ import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
 import com.google.api.services.youtube.model.SearchResultSnippet;
 import com.google.api.services.youtube.model.Thumbnail;
+import com.google.api.services.youtube.model.Video;
+import com.google.api.services.youtube.model.VideoListResponse;
 import com.ren130302.utils.DateUtils;
 import com.ren130302.utils.DateUtils.Unit;
 import com.ren130302.webapi.newsapi.NewsApiClient;
@@ -79,7 +91,7 @@ public class HomeController {
 
 			if (response.isSuccessful()) {
 				final Article.Response articleResponse = Objects.nonNull(response.body()) ? response.body() : new Article.Response();
-				return responseBodyContents.map(articleResponse).json();
+				return ResponseBodyContents.map(articleResponse).json();
 			}
 			else {
 				log.debug("{}", response.errorBody().string());
@@ -114,7 +126,7 @@ public class HomeController {
 
 			if (response.isSuccessful()) {
 				final SearchResponse searchResponse = Objects.nonNull(response.body()) ? response.body() : new SearchResponse();
-				return responseBodyContents.map(searchResponse).json();
+				return ResponseBodyContents.map(searchResponse).json();
 			}
 			else {
 				log.debug("{}", response.errorBody().string());
@@ -143,14 +155,128 @@ public class HomeController {
 		}
 
 		try {
-			final SearchListResponse searchListResponse = YouTubeInstance.singleton().search().list(Collections.singletonList("id,snippet")).setKey(this.holder.getYoutube()).setQ(form.getQ()).setType(Collections.singletonList("video")).setOrder(EnumYoutubeSort.DATE.name().toLowerCase()).setFields("items(id/kind, id/videoId, snippet/title, snippet/publishedAt, snippet/thumbnails/high/url)").setMaxResults((long) pageable.getPageSize()).execute();
-			return responseBodyContents.map(searchListResponse).json();
+			final SearchListResponse searchListResponse = YouTubeInstance.singleton().search().list(Collections.singletonList("id,snippet")).setKey(this.holder.getYoutube()).setQ(form.getQ()).setType(Collections.singletonList("video")).setOrder(EnumYoutubeSort.DATE.name().toLowerCase()).setFields("items(id/kind, id/videoId, snippet/title, snippet/publishedAt, snippet/thumbnails/high/url, snippet/channelTitle)").setMaxResults((long) pageable.getPageSize()).execute();
+			return ResponseBodyContents.map(searchListResponse).json();
 		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		return responseBodyContents.json();
+	}
+
+	@PostMapping(Mapping.MAPPING_YOUTUBE_DL)
+	public ResponseEntity<byte[]> postYoutubeDL(String videoId, boolean toMp3) {
+
+		// videoIdが存在するかリクエストをする
+		// エラーが起きた場合、正常なリクエストでない、またはAPIサーバが落ちている可能性がある
+		// いずれにせよサーバ側でエラーが起きたことを通知するため、レスポンス(500エラー)を返す
+		VideoListResponse videoListResponse = null;
+		try {
+			videoListResponse = YouTubeInstance.singleton().videos().list(Collections.singletonList("id,snippet")).setKey(this.holder.getYoutube()).setId(Arrays.asList(videoId)).execute();
+		}
+		catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
+		if (Objects.isNull(videoListResponse)) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		// リクエストおよびレスポンスが正常に行われたため次の段階へすすむ
+		// クライアントから正常なリクエストかどうかを確認する機構で
+		// 受け取ったレスポンスの中身にあるプロパティ名"Items"が空でなければ正常とする
+		// 空である場合は不具合として扱いレスポンス(400エラー)を返す
+		final List<Video> items = videoListResponse.getItems();
+
+		// 一件でも掛かればヨシ！
+		if (items.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+
+		// 動画の情報
+		final Video video = videoListResponse.getItems().get(0);
+		final String url = String.format("https://www.youtube.com/watch?v=%s", video.getId());
+		final String contentType = toMp3 ? "audio/mpeg" : "audio/mp4";
+		final String extension = toMp3 ? "mp3" : "mp4";
+		final String filename = String.format("%s.%s", video.getSnippet().getTitle(), extension);
+
+		// ヘッダー情報の設定
+		final HttpHeaders header = new HttpHeaders();
+
+		header.add("Content-Type", "charset=UTF-8;" + contentType);
+		header.setContentDispositionFormData("filename", filename);
+
+		final Path path = Paths.get(filename);
+		byte[] bytes = null;
+
+		try {
+			// 指定されたURLの動画をダウンロード
+			download(url, toMp3);
+
+			// CSVファイルをサーバから読み込み
+			bytes = Files.readAllBytes(FileSystems.getDefault().getPath(path.toAbsolutePath().toString()));
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		if (Objects.isNull(bytes)) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		return new ResponseEntity<>(bytes, header, HttpStatus.OK);
+	}
+
+	public static void download(String url, boolean toMp3) {
+		try {
+			// コマンド実行のためのビルダー
+			final ProcessBuilder builder = new ProcessBuilder();
+
+			// コマンドプロンプトの内容をコンソールに出力する設定
+			builder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+			builder.redirectError(ProcessBuilder.Redirect.INHERIT);
+
+			// 使用しているOSを調べる
+			final String osName = SystemProperties.get("os.name");
+			final boolean isWindows = osName.startsWith("Windows");
+			System.out.println(String.format("OS name=%s, isWindows=%b", osName, isWindows));
+
+			if (isWindows) {
+				// 現在のプロジェクト相対パスから絶対パスに変換
+				final Path absolutePath = Paths.get("cmds").toAbsolutePath();
+				// ディレクトリの設定
+				builder.directory(absolutePath.toFile());
+			}
+
+			System.out.println(String.format("Directory=%s", builder.directory()));
+
+			// 実行するコマンドの設定
+			// -v : debug mode
+			// -x : (--extract-audio) で音声のみダウンロード
+			// --audio-format mp3: mp3 形式にフォーマット
+			List<String> command = new ArrayList<>();
+			command.add("youtube-dl");
+			command.add("--print-json");
+			command.add("-v");
+			command.add(url);
+
+			if (toMp3) {
+				System.out.println("Extract Audio");
+				command.add("--extract-audio");
+				command.add("--audio-format");
+				command.add("mp3");
+			}
+
+			builder.command(command);
+			builder.command().forEach(System.out::println);
+
+			// コマンドを実行する
+			Process process = builder.start();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static class YouTubeInstance {
@@ -233,7 +359,7 @@ public class HomeController {
 				content.setTitle(videoResponse.getTitle());
 				content.setSource("https://jp.pornhub.com/embed/" + videoResponse.getVideoId());
 				content.setPublishBy(publishBy);
-				content.setPublishBy(publishAt);
+				content.setPublishAt(publishAt);
 
 				return content;
 			}
@@ -262,19 +388,22 @@ public class HomeController {
 			return "";
 		}
 
-		public ResponseBodyContents map(SearchListResponse searchListResponse) {
-			this.setContents(searchListResponse.getItems().stream().map(Content::map).toList());
-			return this;
+		public static ResponseBodyContents map(SearchListResponse searchListResponse) {
+			ResponseBodyContents responseBodyContents = new ResponseBodyContents();
+			responseBodyContents.setContents(searchListResponse.getItems().stream().map(Content::map).toList());
+			return responseBodyContents;
 		}
 
-		public ResponseBodyContents map(SearchResponse searchResponse) {
-			this.setContents(searchResponse.getVideos().stream().map(Content::map).toList());
-			return this;
+		public static ResponseBodyContents map(SearchResponse searchResponse) {
+			ResponseBodyContents responseBodyContents = new ResponseBodyContents();
+			responseBodyContents.setContents(searchResponse.getVideos().stream().map(Content::map).toList());
+			return responseBodyContents;
 		}
 
-		public ResponseBodyContents map(Article.Response response) {
-			this.setContents(response.getArticles().stream().map(Content::map).toList());
-			return this;
+		public static ResponseBodyContents map(Article.Response response) {
+			ResponseBodyContents responseBodyContents = new ResponseBodyContents();
+			responseBodyContents.setContents(response.getArticles().stream().map(Content::map).toList());
+			return responseBodyContents;
 		}
 	}
 

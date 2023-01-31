@@ -17,8 +17,17 @@
 	border-radius: 10px;
 	margin-top: 15px;
 	margin-left: 15px;
-	
+	background-color: #fff;
 }
+
+
+.no-box {
+	margin-top: -40px;
+	font-size: 20px;
+	float: right;
+	width: max(20px,40%);
+}
+
 
 /* -------------
 	天気メイン 
@@ -173,11 +182,19 @@
     font-weight: bold;
     border: solid 3px #000000;
     display: flex;
+    display:flex;
     padding: 20px;
-    justify-content: center;
-    align-items: center;
+    flex-flow: column;
     grid-area: tra;
 }
+
+
+.traffic_title {
+	font-size: 20px;
+	margin-bottom: -20px;
+	float:left;
+}
+
 /* 交通情報のメッセージ表示あり */
 .traffic-message-t{
 	font-size:30px;

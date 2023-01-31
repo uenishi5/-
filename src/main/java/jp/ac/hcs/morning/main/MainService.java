@@ -319,4 +319,25 @@ public class MainService {
 		entity.getTrafficflgList().add(data);
 		return entity;
 	}
+	/** Jr情報取得 */
+	public boolean getMainJrData() {
+		Document touzai;
+		Document nanboku;
+		Document touhou;
+		boolean flg = false;
+		try {
+			touzai = Jsoup.connect("https://transit.yahoo.co.jp/diainfo/13/0").get();
+			nanboku = Jsoup.connect("https://transit.yahoo.co.jp/diainfo/14/0").get();
+			touhou = Jsoup.connect("https://transit.yahoo.co.jp/diainfo/15/0").get();
+			Elements getalert = touzai.select(".normal");
+			Elements getalert2 = nanboku.select(".normal");
+			Elements getalert3 = touhou.select(".normal");
+			if (getalert == null || getalert2 == null || getalert3 == null) {
+				flg = true;
+			}
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		return flg;
+	}
 }

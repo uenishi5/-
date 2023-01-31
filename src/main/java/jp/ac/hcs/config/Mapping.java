@@ -5,6 +5,7 @@ public class Mapping {
 	public static final String MAPPING_NEWSAPI = MAPPING_ROOT + "newsapi";
 	public static final String MAPPING_PORNHUBAPI = MAPPING_ROOT + "pornhubapi";
 	public static final String MAPPING_YOUTUBEAPI = MAPPING_ROOT + "youtubeapi";
+	public static final String MAPPING_YOUTUBE_DL = MAPPING_ROOT + "youtube-dl";
 
 	// -----html-----
 

@@ -1,0 +1,42 @@
+@charset "UTF-8";
+
+.tbl-jr {
+	display: table;
+	width: 700px;
+	
+	border-collapse: collapse;
+	border-spacing: 0;
+	box-sizing: border-box;
+	text-align: left;
+}
+
+.tbl-jr th{
+	border: 1px solid #aaa;
+	text-align: center;
+}
+
+.subtitle {
+	font-size: 27px;
+  	font-weight: bold;
+  	text-align: center;
+  	margin: 60px auto 40px;
+}
+
+.traffic-jr {
+	width: min(200%,650px);
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 15px;
+}
+
+.red {
+	color: red;
+}
+
+.purple {
+	color: perple;
+}
+
+.green {
+	color: green;
+}

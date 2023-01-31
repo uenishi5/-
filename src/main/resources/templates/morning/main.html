@@ -12,14 +12,15 @@
 
 	<!-- メニューバー -->
 	<div class="menu-bar">
-		<div class="menu-today"><script src="js/days.js"></script></div>
+		<div class="menu-today"><script src="morning/days.js"></script></div>
 		<div class="menu-bar-menu">
 		<table>
 			<td><nobr><a th:href="@{/Weather}">天気</a></nobr>
 			<nobr><a th:href="@{/Weather_alert}">警報・注意報</a></nobr>
+			<nobr><a th:href="@{/Horoscope}">占い</a></nobr>
 			<td><nobr><p class="menu-bar-title"><a th:href="@{/main}"><img src="morning/Morning.png"/></a></p></nobr>
-			<td><nobr><a th:href="@{/Horoscope}">占い</a></nobr>
-			<nobr><a th:href="@{/Traffic}">交通</a></nobr>
+			<td><nobr><a th:href="@{/Traffic}">バス情報</a></nobr>
+			<nobr><a th:href="@{/Jr}">ＪＲ情報</a></nobr>
 			<nobr><a th:href="@{/Chart}">チャート</a></nobr>
 		</table>
 		</div>
@@ -32,7 +33,21 @@
 	
 	<!-- タイトル表示 -->
 	<p class="title">メイン画面</p>
-	<div class="title-space"></div>
+	
+	<p class="no-box" >
+	<nobr>
+	<a href="https://jobnavi.hcs.ac.jp/#f">
+	＜＜JobNaviはこちら
+	</a>
+	</nobr>
+	　
+	<nobr>
+	<a href="https://script.google.com/a/hcs.ac.jp/macros/s/
+	AKfycbyCyUOgSx984uCoPwBS2fdT2NCwQ_dLqcUDx9Ce-3KO5LZ-0zzk/exec"
+	style="line-height: 2.0;">
+	＜＜けんおんちゃんはこちら</a>
+	</nobr>
+	</p>
 	
 	<div class="contents">
 	
@@ -55,11 +70,21 @@
 	<!-- 交通情報メイン -->
 	<div class="main-traffic">
 	<!-- 運休情報の表示 -->
+	
+	<p class="traffic_title">バス</p>
 		<th:block th:if="${flg}">
-			<nobr><p class="traffic-message-t">交通情報あり</nobr>
+			<nobr><p class="traffic-message-t">交通情報あり</p></nobr>
 		</th:block> 
 		<th:block th:if="!${flg}">
-			<nobr><p class="traffic-message-f">交通情報なし</nobr>
+			<nobr><p class="traffic-message-f">交通情報なし</p></nobr>
+		</th:block>
+	
+	<p class="traffic_title">ＪＲ</p>
+		<th:block th:if="${jrflg}">
+			<nobr><p class="traffic-message-t">交通情報あり</p></nobr>
+		</th:block> 
+		<th:block th:if="!${jrflg}">
+			<nobr><p class="traffic-message-f">交通情報なし</p></nobr>
 		</th:block>
 	</div>
 	

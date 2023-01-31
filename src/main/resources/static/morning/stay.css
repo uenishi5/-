@@ -7,6 +7,7 @@
 	padding-left: 10px;
 	font-weight: bold;
 }
+
 /* メニューバー */
 .menu-bar {
   position: fixed;
@@ -36,7 +37,7 @@
 .menu-bar-menu {
 	margin-left: auto;
 	margin-right: auto;
-	width: min(110%,1100px);
+	width: min(110%,1245px);
 }
 
 .menu-bar-title {

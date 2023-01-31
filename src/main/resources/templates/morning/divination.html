@@ -12,14 +12,15 @@
 
 	<!-- メニューバー -->
 	<div class="menu-bar">
-		<div class="menu-today"><script src="js/days.js"></script></div>
+	<div class="menu-today"><script src="morning/days.js"></script></div>
 		<div class="menu-bar-menu">
 		<table>
 			<td><nobr><a th:href="@{/Weather}">天気</a></nobr>
 			<nobr><a th:href="@{/Weather_alert}">警報・注意報</a></nobr>
+			<nobr><a th:href="@{/Horoscope}">占い</a></nobr>
 			<td><nobr><p class="menu-bar-title"><a th:href="@{/main}"><img src="morning/Morning.png"/></a></p></nobr>
-			<td><nobr><a th:href="@{/Horoscope}">占い</a></nobr>
-			<nobr><a th:href="@{/Traffic}">交通</a></nobr>
+			<td><nobr><a th:href="@{/Traffic}">バス情報</a></nobr>
+			<nobr><a th:href="@{/Jr}">ＪＲ情報</a></nobr>
 			<nobr><a th:href="@{/Chart}">チャート</a></nobr>
 		</table>
 		</div>
