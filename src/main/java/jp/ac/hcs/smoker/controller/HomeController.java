@@ -2,13 +2,11 @@ package jp.ac.hcs.smoker.controller;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -17,10 +15,7 @@ import java.util.Objects;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.system.SystemProperties;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -180,7 +175,7 @@ public class HomeController {
 		}
 
 		if (Objects.isNull(videoListResponse)) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return ResponseEntity.internalServerError().build();
 		}
 
 		// リクエストおよびレスポンスが正常に行われたため次の段階へすすむ
@@ -191,7 +186,7 @@ public class HomeController {
 
 		// 一件でも掛かればヨシ！
 		if (items.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return ResponseEntity.badRequest().build();
 		}
 
 		// 動画の情報
@@ -200,83 +195,9 @@ public class HomeController {
 		final String contentType = toMp3 ? "audio/mpeg" : "audio/mp4";
 		final String extension = toMp3 ? "mp3" : "mp4";
 		final String filename = String.format("%s.%s", video.getSnippet().getTitle(), extension);
+		final Path path = FileSystems.getDefault().getPath(Paths.get(System.getProperty("user.home"), "downloads", filename).toAbsolutePath().toString());
 
-		// ヘッダー情報の設定
-		final HttpHeaders header = new HttpHeaders();
-
-		header.add("Content-Type", "charset=UTF-8;" + contentType);
-		header.setContentDispositionFormData("filename", filename);
-
-		final Path path = Paths.get(filename);
-		byte[] bytes = null;
-
-		try {
-			// 指定されたURLの動画をダウンロード
-			download(url, toMp3);
-
-			// CSVファイルをサーバから読み込み
-			bytes = Files.readAllBytes(FileSystems.getDefault().getPath(path.toAbsolutePath().toString()));
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		if (Objects.isNull(bytes)) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-
-		return new ResponseEntity<>(bytes, header, HttpStatus.OK);
-	}
-
-	public static void download(String url, boolean toMp3) {
-		try {
-			// コマンド実行のためのビルダー
-			final ProcessBuilder builder = new ProcessBuilder();
-
-			// コマンドプロンプトの内容をコンソールに出力する設定
-			builder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
-			builder.redirectError(ProcessBuilder.Redirect.INHERIT);
-
-			// 使用しているOSを調べる
-			final String osName = SystemProperties.get("os.name");
-			final boolean isWindows = osName.startsWith("Windows");
-			System.out.println(String.format("OS name=%s, isWindows=%b", osName, isWindows));
-
-			if (isWindows) {
-				// 現在のプロジェクト相対パスから絶対パスに変換
-				final Path absolutePath = Paths.get("cmds").toAbsolutePath();
-				// ディレクトリの設定
-				builder.directory(absolutePath.toFile());
-			}
-
-			System.out.println(String.format("Directory=%s", builder.directory()));
-
-			// 実行するコマンドの設定
-			// -v : debug mode
-			// -x : (--extract-audio) で音声のみダウンロード
-			// --audio-format mp3: mp3 形式にフォーマット
-			List<String> command = new ArrayList<>();
-			command.add("youtube-dl");
-			command.add("--print-json");
-			command.add("-v");
-			command.add(url);
-
-			if (toMp3) {
-				System.out.println("Extract Audio");
-				command.add("--extract-audio");
-				command.add("--audio-format");
-				command.add("mp3");
-			}
-
-			builder.command(command);
-			builder.command().forEach(System.out::println);
-
-			// コマンドを実行する
-			Process process = builder.start();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
+		return DownloadHelper.execute(path, url, toMp3);
 	}
 
 	public static class YouTubeInstance {
@@ -329,7 +250,7 @@ public class HomeController {
 			}
 
 			public static Content map(Article article) {
-				Content content = new Content();
+				final Content content = new Content();
 				content.setOriginalUrl(article.getUrl());
 				content.setIconUrl(article.getUrlToImage());
 				content.setTitle(article.getTitle());
@@ -340,7 +261,7 @@ public class HomeController {
 			}
 
 			public static Content map(VideoResponse videoResponse) {
-				Content content = new Content();
+				final Content content = new Content();
 
 				String publishBy = "";
 
@@ -352,7 +273,7 @@ public class HomeController {
 					e.printStackTrace();
 				}
 
-				String publishAt = videoResponse.getPornstars().isEmpty() ? "" : videoResponse.getPornstars().get(0).getPornstarName();
+				final String publishAt = videoResponse.getPornstars().isEmpty() ? "" : videoResponse.getPornstars().get(0).getPornstarName();
 
 				content.setOriginalUrl(videoResponse.getUrl());
 				content.setIconUrl(videoResponse.getThumb());

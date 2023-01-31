@@ -204,10 +204,7 @@ function filter_setting(e) {
     });
 }
 
-function ajax_download(e, url){
-    const searchTerm = 'v=';
-    const indexOfFirst = url.indexOf(searchTerm) + 2;
-    const videoId = url.substring(indexOfFirst,url.length)
+function ajax_youtube_download(e) {
 
     e.preventDefault();  // デフォルトのイベント(ページの遷移やデータ送信など)を無効にする
     $.ajax({
@@ -215,19 +212,19 @@ function ajax_download(e, url){
         type: "POST",
         dataType: "json",
         data: {
-            videoId:videoId,
-            toMp3:false
+            videoId: videoId,
+            toMp3: false
         }
     })
-    .done(function (response) {
-        alert("ddd!");
-    })
-    .fail(function (response) {
-        alert("なにかしらのエラー!");  // 通信に失敗した場合の処理
-    })
-    .always(function (response) {
+        .done(function (response) {
+            alert("ddd!");
+        })
+        .fail(function (response) {
+            alert("なにかしらのエラー!");  // 通信に失敗した場合の処理
+        })
+        .always(function (response) {
 
-    })
+        })
 }
 
 $("#search-form").on("submit", function (e) {
@@ -257,7 +254,6 @@ $("#search-form").on("submit", function (e) {
                             const source = $(this).find(".source").text();
                             const originalUrl = $(this).find(".originalUrl").text();
 
-
                             $("#item-window").find(".modal-title").children().remove();
                             $("#item-window").find(".modal-title").text(title);
 
@@ -267,9 +263,34 @@ $("#search-form").on("submit", function (e) {
 
                             $("#item-window").find(".modal-footer").children().remove();
                             $("#item-window").find(".modal-footer")
-                                .append($("<button>", { "class": "btn", "text": "Download", "type":"button"}).onclick(ajax_download(e, originalUrl)))
-                                .append($("<a>", { "class": "btn ms-auto", "text": "Original", "href": originalUrl }));
+                                .append($("<button>", { "class": "btn", "text": "Download", "type": "button" })
+                                    .click(function (e) {
+                                        const searchTerm = 'v=';
+                                        const indexOfFirst = originalUrl.indexOf(searchTerm) + 2;
+                                        const videoId = originalUrl.substring(indexOfFirst, originalUrl.length)
 
+                                        e.preventDefault();  // デフォルトのイベント(ページの遷移やデータ送信など)を無効にする
+                                        $.ajax({
+                                            url: "/youtube-dl",
+                                            type: "POST",
+                                            dataType: "json",
+                                            data: {
+                                                videoId: videoId,
+                                                toMp3: true
+                                            }
+                                        })
+                                            .done(function (response) {
+                                                alert("done!");
+                                            })
+                                            .fail(function (response) {
+                                                console.log(response);
+                                            })
+                                            .always(function (response) {
+
+                                            })
+                                    }
+                                    ))
+                                .append($("<a>", { "class": "btn ms-auto", "text": "Original", "href": originalUrl }));
                         })
                         .append($("<img>", { "class": "iconUrl", "src": content.iconUrl }))
                         .append($("<div>", { "class": "title", "text": content.title }))
@@ -280,7 +301,7 @@ $("#search-form").on("submit", function (e) {
             });
         })
         .fail(function (response) {
-            alert("なにかしらのエラー!");  // 通信に失敗した場合の処理
+            console.log(response);
         })
         .always(function (response) {
 
