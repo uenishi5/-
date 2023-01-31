@@ -16,18 +16,4 @@ public class HoroscopeController {
 		model.addAttribute("HoroscopeEntity",entity);
 		return "morning/divination";
 	}
-//	/**
-//	 * 
-//	 * @param model データの格納先
-//	 * @param horotitle 星座名
-//	 * @return
-//	 */
-//	@RequestMapping("/getHoroscopeDetail")
-//	public static String getHoroscopeDetailData(Model model, String horotitle) {
-//		HoroscopeEntity entity = new HoroscopeEntity();
-//		HoroscopeService service = new HoroscopeService();
-//		entity = service.getHoroscopeDetail(horotitle);
-//		model.addAttribute("HoroscopeEntity", entity);
-//		return "divination";
-//	}
 }
