@@ -60,44 +60,5 @@ public class JrService {
 		return entity;
 	}
 
-//	public JrEntity getJrData(int no) {
-//		Document document;
-//		JrEntity entity = new JrEntity();
-//		try {
-//			JrData data = new JrData();
-//			document = Jsoup.connect(JRLIST[no]).get();
-//			Elements normal = document.select(".normal");
-//			Elements trouble_suspend = document.select(".trouble suspend");
-//			Elements trouble = document.select(".trouble");
-//			Elements dt = document.select("dt");
-//			Elements title = document.select(".title");
-//			String[] title2 = title.text().split(" ");
-//			data.setTitle(title2[0]);
-//			String[] alert = dt.text().split(" ");
-//			String alertname = alert[0].substring(3);
-//			data.setAlertname(alertname);	
-//				if (normal.text() != null) {
-//					data.setContent(normal.text());
-//					data.setColor("green");
-//					
-//				} else if (trouble_suspend.text() != null) {
-//					data.setColor("purple");
-//					data.setContent(trouble_suspend.text());
-//					
-//				} else if (trouble.text() != null) {
-//					data.setColor("red");
-//					data.setContent(trouble.text());		
-//				}else {
-//					data.setColor("green");
-//					data.setContent(normal.text());
-//				}
-//			entity.getJrList().add(data);
-//
-//		} catch (IOException e) {
-//
-//		}
-//
-//		return entity;
-//	}
 
 }

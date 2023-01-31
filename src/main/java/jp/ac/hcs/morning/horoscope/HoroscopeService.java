@@ -54,41 +54,6 @@ public class HoroscopeService {
 		return entity;
 	}
 
-//	/**
-//	 * 特定の星座の詳細を返すサービス
-//	 * @param sign 星座名
-//	 * @return
-//	 */
-//	public HoroscopeEntity getHoroscopeDetail(String sign) {
-//		HoroscopeEntity entity = new HoroscopeEntity();
-//		String result = "";
-//
-//		URL url;
-//		try {
-//			String date = simpleDateFormat();
-//			String horoscopeurl = API + date;
-//			url = new URL(horoscopeurl);
-//			// APIへリクエスト送信
-//			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//			connection.connect();
-//			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-//			String tmp = "";
-//
-//			while ((tmp = in.readLine()) != null) {
-//				result += tmp;
-//			}
-//
-//			// 結果をデータに変換
-//			entity = this.convert_only(result, date, sign);
-//			in.close();
-//			connection.disconnect();
-//		} catch (Exception e) {
-//			// TODO 自動生成された catch ブロック
-//			e.printStackTrace();
-//		}
-//
-//		return entity;
-//	}
 
 	/**
 	 * 星座情報を昇順に並び変えて返すプログラム
@@ -166,39 +131,7 @@ public class HoroscopeService {
 		return entity;
 	}
 
-//	/** 一件のデータ取得 */
-//
-//	private HoroscopeEntity convert_only(String json, String date, String sign) {
-//		ObjectMapper objectMapper = new ObjectMapper();
-//
-//		HoroscopeEntity entity = new HoroscopeEntity();
-//
-//		try {
-//			JsonNode horoscope = objectMapper.readValue(json, JsonNode.class);
-//			for (int idx = 0; idx < 12; idx++) {
-//
-//				HoroscopeData data = new HoroscopeData();
-//				String getsign = horoscope.get("horoscope").get(date).get(idx).get("sign").asText();
-//				if (getsign.equals(sign)) {
-//					data.setContent(horoscope.get("horoscope").get(date).get(idx).get("content").asText());
-//					data.setLucky_item(horoscope.get("horoscope").get(date).get(idx).get("item").asText());
-//					data.setMoney(horoscope.get("horoscope").get(date).get(idx).get("money").asText());
-//					data.setTotal(horoscope.get("horoscope").get(date).get(idx).get("total").asText());
-//					data.setJob(horoscope.get("horoscope").get(date).get(idx).get("job").asText());
-//					data.setColor(horoscope.get("horoscope").get(date).get(idx).get("color").asText());
-//					data.setLove(horoscope.get("horoscope").get(date).get(idx).get("love").asText());
-//					data.setRank(horoscope.get("horoscope").get(date).get(idx).get("rank").asInt());
-//					data.setSign(horoscope.get("horoscope").get(date).get(idx).get("sign").asText());
-//					entity.getHoroscopeList().add(data);
-//					break;
-//				}
-//			}
-//		} catch (IOException e) {
-//			// TODO 自動生成された catch ブロック
-//			e.printStackTrace();
-//		}
-//		return entity;
-//	}
+
 /** 日付の取得を行う */
 	private String simpleDateFormat() {
 		Calendar cl = Calendar.getInstance();
