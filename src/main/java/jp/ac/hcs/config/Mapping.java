@@ -17,6 +17,14 @@ public class Mapping {
 
 	public static final String RESOURCE_INDEX = "index";
 	public static final String RESOURCE_MAIN = DIRECTORY_MORNING +"main";
+	public static final String RESOURCE_CHART = DIRECTORY_MORNING +"chart";
+	public static final String RESOURCE_HOROSCOPE = DIRECTORY_MORNING +"divination";
+	public static final String RESOURCE_JR = DIRECTORY_MORNING +"jr_traffic";
+	public static final String RESOURCE_TRAFFIC = DIRECTORY_MORNING + "traffic";
+	public static final String RESOURCE_TRAFFIC_RESULT = DIRECTORY_MORNING + "traffic_result";
+	public static final String RESOURCE_WEATHER = DIRECTORY_MORNING + "weather";
+	public static final String RESOURCE_WEATHER_ALERT = DIRECTORY_MORNING + "alert";
+
 
 
 }
