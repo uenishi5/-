@@ -1,11 +1,14 @@
 package jp.ac.hcs.morning.weather_alert;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
+
 /** 警報注意報を取得するクラス */
 @Service
 public class Weather_alertService {
@@ -56,15 +59,12 @@ public class Weather_alertService {
 					}
 					if ((alert[idx].matches(".*注意報"))) {
 						data.setName(alert[idx].replace("注意報", ""));
-
 						data.setAlert_color("yellow");
 					} else if ((alert[idx].matches(".*警報"))) {
 						data.setName(alert[idx].replace("警報", ""));
-
 						data.setAlert_color("red");
 					} else if ((alert[idx].matches(".*特別警報"))) {
 						data.setName(alert[idx].replace("特別警報", ""));
-
 						data.setAlert_color("black");
 					}
 					entity.getWeather_alertnameList().add(data);
@@ -114,144 +114,87 @@ public class Weather_alertService {
 					}
 					alertnamecount = alertnamecount - 1;
 					data.setName(name);
-					data.setAlertdata1(alertdata[alertlabel]);
-					if (alertdata[alertlabel].equals("発表なし")) {
-						data.setAlertdata1class("white");
-					} else if (alertdata[alertlabel].equals("注意報級")) {
-						data.setAlertdata1class("yellow");
-					} else if (alertdata[alertlabel].equals("警報級")) {
-						data.setAlertdata1class("red");
-					} else if (alertdata[alertlabel].equals("特別警報級")) {
-						data.setAlertdata1class("black");
-					}
-					alertlabel = alertlabel + 2;
-					data.setAlertdata2(alertdata[alertlabel]);
-					if (alertdata[alertlabel].equals("発表なし")) {
-						data.setAlertdata2class("white");
-					} else if (alertdata[alertlabel].equals("注意報級")) {
-						data.setAlertdata2class("yellow");
-					} else if (alertdata[alertlabel].equals("警報級")) {
-						data.setAlertdata2class("red");
-					} else if (alertdata[alertlabel].equals("特別警報級")) {
-						data.setAlertdata2class("black");
-					}
-					alertlabel = alertlabel + 2;
-					data.setAlertdata3(alertdata[alertlabel]);
-					if (alertdata[alertlabel].equals("発表なし")) {
-						data.setAlertdata3class("white");
-					} else if (alertdata[alertlabel].equals("注意報級")) {
-						data.setAlertdata3class("yellow");
-					} else if (alertdata[alertlabel].equals("警報級")) {
-						data.setAlertdata3class("red");
-					} else if (alertdata[alertlabel].equals("特別警報級")) {
-						data.setAlertdata3class("black");
-					}
-					alertlabel = alertlabel + 2;
-					data.setAlertdata4(alertdata[alertlabel]);
-					if (alertdata[alertlabel].equals("発表なし")) {
-						data.setAlertdata4class("white");
-					} else if (alertdata[alertlabel].equals("注意報級")) {
-						data.setAlertdata4class("yellow");
-					} else if (alertdata[alertlabel].equals("警報級")) {
-						data.setAlertdata4class("red");
-					} else if (alertdata[alertlabel].equals("特別警報級")) {
-						data.setAlertdata4class("black");
-					}
-					alertlabel = alertlabel + 2;
-					data.setAlertdata5(alertdata[alertlabel]);
-					if (alertdata[alertlabel].equals("発表なし")) {
-						data.setAlertdata5class("white");
-					} else if (alertdata[alertlabel].equals("注意報級")) {
-						data.setAlertdata5class("yellow");
-					} else if (alertdata[alertlabel].equals("警報級")) {
-						data.setAlertdata5class("red");
-					} else if (alertdata[alertlabel].equals("特別警報級")) {
-						data.setAlertdata5class("black");
-					}
-					alertlabel = alertlabel + 2;
-					data.setAlertdata6(alertdata[alertlabel]);
-					if (alertdata[alertlabel].equals("発表なし")) {
-						data.setAlertdata6class("white");
-					} else if (alertdata[alertlabel].equals("注意報級")) {
-						data.setAlertdata6class("yellow");
-					} else if (alertdata[alertlabel].equals("警報級")) {
-						data.setAlertdata6class("red");
-					} else if (alertdata[alertlabel].equals("特別警報級")) {
-						data.setAlertdata6class("black");
-					}
-					alertlabel = alertlabel + 2;
-					data.setAlertdata7(alertdata[alertlabel]);
-					if (alertdata[alertlabel].equals("発表なし")) {
-						data.setAlertdata7class("white");
-					} else if (alertdata[alertlabel].equals("注意報級")) {
-						data.setAlertdata7class("yellow");
-					} else if (alertdata[alertlabel].equals("警報級")) {
-						data.setAlertdata7class("red");
-					} else if (alertdata[alertlabel].equals("特別警報級")) {
-						data.setAlertdata7class("black");
-					}
-					alertlabel = alertlabel + 2;
-					data.setAlertdata8(alertdata[alertlabel]);
-					if (alertdata[alertlabel].equals("発表なし")) {
-						data.setAlertdata8class("white");
-					} else if (alertdata[alertlabel].equals("注意報級")) {
-						data.setAlertdata8class("yellow");
-					} else if (alertdata[alertlabel].equals("警報級")) {
-						data.setAlertdata8class("red");
-					} else if (alertdata[alertlabel].equals("特別警報級")) {
-						data.setAlertdata8class("black");
-					}
-					alertlabel = alertlabel + 2;
-					data.setAlertdata9(alertdata[alertlabel]);
-					if (alertdata[alertlabel].equals("発表なし")) {
-						data.setAlertdata9class("white");
-					} else if (alertdata[alertlabel].equals("注意報級")) {
-						data.setAlertdata9class("yellow");
-					} else if (alertdata[alertlabel].equals("警報級")) {
-						data.setAlertdata9class("red");
-					} else if (alertdata[alertlabel].equals("特別警報級")) {
-						data.setAlertdata9class("black");
-					}
-					alertlabel = alertlabel + 1;
-					if (alertdata[alertlabel].equals("発表なし")) {
-						data.setAlertdata10class("white");
-						data.setAlertdata10(alertdata[alertlabel]);
-						errorflg = true;
-						alertlabel = alertlabel + 1;
-						alertnamecount = alertnamecount - 1;
-					} else if (alertdata[alertlabel].equals("注意報級")) {
-						data.setAlertdata10class("yellow");
-						data.setAlertdata10(alertdata[alertlabel]);
-						errorflg = true;
-						alertlabel = alertlabel + 1;
-						alertnamecount = alertnamecount - 1;
-					} else if (alertdata[alertlabel].equals("警報級")) {
-						data.setAlertdata10class("red");
-						data.setAlertdata10(alertdata[alertlabel]);
-						errorflg = true;
-						alertlabel = alertlabel + 1;
-						alertnamecount = alertnamecount - 1;
-					} else if (alertdata[alertlabel].equals("特別警報級")) {
-						data.setAlertdata10class("black");
-						data.setAlertdata10(alertdata[alertlabel]);
-						errorflg = true;
-						alertlabel = alertlabel + 1;
-						alertnamecount = alertnamecount - 1;
-					} else {
-						alertlabel = alertlabel + 1;
-					}
-					if (!(errorflg)) {
-						data.setAlertdata10(alertdata[alertlabel]);
-						if (alertdata[alertlabel].equals("発表なし")) {
-							data.setAlertdata10class("white");
-						} else if (alertdata[alertlabel].equals("注意報級")) {
-							data.setAlertdata10class("yellow");
-						} else if (alertdata[alertlabel].equals("警報級")) {
-							data.setAlertdata10class("red");
-						} else if (alertdata[alertlabel].equals("特別警報級")) {
-							data.setAlertdata10class("black");
+					List<String> alertdatalist = new ArrayList<String>();
+					List<String> alertclasslist = new ArrayList<String>();
+					for (int idx = 0; idx < 10; idx++) {
+						if (idx == 9) {
+							if (alertdata[alertlabel].equals("発表なし")) {
+								alertdatalist.add(alertdata[alertlabel]);
+								alertclasslist.add("white");
+								errorflg = true;
+								alertlabel = alertlabel + 1;
+								alertnamecount = alertnamecount - 1;
+							} else if (alertdata[alertlabel].equals("注意報級")) {
+								alertdatalist.add(alertdata[alertlabel]);
+								alertclasslist.add("yellow");
+								errorflg = true;
+								alertlabel = alertlabel + 1;
+								alertnamecount = alertnamecount - 1;
+							} else if (alertdata[alertlabel].equals("警報級")) {
+								alertdatalist.add(alertdata[alertlabel]);
+								alertclasslist.add("red");
+								errorflg = true;
+								alertlabel = alertlabel + 1;
+								alertnamecount = alertnamecount - 1;
+							} else if (alertdata[alertlabel].equals("特別警報級")) {
+								alertdatalist.add(alertdata[alertlabel]);
+								alertclasslist.add("black");
+								errorflg = true;
+								alertlabel = alertlabel + 1;
+								alertnamecount = alertnamecount - 1;
+							} else {
+								alertlabel = alertlabel + 1;
+							}
+							if (!(errorflg)) {
+								alertdatalist.add(alertdata[alertlabel]);
+								if (alertdata[alertlabel].equals("発表なし")) {
+									alertclasslist.add("white");
+								} else if (alertdata[alertlabel].equals("注意報級")) {
+									alertclasslist.add("yellow");
+								} else if (alertdata[alertlabel].equals("警報級")) {
+									alertclasslist.add("red");
+								} else if (alertdata[alertlabel].equals("特別警報級")) {
+									alertclasslist.add("black");
+								}
+							}
+						} else {
+							alertdatalist.add(alertdata[alertlabel]);
+							if (alertdata[alertlabel].equals("発表なし")) {
+								alertclasslist.add("white");
+							} else if (alertdata[alertlabel].equals("注意報級")) {
+								alertclasslist.add("yellow");
+							} else if (alertdata[alertlabel].equals("警報級")) {
+								alertclasslist.add("red");
+							} else if (alertdata[alertlabel].equals("特別警報級")) {
+								alertclasslist.add("black");
+							}
+							if (idx == 8) {
+								alertlabel = alertlabel + 1;
+							} else {
+								alertlabel = alertlabel + 2;
+							}
 						}
 					}
+					data.setAlertdata1(alertdatalist.get(0));
+					data.setAlertdata1class(alertclasslist.get(0));
+					data.setAlertdata2(alertdatalist.get(1));
+					data.setAlertdata2class(alertclasslist.get(1));
+					data.setAlertdata3(alertdatalist.get(2));
+					data.setAlertdata3class(alertclasslist.get(2));
+					data.setAlertdata4(alertdatalist.get(3));
+					data.setAlertdata4class(alertclasslist.get(3));
+					data.setAlertdata5(alertdatalist.get(4));
+					data.setAlertdata5class(alertclasslist.get(4));
+					data.setAlertdata6(alertdatalist.get(5));
+					data.setAlertdata6class(alertclasslist.get(5));
+					data.setAlertdata7(alertdatalist.get(6));
+					data.setAlertdata7class(alertclasslist.get(6));
+					data.setAlertdata8(alertdatalist.get(7));
+					data.setAlertdata8class(alertclasslist.get(7));
+					data.setAlertdata9(alertdatalist.get(8));
+					data.setAlertdata9class(alertclasslist.get(8));
+					data.setAlertdata10(alertdatalist.get(9));
+					data.setAlertdata10class(alertclasslist.get(9));
 					entity.getWeather_alertList().add(data);
 					if (alertnamecount + 21 < alertlength - 1 && !(alertdata[alertnamecount + 21].equals("日付"))) {
 						alertnamecount = alertnamecount + 21;
@@ -264,10 +207,9 @@ public class Weather_alertService {
 					alertnamecount = alertnamecount + 26;
 					alertlabel = alertlabel + 8;
 				}
-				//2段目の取得（データが存在する場合)
+				//2段目のデータを取得する（データが存在する場合)
 				while (weatherflg) {
 					Weather_alertData data = new Weather_alertData();
-
 					name = alertdata[alertnamecount];
 					alertnamecount++;
 					while (!(alertdata[alertnamecount].matches(".*日"))) {
@@ -277,49 +219,32 @@ public class Weather_alertService {
 					}
 					alertnamecount = alertnamecount - 1;
 					data.setName(name);
-					data.setAlert1(alertdata[alertlabel]);
+					List<String> dayalertlist = new ArrayList<String>();
+					List<String> dayalertclasslist = new ArrayList<String>();
+					for(int idx=0; idx<4; idx++) {
+						dayalertlist.add(alertdata[alertlabel]);
 					if (alertdata[alertlabel].equals("発表なし")) {
-						data.setDayalertdata1class("white");
+						dayalertclasslist.add("white");
 					} else if (alertdata[alertlabel].equals("注意報級")) {
-						data.setDayalertdata1class("yellow");
+						dayalertclasslist.add("yellow");
 					} else if (alertdata[alertlabel].equals("警報級")) {
-						data.setDayalertdata1class("red");
+						dayalertclasslist.add("red");
 					} else if (alertdata[alertlabel].equals("特別警報級")) {
 						data.setDayalertdata1class("black");
 					}
-					alertlabel = alertlabel + 2;
-					data.setAlert2(alertdata[alertlabel]);
-					if (alertdata[alertlabel].equals("発表なし")) {
-						data.setDayalertdata2class("white");
-					} else if (alertdata[alertlabel].equals("注意報級")) {
-						data.setDayalertdata2class("yellow");
-					} else if (alertdata[alertlabel].equals("警報級")) {
-						data.setDayalertdata2class("red");
-					} else if (alertdata[alertlabel].equals("特別警報級")) {
-						data.setDayalertdata2class("black");
+					if(!(idx == 3)) {
+						alertlabel = alertlabel + 2;
 					}
-					alertlabel = alertlabel + 2;
-					data.setAlert3(alertdata[alertlabel]);
-					if (alertdata[alertlabel].equals("発表なし")) {
-						data.setDayalertdata3class("white");
-					} else if (alertdata[alertlabel].equals("注意報級")) {
-						data.setDayalertdata3class("yellow");
-					} else if (alertdata[alertlabel].equals("警報級")) {
-						data.setDayalertdata3class("red");
-					} else if (alertdata[alertlabel].equals("特別警報級")) {
-						data.setDayalertdata3class("black");
 					}
-					alertlabel = alertlabel + 2;
-					data.setAlert4(alertdata[alertlabel]);
-					if (alertdata[alertlabel].equals("発表なし")) {
-						data.setDayalertdata4class("white");
-					} else if (alertdata[alertlabel].equals("注意報級")) {
-						data.setDayalertdata4class("yellow");
-					} else if (alertdata[alertlabel].equals("警報級")) {
-						data.setDayalertdata4class("red");
-					} else if (alertdata[alertlabel].equals("特別警報級")) {
-						data.setDayalertdata4class("black");
-					}
+
+					data.setAlert1(dayalertlist.get(0));
+					data.setDayalertdata1class(dayalertclasslist.get(0));
+					data.setAlert2(dayalertlist.get(1));
+					data.setDayalertdata2class(dayalertclasslist.get(1));
+					data.setAlert3(dayalertlist.get(2));
+					data.setDayalertdata3class(dayalertclasslist.get(2));
+					data.setAlert4(dayalertlist.get(3));
+					data.setDayalertdata4class(dayalertclasslist.get(3));
 					entity.getWeather_alert2List().add(data);
 					if (alertnamecount + 9 > alertlength - 1) {
 						alertnamecount = alertnamecount + 9;
@@ -330,8 +255,9 @@ public class Weather_alertService {
 				}
 
 			}
-		} catch (IOException e) {
-			
+		} catch (
+		IOException e) {
+
 			entity.setError(true);
 			return entity;
 

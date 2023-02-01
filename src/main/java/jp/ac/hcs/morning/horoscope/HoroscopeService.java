@@ -54,7 +54,6 @@ public class HoroscopeService {
 		return entity;
 	}
 
-
 	/**
 	 * 星座情報を昇順に並び変えて返すプログラム
 	 * @param json
@@ -70,8 +69,7 @@ public class HoroscopeService {
 		try {
 			JsonNode horoscope = objectMapper.readValue(json, JsonNode.class);
 			for (int idx = 0; idx < 12; idx++) {
-				int rank = horoscope.get("horoscope").get(date).get(idx).get("rank").asInt();
-				rank = rank - 1;
+				int rank = horoscope.get("horoscope").get(date).get(idx).get("rank").asInt() - 1;
 				horosortlist[rank][0] = horoscope.get("horoscope").get(date).get(idx).get("content").asText();
 				horosortlist[rank][1] = horoscope.get("horoscope").get(date).get(idx).get("item").asText();
 				horosortlist[rank][2] = horoscope.get("horoscope").get(date).get(idx).get("money").asText();
@@ -95,32 +93,44 @@ public class HoroscopeService {
 				data.setRank(Integer.parseInt(rank));
 				data.setSign(horosortlist[idx][8]);
 				String sign = horosortlist[idx][8];
-				if (sign.equals("牡羊座")) {
+				switch (sign) {
+				case "牡羊座":
 					data.setPhotopath("morning/ohitsuji.png");
-				} else if (sign.equals("乙女座")) {
+					break;
+				case "乙女座":
 					data.setPhotopath("morning/otome.png");
-				} else if (sign.equals("天秤座")) {
+					break;
+				case "天秤座":
 					data.setPhotopath("morning/tenbin.png");
-				} else if (sign.equals("双子座")) {
+					break;
+				case "双子座":
 					data.setPhotopath("morning/futago.png");
-				} else if (sign.equals("牡牛座")) {
+					break;
+				case "牡牛座":
 					data.setPhotopath("morning/oushi.png");
-				} else if (sign.equals("獅子座")) {
+					break;
+				case "獅子座":
 					data.setPhotopath("morning/shishi.png");
-				} else if (sign.equals("蠍座")) {
+					break;
+				case "蠍座":
 					data.setPhotopath("morning/sasori.png");
-				} else if (sign.equals("蟹座")) {
+					break;
+				case "蟹座":
 					data.setPhotopath("morning/kani.png");
-				} else if (sign.equals("射手座")) {
+					break;
+				case "射手座":
 					data.setPhotopath("morning/ite.png");
-				} else if (sign.equals("山羊座")) {
+					break;
+				case "山羊座":
 					data.setPhotopath("morning/yagi.png");
-				} else if (sign.equals("水瓶座")) {
+					break;
+				case "水瓶座":
 					data.setPhotopath("morning/mizugame.png");
-				} else if (sign.equals("魚座")) {
+					break;
+				case "魚座":
 					data.setPhotopath("morning/uo.png");
-				}else {
-					data.setPhotopath("null");
+					break;
+
 				}
 				entity.getHoroscopeList().add(data);
 			}
@@ -131,8 +141,7 @@ public class HoroscopeService {
 		return entity;
 	}
 
-
-/** 日付の取得を行う */
+	/** 日付の取得を行う */
 	private String simpleDateFormat() {
 		Calendar cl = Calendar.getInstance();
 

@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jp.ac.hcs.config.Mapping;
+
 @Controller
 public class WeatherController {
 	
@@ -17,6 +19,6 @@ public class WeatherController {
 		
 		entity = service.getWeatherData();
 		model.addAttribute("WeatherEntity", entity);
-		return "morning/weather";
+		return Mapping.RESOURCE_WEATHER;
 	}
 }

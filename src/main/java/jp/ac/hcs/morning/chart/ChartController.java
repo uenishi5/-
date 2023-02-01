@@ -3,6 +3,8 @@ package jp.ac.hcs.morning.chart;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import jp.ac.hcs.config.Mapping;
 /**チャート情報を表示するコントローラー*/
 @Controller
 public class ChartController {
@@ -12,6 +14,6 @@ public class ChartController {
 		ChartService service = new ChartService();
 		entity = service.getChartData();
 		model.addAttribute("ChartEntity",entity);
-		return "morning/chart";
+		return Mapping.RESOURCE_CHART;
 	}
 }

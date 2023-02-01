@@ -11,9 +11,7 @@ import java.util.Calendar;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,7 +34,6 @@ public class MainService {
 	/** エンドポイント */
 	private static final String HOROSCOPE = "http://api.jugemkey.jp/api/horoscope/free/";
 	private static final String SAPPORO = "https://weather.tsukumijima.net/api/forecast/city/016010";
-	private static final String SAPPORO_BUS = "https://www.chuo-bus.co.jp/support/stop/?ope=list&g=16";
 	/** 高速バス情報 */
 	private static final String NORTH_SAPPORO_ISHIKARI = "https://www.chuo-bus.co.jp/support/stop/?ope=list&g=16";
 	private static final String SOUTH_SAPPORO_NORTH_HIROSHIMA_CHITOSE_EBETSU = "https://www.chuo-bus.co.jp/support/stop/?ope=list&g=17";
@@ -47,8 +44,6 @@ public class MainService {
 	private static final String IWAMIZAWA = "https://www.chuo-bus.co.jp/support/stop/?ope=list&g=10";
 	private static final String BUSLIST[] = { NORTH_SAPPORO_ISHIKARI, SOUTH_SAPPORO_NORTH_HIROSHIMA_CHITOSE_EBETSU,
 			OTARU_SHINAI, OTARU_HOUMEN, YOICHI_SHAKOTAN, TAKIGAWA, IWAMIZAWA };
-	@Autowired
-	private RestTemplate restTemplate;
 
 	/** メイン画面用データ取得 */
 	public WeatherEntity getWeatherData() {
@@ -181,30 +176,43 @@ public class MainService {
 				if (getrank == 1) {
 					data.setTop(horoscope.get("horoscope").get(date).get(idx).get("sign").asText());
 					String photopath = null;
-					if (horotitle.equals("牡羊座")) {
+					switch(horotitle) {
+					case "牡羊座":
 						photopath = "morning/ohitsuji.png";
-					} else if (horotitle.equals("乙女座")) {
+						break;
+					case "乙女座":
 						photopath = "morning/otome.png";
-					} else if (horotitle.equals("天秤座")) {
+						break;
+					case "天秤座":
 						photopath = "morning/tenbin.png";
-					} else if (horotitle.equals("双子座")) {
+						break;
+					case "双子座":
 						photopath = "morning/futago.png";
-					} else if (horotitle.equals("牡牛座")) {
+						break;
+					case "牡牛座":
 						photopath = "morning/oushi.png";
-					} else if (horotitle.equals("獅子座")) {
+						break;
+					case "獅子座":
 						photopath = "morning/shishi.png";
-					} else if (horotitle.equals("蠍座")) {
+						break;
+					case "蠍座":
 						photopath = "morning/sasori.png";
-					} else if (horotitle.equals("蟹座")) {
+						break;
+					case "蟹座":
 						photopath = "morning/kani.png";
-					} else if (horotitle.equals("射手座")) {
+						break;
+					case "射手座":
 						photopath = "morning/ite.png";
-					} else if (horotitle.equals("山羊座")) {
+						break;
+					case "山羊座":
 						photopath = "morning/yagi.png";
-					} else if (horotitle.equals("水瓶座")) {
+						break;
+					case "水瓶座":
 						photopath = "morning/mizugame.png";
-					} else if (horotitle.equals("魚座")) {
+						break;
+					case "魚座":
 						photopath = "morning/uo.png";
+						break;
 					}
 					data.setPhotopath(photopath);
 					entity.getHoroscopeList().add(data);
@@ -213,7 +221,10 @@ public class MainService {
 			}
 		} catch (IOException e) {
 			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
+			HoroscopeData data = new HoroscopeData();
+			data.setPhotopath("morning/uo.png");
+			data.setTop("取得エラー");
+			entity.getHoroscopeList().add(data);
 		}
 		return entity;
 	}
@@ -329,10 +340,7 @@ public class MainService {
 			touzai = Jsoup.connect("https://transit.yahoo.co.jp/diainfo/13/0").get();
 			nanboku = Jsoup.connect("https://transit.yahoo.co.jp/diainfo/14/0").get();
 			touhou = Jsoup.connect("https://transit.yahoo.co.jp/diainfo/15/0").get();
-			Elements getalert = touzai.select(".normal");
-			Elements getalert2 = nanboku.select(".normal");
-			Elements getalert3 = touhou.select(".normal");
-			if (getalert == null || getalert2 == null || getalert3 == null) {
+			if (touzai.select(".normal").text() == null || nanboku.select(".normal").text() == null || touhou.select(".normal").text() == null) {
 				flg = true;
 			}
 		} catch (IOException e) {
