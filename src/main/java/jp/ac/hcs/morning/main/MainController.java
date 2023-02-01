@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jp.ac.hcs.config.Mapping;
 import jp.ac.hcs.morning.chart.ChartEntity;
 import jp.ac.hcs.morning.horoscope.HoroscopeEntity;
 import jp.ac.hcs.morning.traffic.TrafficData;
@@ -50,11 +51,9 @@ public class MainController {
 		trafficEntity = mainService.getMainTrafficData();
 		TrafficData a = trafficEntity.getTrafficflgList().get(0);
 		boolean alertflg = a.isAlertflg();
-		if(alertflg) {
-			model.addAttribute("flg", true);
-		}else {
-			model.addAttribute("flg", false);
-		}
+		
+		model.addAttribute("flg", alertflg);
+
 		/** Jr情報取得*/
 		boolean jrflg = mainService.getMainJrData();
 		if(jrflg) {
@@ -62,6 +61,6 @@ public class MainController {
 		}else {
 			model.addAttribute("jrflg",false);
 		}
-		return "morning/main";
+		return Mapping.RESOURCE_MAIN;
 	}
 }

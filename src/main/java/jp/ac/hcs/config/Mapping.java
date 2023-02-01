@@ -7,11 +7,16 @@ public class Mapping {
 	public static final String MAPPING_YOUTUBEAPI = MAPPING_ROOT + "youtubeapi";
 	public static final String MAPPING_YOUTUBE_DL = MAPPING_ROOT + "youtube-dl";
 
-	// -----html-----
-
-	public static final String RESOURCE_ROOT = "index";
-
+	
 	// -----directory-----
 
-	public static final String DIRECTORY_NEWSAPI = "newsapi";
+	public static final String DIRECTORY_NEWSAPI = "newsapi/";
+	public static final String DIRECTORY_MORNING = "morning/";
+	
+	// -----html-----
+
+	public static final String RESOURCE_INDEX = "index";
+	public static final String RESOURCE_MAIN = DIRECTORY_MORNING +"main";
+
+
 }
