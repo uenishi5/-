@@ -1,16 +1,9 @@
 const data = {
     newsapi: {
-        url: "/newsapi",
-        data: { // 送信データ
-            q: $("#search-form-query").val(),
-            page: $("#page-item-value").val(),
-            size: $("#search-form-size").val(),
-            date: $("#search-form-date").val()
-        },
-        test: [],
         filters: [
             {
                 id: "#search-form-size",
+                label:"ページサイズ",
                 tag: [
                     $("<span>", { class: "col-1", id: "display_size" }),
                     $("<input>", {
@@ -21,6 +14,7 @@ const data = {
             },
             {
                 id: "#search-form-date",
+                label:"日付絞り込み",
                 tag: [
                     $("<select>", {
                         class: "filter-setting-value form-select", id: "search-form-date"
@@ -34,6 +28,7 @@ const data = {
             },
             {
                 id: "#search-form-sort",
+                label:"並び順",
                 tag: [
                     $("<select>", {
                         class: "filter-setting-value form-select", id: "search-form-sort"
@@ -44,92 +39,12 @@ const data = {
                 ]
             }
         ]
-        ,
-        onclick: function () {
-            const iconUrl = $(this).find(".iconUrl").attr("src");
-            const title = $(this).find(".title").text();
-            const publishBy = $(this).find(".publishBy").text();
-            const publishAt = $(this).find(".publishAt").text();
-            const source = $(this).find(".source").text();
-            const originalUrl = $(this).find(".originalUrl").text();
-
-
-            $("#item-window").find(".modal-title").children().remove();
-            $("#item-window").find(".modal-title").text(title);
-
-            $("#item-window").find(".modal-body").children().remove();
-            $("#item-window").find(".modal-body")
-                .append($("<iframe>", { "class": "w-100", "src": source }));
-
-            $("#item-window").find(".modal-footer").children().remove();
-            $("#item-window").find(".modal-footer")
-                .append($("<a>", { "class": "btn ms-auto", "text": "Original", "href": originalUrl }));
-
-        }
     },
     pornhubapi: {
-        url: "/pornhubapi",
-        data: {
-            q: $("#search-form-query").val(),
-            page: $("#page-item-value").val(),
-            thumbsize: $("#search-form-size").val()
-        },
         filters: []
-
-        ,
-        onclick: function () {
-            const iconUrl = $(this).find(".iconUrl").attr("src");
-            const title = $(this).find(".title").text();
-            const publishBy = $(this).find(".publishBy").text();
-            const publishAt = $(this).find(".publishAt").text();
-            const source = $(this).find(".source").text();
-            const originalUrl = $(this).find(".originalUrl").text();
-
-
-            $("#item-window").find(".modal-title").children().remove();
-            $("#item-window").find(".modal-title").text(title);
-
-            $("#item-window").find(".modal-body").children().remove();
-            $("#item-window").find(".modal-body")
-                .append($("<iframe>", { "class": "w-100", "src": source }));
-
-            $("#item-window").find(".modal-footer").children().remove();
-            $("#item-window").find(".modal-footer")
-                .append($("<a>", { "class": "btn ms-auto", "text": "Original", "href": originalUrl }));
-
-        }
     },
     youtubeapi: {
-        url: "youtubeapi",
-        data: {
-            q: $("#search-form-query").val(),
-            page: $("#page-item-value").val(),
-        },
         filters: []
-
-        ,
-        onclick: function () {
-            const iconUrl = $(this).find(".iconUrl").attr("src");
-            const title = $(this).find(".title").text();
-            const publishBy = $(this).find(".publishBy").text();
-            const publishAt = $(this).find(".publishAt").text();
-            const source = $(this).find(".source").text();
-            const originalUrl = $(this).find(".originalUrl").text();
-
-
-            $("#item-window").find(".modal-title").children().remove();
-            $("#item-window").find(".modal-title").text(title);
-
-            $("#item-window").find(".modal-body").children().remove();
-            $("#item-window").find(".modal-body")
-                .append($("<iframe>", { "class": "w-100", "src": source }));
-
-            $("#item-window").find(".modal-footer").children().remove();
-            $("#item-window").find(".modal-footer")
-                .append($("<button>", { "class": "btn", "text": "Download", "formaction": originalUrl, "formmethod": "post" }))
-                .append($("<a>", { "class": "btn ms-auto", "text": "Original", "href": originalUrl }));
-
-        }
     }
 }
 
@@ -177,12 +92,22 @@ $("#search-form-filter-apply").click(function () {
     $("#search-form-filter-tags").children().remove();
 
     $("#filterForm").find(".filter-setting").each(function () {
+        const tag_label = $(this).find(".filter-setting-label");
+        const tag_value = $(this).find(".filter-setting-value");
+        var value = -1;
+
+        if(tag_value.is("input")){
+            value = tag_value.val();
+        }else if(tag_value.is("select")){
+            value = tag_value.find("option:selected").text();
+        }
+
         $("#search-form-filter-tags")
             .append($("<div>", { "class": "col-auto" })
                 .append($("<button>", { "class": "btn btn-border", "data-bs-toggle": "modal", "data-bs-target": "#filterForm" })
-                    .append($("<div>", { "text": $(this).find(".col-form-label").text() }))
+                    .append($("<div>", { "text":  tag_label.text()}))
                     .append($("<div>", { "text": ":" }))
-                    .append($("<div>", { "text": $(this).find(".filter-setting-value").val(), "name": $(this).find(".filter-setting-value").data("param-name") }))
+                    .append($("<div>", { "text": value, "name": tag_value.data("param-name") }))
                 ))
     });
 
@@ -191,9 +116,9 @@ $("#search-form-filter-apply").click(function () {
 //絞り込みの設定
 function filter_setting(e) {
     console.log(data[e].filters);
-    data.newsapi.filters.forEach(filter => {
+    data[e].filters.forEach(filter => {
         const filter_setting = $("<div>", { "class": "filter-setting row mb-3" })
-        const label = $("<div>", { "class": "col-3" }).append($("<div>", { "class": "filter-setting-label" }));
+        const label = $("<div>", { "class": "col-3" }).append($("<div>", { "class": "filter-setting-label" ,"text":filter.label}));
         const value = $("<div>", { "class": "col-9" });
 
         filter.tag.forEach(t => value.append(t))
@@ -201,37 +126,124 @@ function filter_setting(e) {
         filter_setting
             .append(label)
             .append(value);
+        
+        $("#filterForm").find(".modal-body").append(filter_setting);
     });
 }
 
-function ajax_youtube_download(e) {
-
+$("#search-form").on("submit", function (e) {
     e.preventDefault();  // デフォルトのイベント(ページの遷移やデータ送信など)を無効にする
+    youtubeapi();
+});
+
+
+
+function newsapi(){
     $.ajax({
-        url: "/youtube-dl",
+        url: "/nesapi",
         type: "POST",
         dataType: "json",
         data: {
-            videoId: videoId,
-            toMp3: false
+            q: $("#search-form-query").val(),
+            page: $("#page-item-value").val(),
+            size: $("#search-form-size").val(),
+            date: $("#search-form-date").val()
         }
     })
         .done(function (response) {
-            alert("ddd!");
+            $("#contents").children().remove();
+            response.contents.forEach(content => {
+                $("#contents")
+                    .append($("<button>", { "class": "item btn", "data-bs-toggle": "modal", "data-bs-target": "#item-window" })
+                        .click(function () {
+                            const iconUrl = $(this).find(".iconUrl").attr("src");
+                            const title = $(this).find(".title").text();
+                            const publishBy = $(this).find(".publishBy").text();
+                            const publishAt = $(this).find(".publishAt").text();
+                            const source = $(this).find(".source").text();
+                            const originalUrl = $(this).find(".originalUrl").text();
+                
+                
+                            $("#item-window").find(".modal-title").children().remove();
+                            $("#item-window").find(".modal-title").text(title);
+                
+                            $("#item-window").find(".modal-body").children().remove();
+                            $("#item-window").find(".modal-body")
+                                .append($("<iframe>", { "class": "w-100", "src": source }));
+                
+                            $("#item-window").find(".modal-footer").children().remove();
+                            $("#item-window").find(".modal-footer")
+                                .append($("<a>", { "class": "btn ms-auto", "text": "Original", "href": originalUrl }));
+                        })
+                        .append($("<img>", { "class": "iconUrl", "src": content.iconUrl }))
+                        .append($("<div>", { "class": "title", "text": content.title }))
+                        .append($("<div>", { "class": "publishBy", "text": content.publishBy }))
+                        .append($("<div>", { "class": "publishAt", "text": content.publishAt }))
+                        .append($("<div>", { "class": "source", "text": content.source }))
+                        .append($("<div>", { "class": "originalUrl", "text": content.originalUrl })));
+            });
         })
         .fail(function (response) {
-            alert("なにかしらのエラー!");  // 通信に失敗した場合の処理
+            console.log(response);
         })
         .always(function (response) {
 
-        })
+        });
 }
 
-$("#search-form").on("submit", function (e) {
-    const useApi = $(this)
-    console.log(data["youtubeapi"].url);
+function pornhubapi(){
+    $.ajax({
+        url: "/pornhubapi",
+        type: "POST",
+        dataType: "json",
+        data: {
+            q: $("#search-form-query").val(),
+            page: $("#page-item-value").val(),
+            thumbsize: $("#search-form-size").val()
+        }
+    })
+        .done(function (response) {
+            $("#contents").children().remove();
+            response.contents.forEach(content => {
+                $("#contents")
+                    .append($("<button>", { "class": "item btn", "data-bs-toggle": "modal", "data-bs-target": "#item-window" })
+                        .click(function () {
+                            const iconUrl = $(this).find(".iconUrl").attr("src");
+                            const title = $(this).find(".title").text();
+                            const publishBy = $(this).find(".publishBy").text();
+                            const publishAt = $(this).find(".publishAt").text();
+                            const source = $(this).find(".source").text();
+                            const originalUrl = $(this).find(".originalUrl").text();
+                
+                
+                            $("#item-window").find(".modal-title").children().remove();
+                            $("#item-window").find(".modal-title").text(title);
+                
+                            $("#item-window").find(".modal-body").children().remove();
+                            $("#item-window").find(".modal-body")
+                                .append($("<iframe>", { "class": "w-100", "src": source }));
+                
+                            $("#item-window").find(".modal-footer").children().remove();
+                            $("#item-window").find(".modal-footer")
+                                .append($("<a>", { "class": "btn ms-auto", "text": "Original", "href": originalUrl }));
+                        })
+                        .append($("<img>", { "class": "iconUrl", "src": content.iconUrl }))
+                        .append($("<div>", { "class": "title", "text": content.title }))
+                        .append($("<div>", { "class": "publishBy", "text": content.publishBy }))
+                        .append($("<div>", { "class": "publishAt", "text": content.publishAt }))
+                        .append($("<div>", { "class": "source", "text": content.source }))
+                        .append($("<div>", { "class": "originalUrl", "text": content.originalUrl })));
+            });
+        })
+        .fail(function (response) {
+            console.log(response);
+        })
+        .always(function (response) {
 
-    e.preventDefault();  // デフォルトのイベント(ページの遷移やデータ送信など)を無効にする
+        });
+}
+
+function youtubeapi(){
     $.ajax({
         url: "/youtubeapi",
         type: "POST",
@@ -254,6 +266,12 @@ $("#search-form").on("submit", function (e) {
                             const source = $(this).find(".source").text();
                             const originalUrl = $(this).find(".originalUrl").text();
 
+                            const param = 'v=';
+                            const indexOfFirst = originalUrl.indexOf(param) + param.length;
+                            const videoId = originalUrl.substring(indexOfFirst, originalUrl.length);
+
+                            const url = "/youtube-dl?videoId=" + videoId + "&toMp3=" + true;
+
                             $("#item-window").find(".modal-title").children().remove();
                             $("#item-window").find(".modal-title").text(title);
 
@@ -263,33 +281,7 @@ $("#search-form").on("submit", function (e) {
 
                             $("#item-window").find(".modal-footer").children().remove();
                             $("#item-window").find(".modal-footer")
-                                .append($("<button>", { "class": "btn", "text": "Download", "type": "button" })
-                                    .click(function (e) {
-                                        const searchTerm = 'v=';
-                                        const indexOfFirst = originalUrl.indexOf(searchTerm) + 2;
-                                        const videoId = originalUrl.substring(indexOfFirst, originalUrl.length)
-
-                                        e.preventDefault();  // デフォルトのイベント(ページの遷移やデータ送信など)を無効にする
-                                        $.ajax({
-                                            url: "/youtube-dl",
-                                            type: "POST",
-                                            dataType: "json",
-                                            data: {
-                                                videoId: videoId,
-                                                toMp3: true
-                                            }
-                                        })
-                                            .done(function (response) {
-                                                alert("done!");
-                                            })
-                                            .fail(function (response) {
-                                                console.log(response);
-                                            })
-                                            .always(function (response) {
-
-                                            })
-                                    }
-                                    ))
+                                .append($("<a>", { "class": "btn", "text": "Download", "href":url}))
                                 .append($("<a>", { "class": "btn ms-auto", "text": "Original", "href": originalUrl }));
                         })
                         .append($("<img>", { "class": "iconUrl", "src": content.iconUrl }))
@@ -305,5 +297,5 @@ $("#search-form").on("submit", function (e) {
         })
         .always(function (response) {
 
-        })
-});
+        });
+}

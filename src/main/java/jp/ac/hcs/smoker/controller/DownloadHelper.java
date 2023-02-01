@@ -1,5 +1,6 @@
 package jp.ac.hcs.smoker.controller;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -35,16 +36,10 @@ public class DownloadHelper {
 	}
 
 	public static ResponseEntity<byte[]> sendToClient(File file) {
-		final HttpHeaders headers = new HttpHeaders();
-
-		// ヘッダーへ情報を追加する
-		// 設定中に例外が発生した場合は、問題なしと見なし 200コード を返す
-		addContentDisposition(headers, file);
-
 		// サーバーからクライアントにダウンロードをさせる
 		// 設定中に例外が発生した場合は、問題なしと見なし 200コード を返す
-		try (FileInputStream inputStream = new FileInputStream(file)) {
-			return ResponseEntity.ok().headers(header -> addContentDisposition(headers, file)).contentType(MediaType.APPLICATION_OCTET_STREAM).body(IOUtils.toByteArray(inputStream));
+		try (BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(file))) {
+			return ResponseEntity.ok().headers(header -> addContentDisposition(header, file)).contentType(MediaType.APPLICATION_OCTET_STREAM).body(IOUtils.toByteArray(inputStream));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -112,6 +107,10 @@ public class DownloadHelper {
 		final String sha256hex = Hashing.sha256().hashString(url, StandardCharsets.UTF_8).toString();
 		REQUEST.put(sha256hex, NONE);
 
+		if (Files.exists(path)) {
+			return sendToClient(path.toFile());
+		}
+
 		Process process = null;
 
 		// 指定されたURLの動画をダウンロードするコマンドを実行
@@ -128,7 +127,6 @@ public class DownloadHelper {
 		// 状態がエラーになった場合はプロセスを殺す
 		long start = System.currentTimeMillis();
 
-		System.out.println("Wait for download to complete");
 		while (REQUEST.get(sha256hex) != OK) {
 			if (Files.exists(path)) {
 				REQUEST.put(sha256hex, OK);

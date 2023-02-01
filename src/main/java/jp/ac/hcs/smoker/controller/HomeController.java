@@ -160,8 +160,12 @@ public class HomeController {
 		return responseBodyContents.json();
 	}
 
-	@PostMapping(Mapping.MAPPING_YOUTUBE_DL)
+	@GetMapping(Mapping.MAPPING_YOUTUBE_DL)
 	public ResponseEntity<byte[]> postYoutubeDL(String videoId, boolean toMp3) {
+
+		if (videoId.isEmpty()) {
+			return ResponseEntity.badRequest().build();
+		}
 
 		// videoIdが存在するかリクエストをする
 		// エラーが起きた場合、正常なリクエストでない、またはAPIサーバが落ちている可能性がある
@@ -196,6 +200,8 @@ public class HomeController {
 		final String extension = toMp3 ? "mp3" : "mp4";
 		final String filename = String.format("%s.%s", video.getSnippet().getTitle(), extension);
 		final Path path = FileSystems.getDefault().getPath(Paths.get(System.getProperty("user.home"), "downloads", filename).toAbsolutePath().toString());
+
+		log.debug("path={}", path);
 
 		return DownloadHelper.execute(path, url, toMp3);
 	}
