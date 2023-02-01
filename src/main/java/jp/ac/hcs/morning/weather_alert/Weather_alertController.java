@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jp.ac.hcs.config.Mapping;
 import jp.ac.hcs.morning.main.MainController;
 /**警報注意報のコントローラー*/
 @Controller
@@ -27,7 +28,7 @@ public class Weather_alertController {
 			model.addAttribute("errormessage","エラーが発生しました。");
 			main.getMainData(model);
 		}
-		return "morning/alert";
+		return Mapping.RESOURCE_WEATHER_ALERT;
 	}
 		
 }

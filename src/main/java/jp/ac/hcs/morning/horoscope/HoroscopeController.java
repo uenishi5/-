@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jp.ac.hcs.config.Mapping;
+
 @Controller
 public class HoroscopeController {
 	/** 占い画面に遷移するコントローラー */
@@ -14,6 +16,6 @@ public class HoroscopeController {
 		/** 全ての星座情報をリストで、昇順に格納する。*/
 		entity = service.getHoroscopeData();
 		model.addAttribute("HoroscopeEntity",entity);
-		return "morning/divination";
+		return Mapping.RESOURCE_HOROSCOPE;
 	}
 }

@@ -5,6 +5,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import jp.ac.hcs.config.Mapping;
 @Controller
 public class TrafficController {
 
@@ -14,7 +16,7 @@ public class TrafficController {
 //		//結果を取得
 //		TrafficEntity entity = trafficService.getMainTrafficData();
 
-		return "morning/traffic";
+		return Mapping.RESOURCE_TRAFFIC;
 	}
 	/** 交通情報を取得*/
 	@GetMapping("/TrafficBus")
@@ -31,7 +33,7 @@ public class TrafficController {
 		}
 		model.addAttribute("TrafficEntity",entity);
 		
-		return "morning/traffic_result";
+		return Mapping.RESOURCE_TRAFFIC_RESULT;
 	}
 }
 
