@@ -211,7 +211,6 @@ $("#change-theme").click(function () {
     const new_theme = next_theme_class_name ? next_theme : $('#theme-list option:first');
     const new_theme_class_name = new_theme.data('class-name');
 
-
     new_theme.prop('selected', 'selected');
     body.toggleClass(theme_class_name).toggleClass(new_theme_class_name);
 
