@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.boot.system.SystemProperties;
@@ -132,7 +133,9 @@ public class DownloadHelper {
 				REQUEST.put(sha256hex, OK);
 			}
 			else if (REQUEST.get(sha256hex) == ERROR) {
-				process.destroy();
+				if (Objects.nonNull(process)) {
+					process.destroy();
+				}
 				REQUEST.remove(sha256hex);
 				return ResponseEntity.ok().build();
 			}
