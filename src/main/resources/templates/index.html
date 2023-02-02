@@ -12,12 +12,6 @@
     <link rel="stylesheet" href="../static/css/main.css">
 </head>
 
-<select hidden>
-    <option selected data-class-name="light">News</option>
-    <option data-class-name="red">Youtube</option>
-    <option data-class-name="dark">PornHub</option>
-</select>
-
 <body class="light">
 
     <div class="modal fade" id="filterForm" tabindex="1000" aria-labelledby="filterFormLabel" aria-hidden="true">
@@ -59,6 +53,11 @@
     <header class="p-4 sticky-top">
         <div style="position: absolute; z-index: 2000;">
             <button class="btn" id="change-theme"></button>
+            <select id="theme-list" hidden>
+                <option selected data-class-name="light" data-api-name="newsapi" onclick="newsapi();">ITMedia</option>
+                <option data-class-name="red" data-api-name="youtubeapi" onclick="youtubeapi();">Youtube</option>
+                <option data-class-name="dark" data-api-name="pornhubapi" onclick="pornhubapi();">PornHub</option>
+            </select>
         </div>
 
         <div class="container">

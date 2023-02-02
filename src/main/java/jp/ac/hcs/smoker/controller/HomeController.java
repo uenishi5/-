@@ -62,7 +62,7 @@ public class HomeController {
 	@GetMapping(Mapping.MAPPING_ROOT)
 	public String getHome(Principal principal, Model model, Pageable pageable) {
 		log.debug("GET {}", Mapping.MAPPING_ROOT);
-		return Mapping.RESOURCE_ROOT;
+		return Mapping.RESOURCE_INDEX;
 	}
 
 	@PostMapping(Mapping.MAPPING_NEWSAPI)
@@ -196,7 +196,6 @@ public class HomeController {
 		// 動画の情報
 		final Video video = videoListResponse.getItems().get(0);
 		final String url = String.format("https://www.youtube.com/watch?v=%s", video.getId());
-		final String contentType = toMp3 ? "audio/mpeg" : "audio/mp4";
 		final String extension = toMp3 ? "mp3" : "mp4";
 		final String filename = String.format("%s.%s", video.getSnippet().getTitle(), extension);
 		final Path path = FileSystems.getDefault().getPath(Paths.get(System.getProperty("user.home"), "downloads", filename).toAbsolutePath().toString());
