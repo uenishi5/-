@@ -32,12 +32,12 @@ public class TrafficService {
 		try {
 
 			document = Jsoup.connect(BUSLIST[no]).get();
-			Elements f16 = document.select(".F16");
 			Elements td = document.getElementsByTag("td");
 			Elements rosenlist = document.select(".Rsn");
 			int rosencount = 0;
 			int idx = 0;
-			if (!(f16.text().equals("現在、運休の情報はありません。 道路状況等により遅延が発生する場合がありますので、 詳しくは各ターミナル・営業所にお問合せください。"))) {
+			int rowspan = 1;
+			if (!(document.select(".F16").text().equals("現在、運休の情報はありません。 道路状況等により遅延が発生する場合がありますので、 詳しくは各ターミナル・営業所にお問合せください。"))) {
 				ArrayList<String> tdlist = new ArrayList<>();
 				for (Element td1 : td) {
 					tdlist.add(td1.text());
@@ -45,7 +45,12 @@ public class TrafficService {
 				}
 				idx = 0;
 				for (Element rosen : rosenlist) {
-					int rowspan = Integer.parseInt(rosen.attr("rowspan"));
+					String rowspansub = rosen.attr("rowspan");
+					if(rowspansub.equals("")) {
+						rowspan = 1;
+					}else{
+						rowspan = Integer.parseInt(rowspansub);
+					}
 					for (int count = 0; count < rowspan; count++) {
 						TrafficData rosendata = new TrafficData();
 						if(!(count == 0)) {
