@@ -9,4 +9,8 @@ import lombok.Data;
 public class WeatherEntity {
 	/** 天気情報リスト */
 	private List<WeatherData> weatherList = new ArrayList<>();
+
+	public static WeatherEntity error() {
+		return null;
+	}
 }

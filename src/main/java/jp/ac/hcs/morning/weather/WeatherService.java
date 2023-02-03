@@ -1,15 +1,13 @@
 package jp.ac.hcs.morning.weather;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jp.ac.hcs.morning.HttpConnectUtils;
 
 /** 天気情報を取得するクラス */
 @Service
@@ -19,92 +17,63 @@ public class WeatherService {
 
 	/** 天気情報を取得するメソッド */
 	public WeatherEntity getWeatherData() {
-		WeatherEntity entity = new WeatherEntity();
-		String result = "";
-		URL url;
-		try {
-			url = new URL(WEATHERURL);
-			// APIへリクエスト送信
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			connection.connect();
-			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			String tmp = "";
-
-			while ((tmp = in.readLine()) != null) {
-				result += tmp;
-			}
-
-			// 結果をデータに変換
-
-			entity = this.convert(result);
-
-			in.close();
-			connection.disconnect();
-		} catch (Exception e) {
-			// TODO 自動生成された catch ブロック
-
-		}
+		final String data = HttpConnectUtils.connectAndGetText(WEATHERURL);
+		final WeatherEntity entity = data.isEmpty() ? WeatherEntity.error() : this.convert(data);
 
 		return entity;
 	}
 
 	/** データをリストに格納するメソッド */
 	private WeatherEntity convert(String json) {
-		ObjectMapper objectMapper = new ObjectMapper();
+		final ObjectMapper objectMapper = new ObjectMapper();
 
-		WeatherEntity entity = new WeatherEntity();
+		JsonNode weatherNode = null;
+
 		try {
-			JsonNode weather = objectMapper.readValue(json, JsonNode.class);
-			for (int idx = 0; idx < 3; idx++) {
+			weatherNode = objectMapper.readValue(json, JsonNode.class);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			return WeatherEntity.error();
+		}
 
-				WeatherData data = new WeatherData();
-				data.setDate(weather.get("forecasts").get(idx).get("date").asText());
-				data.setDateLabel(weather.get("forecasts").get(idx).get("dateLabel").asText());
-				data.setTelop(weather.get("forecasts").get(idx).get("telop").asText());
-				if (weather.get("forecasts").get(idx).get("detail").get("weather").asText() == "null") {
-					data.setWeather("情報無し");
-				} else {
-					data.setWeather(weather.get("forecasts").get(idx).get("detail").get("weather").asText());
-				}
-				data.setWave(weather.get("forecasts").get(idx).get("detail").get("wave").asText());
-				data.setWind(weather.get("forecasts").get(idx).get("detail").get("wind").asText());
-				if (weather.get("forecasts").get(idx).get("temperature").get("max")
-						.get("celsius").asText() == "null") {
-					data.setTemperature_max("--");
-				} else {
-					data.setTemperature_max(weather.get("forecasts").get(idx).get("temperature").get("max")
-							.get("celsius").asText());
-				}
-				if (weather.get("forecasts").get(idx).get("temperature").get("min")
-						.get("celsius").asText() == "null") {
-					data.setTemperature_min("--");
-				} else {
-					data.setTemperature_min(weather.get("forecasts").get(idx).get("temperature").get("min")
-							.get("celsius").asText());
-				}
-				data.setChanceOfRain_T00_06(
-						weather.get("forecasts").get(idx).get("chanceOfRain").get("T00_06").asText());
-				data.setChanceOfRain_T06_12(
-						weather.get("forecasts").get(idx).get("chanceOfRain").get("T06_12").asText());
-				if (weather.get("forecasts").get(idx).get("chanceOfRain").get("T12_18").asText() == "null") {
-					data.setChanceOfRain_T12_18("--");
-				} else {
-					data.setChanceOfRain_T12_18(
-							weather.get("forecasts").get(idx).get("chanceOfRain").get("T12_18").asText());
-				}
-				data.setChanceOfRain_T18_24(
-						weather.get("forecasts").get(idx).get("chanceOfRain").get("T18_24").asText());
-				data.setArea(weather.get("location").get("area").asText());
-				data.setPrefecture(weather.get("location").get("prefecture").asText());
-				data.setCity(weather.get("location").get("city").asText());
-				data.setSvg(weather.get("forecasts").get(idx).get("image").get("url").asText());
+		final WeatherEntity entity = new WeatherEntity();
 
-				entity.getWeatherList().add(data);
+		for (int idx = 0; idx < 3; idx++) {
+			final WeatherData data = new WeatherData();
+			final JsonNode forecasts = weatherNode.get("forecasts");
+			final JsonNode forecast = forecasts.get(idx);
+			final JsonNode detail = forecast.get("detail");
+			final JsonNode chanceOfRain = forecast.get("chanceOfRain");
+			final JsonNode weather = detail.get("weather");
+			final JsonNode loaction = weather.get("location");
+			final JsonNode temperature = forecast.get("temperature");
 
-			}
-		} catch (IOException e) {
+			data.setDate(forecast.get("date").asText());
+			data.setDateLabel(forecast.get("dateLabel").asText());
+			data.setTelop(forecast.get("telop").asText());
+			data.setWeather(getText(weather.asText(), "null", "情報なし"));
+			data.setWave(detail.get("wave").asText());
+			data.setWind(detail.get("wind").asText());
+			data.setTemperature_max(getText(temperature.get("max").get("celsius").asText(), "null", "--"));
+			data.setTemperature_min(getText(temperature.get("min").get("celsius").asText(), "null", "--"));
+			data.setChanceOfRain_T00_06(getText(chanceOfRain.get("T00_06").asText(), "null", "--"));
+			data.setChanceOfRain_T06_12(getText(chanceOfRain.get("T06_12").asText(), "null", "--"));
+			data.setChanceOfRain_T12_18(getText(chanceOfRain.get("T12_18").asText(), "null", "--"));
+			data.setChanceOfRain_T18_24(getText(chanceOfRain.get("T18_24").asText(), "null", "--"));
+			data.setArea(loaction.get("area").asText());
+			data.setPrefecture(loaction.get("prefecture").asText());
+			data.setCity(loaction.get("city").asText());
+			data.setSvg(forecast.get("image").get("url").asText());
+
+			entity.getWeatherList().add(data);
 
 		}
+
 		return entity;
+	}
+
+	public static String getText(String text, String equal, String error) {
+		return text.equals(equal) ? error : text;
 	}
 }
