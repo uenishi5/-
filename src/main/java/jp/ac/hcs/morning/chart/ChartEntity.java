@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 public class ChartEntity {
-	private List<ChartData> chartList = new ArrayList<>();
+	private final List<ChartData> chartList = new ArrayList<>();
 
 	public static ChartEntity error() {
 		final ChartEntity chartEntity = new ChartEntity();
