@@ -16,6 +16,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class HoroscopeService {
+
+	private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd");
+
 	/** エンドポイント */
 	private static final String API = "http://api.jugemkey.jp/api/horoscope/free/";
 
@@ -25,8 +28,8 @@ public class HoroscopeService {
 	 * @return entity
 	 */
 	public HoroscopeEntity getHoroscopeData() {
-		final String date = this.simpleDateFormat();
-		final String horoscopeUrl = API + date;
+		final String today = this.getToday();
+		final String horoscopeUrl = API + today;
 
 		String result = "";
 
@@ -67,7 +70,7 @@ public class HoroscopeService {
 		}
 
 		// 結果をデータに変換
-		final HoroscopeEntity entity = this.convert(result, date);
+		final HoroscopeEntity entity = this.convert(result, today);
 
 		connection.disconnect();
 
@@ -82,93 +85,47 @@ public class HoroscopeService {
 	 * @return
 	 */
 	private HoroscopeEntity convert(String json, String date) {
-		final ObjectMapper objectMapper = new ObjectMapper();
 
-		final HoroscopeEntity entity = new HoroscopeEntity();
-		String[][] horosortlist = new String[12][9];
+		JsonNode horoscope = null;
 
 		try {
-			final JsonNode horoscope = objectMapper.readValue(json, JsonNode.class);
-			for (int idx = 0; idx < 12; idx++) {
-				final JsonNode horosort = horoscope.get("horoscope").get(date).get(idx);
-				int rank = horosort.get("rank").asInt() - 1;
-				horosortlist[rank][0] = horosort.get("content").asText();
-				horosortlist[rank][1] = horosort.get("item").asText();
-				horosortlist[rank][2] = horosort.get("money").asText();
-				horosortlist[rank][3] = horosort.get("total").asText();
-				horosortlist[rank][4] = horosort.get("job").asText();
-				horosortlist[rank][5] = horosort.get("color").asText();
-				horosortlist[rank][6] = horosort.get("love").asText();
-				horosortlist[rank][7] = horosort.get("rank").asText();
-				horosortlist[rank][8] = horosort.get("sign").asText();
+			final ObjectMapper objectMapper = new ObjectMapper();
+			horoscope = objectMapper.readValue(json, JsonNode.class);
 
-				HoroscopeData data = new HoroscopeData();
-				data.setContent(horosortlist[idx][0]);
-				data.setLucky_item(horosortlist[idx][1]);
-				data.setMoney(horosortlist[idx][2]);
-				data.setTotal(horosortlist[idx][3]);
-				data.setJob(horosortlist[idx][4]);
-				data.setColor(horosortlist[idx][5]);
-				data.setLove(horosortlist[idx][6]);
-				String rank = horosortlist[idx][7];
-				data.setRank(Integer.parseInt(rank));
-				data.setSign(horosortlist[idx][8]);
-				String sign = horosortlist[idx][8];
-				switch (data.getSign()) {
-					case "牡羊座":
-						data.setPhotopath("morning/ohitsuji.png");
-						break;
-					case "乙女座":
-						data.setPhotopath("morning/otome.png");
-						break;
-					case "天秤座":
-						data.setPhotopath("morning/tenbin.png");
-						break;
-					case "双子座":
-						data.setPhotopath("morning/futago.png");
-						break;
-					case "牡牛座":
-						data.setPhotopath("morning/oushi.png");
-						break;
-					case "獅子座":
-						data.setPhotopath("morning/shishi.png");
-						break;
-					case "蠍座":
-						data.setPhotopath("morning/sasori.png");
-						break;
-					case "蟹座":
-						data.setPhotopath("morning/kani.png");
-						break;
-					case "射手座":
-						data.setPhotopath("morning/ite.png");
-						break;
-					case "山羊座":
-						data.setPhotopath("morning/yagi.png");
-						break;
-					case "水瓶座":
-						data.setPhotopath("morning/mizugame.png");
-						break;
-					case "魚座":
-						data.setPhotopath("morning/uo.png");
-						break;
-
-				}
-				entity.getHoroscopeList().add(data);
-			}
 		}
 		catch (IOException e) {
+			// 変換に失敗や接続ができなかった場合、エラー専用のオブジェクトを返す
 			e.printStackTrace();
+			return HoroscopeEntity.error();
 		}
+
+		// 正常に変換できたのでJsonNodeからデータを取得して各種値を設定する
+		final HoroscopeEntity entity = new HoroscopeEntity();
+
+		final JsonNode horoscopeToday = horoscope.get("horoscope").get(date);
+
+		for (int idx = 0; idx < 12; idx++) {
+			final JsonNode horosort = horoscopeToday.get(idx);
+			final HoroscopeData data = new HoroscopeData();
+
+			data.setContent(horosort.get("content").asText());
+			data.setLucky_item(horosort.get("item").asText());
+			data.setMoney(horosort.get("money").asText());
+			data.setTotal(horosort.get("total").asText());
+			data.setJob(horosort.get("job").asText());
+			data.setColor(horosort.get("color").asText());
+			data.setLove(horosort.get("love").asText());
+			data.setRank(horosort.get("rank").asInt());
+			data.setSign(horosort.get("sign").asText());
+
+			entity.getHoroscopeList().add(data);
+		}
+
 		return entity;
 	}
 
-	/** 日付の取得を行う */
-	private String simpleDateFormat() {
-		Calendar cl = Calendar.getInstance();
-
-		// 日付をyyyy/MM/ddの形で出力する
-		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd");
-		String str1 = sdf1.format(cl.getTime());
-		return str1;
+	/** 日付の取得を行いyyyy/MM/dd形式の文字列を返す */
+	private String getToday() {
+		return SIMPLE_DATE_FORMAT.format(Calendar.getInstance().getTime());
 	}
 }
