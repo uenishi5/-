@@ -7,6 +7,13 @@ import lombok.Data;
 
 @Data
 public class JrEntity {
-	private List<JrData> jrList = new ArrayList<>();
+	private final List<JrData> jrList = new ArrayList<>();
 
+	public static JrEntity error() {
+		final JrEntity jrEntity = new JrEntity();
+
+		jrEntity.getJrList().add(JrData.error());
+
+		return jrEntity;
+	}
 }
