@@ -3,6 +3,8 @@ package jp.ac.hcs.morning.weather_alert;
 import java.util.List;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Data
 public class Weather_alertData {
@@ -55,10 +57,37 @@ public class Weather_alertData {
 		private AlertColor alertDataClass;
 	}
 
+	@Getter
+	@RequiredArgsConstructor
 	public static enum AlertColor {
-		WHITE,
-		YELLOW,
-		RED,
-		BLACK;
+		WHITE("発表なし"),
+		YELLOW("注意報級", ".*注意報"),
+		RED("警報級", ".*警報"),
+		BLACK("特別警報級", ".*特別警報");
+
+		private final String msg;
+		private final String reg;
+
+		private AlertColor(String msg) {
+			this(msg, null);
+		}
+
+		public static AlertColor parseMsg(String text) {
+			for (AlertColor color : values()) {
+				if (text.equals(color.getMsg())) {
+					return color;
+				}
+			}
+			return WHITE;
+		}
+
+		public static AlertColor parseReg(String text) {
+			for (AlertColor color : values()) {
+				if (text.matches(color.getReg())) {
+					return color;
+				}
+			}
+			return WHITE;
+		}
 	}
 }
