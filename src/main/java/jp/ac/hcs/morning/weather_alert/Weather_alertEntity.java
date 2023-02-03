@@ -8,12 +8,20 @@ import lombok.Data;
 @Data
 public class Weather_alertEntity {
 	private List<Weather_alertData> weather_alertnameList = new ArrayList<>();
-	
+
 	private List<Weather_alertData> weather_alertList = new ArrayList<>();
-	
+
 	private List<Weather_alertData> weather_alert2List = new ArrayList<>();
-	
+
 	private List<Weather_alertData> weather_dateList = new ArrayList<>();
-	
-	private boolean error ;
+
+	private boolean error;
+
+	public static Weather_alertEntity error() {
+		final Weather_alertEntity weatherAlertEntity = new Weather_alertEntity();
+
+		weatherAlertEntity.setError(true);
+
+		return weatherAlertEntity;
+	}
 }
