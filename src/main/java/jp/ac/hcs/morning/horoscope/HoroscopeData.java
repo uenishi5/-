@@ -94,4 +94,13 @@ public class HoroscopeData {
 
 		}
 	}
+
+	public static HoroscopeData error() {
+		final HoroscopeData horoscopeData = new HoroscopeData();
+
+		horoscopeData.setPhotopath("morning/uo.png");
+		horoscopeData.setTop("取得エラー");
+
+		return horoscopeData;
+	}
 }
