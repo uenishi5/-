@@ -14,7 +14,8 @@ public class HoroscopeEntity {
 		final HoroscopeEntity horoscopeEntity = new HoroscopeEntity();
 		final HoroscopeData horoscopeData = new HoroscopeData();
 
-		horoscopeData.setContent("error");
+		horoscopeData.setCatchflg(true);
+		horoscopeData.setTop("エラーが発生しました");
 
 		horoscopeEntity.getHoroscopeList().add(horoscopeData);
 
