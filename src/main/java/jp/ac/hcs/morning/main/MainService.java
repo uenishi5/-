@@ -26,6 +26,7 @@ import jp.ac.hcs.morning.weather.WeatherData;
 import jp.ac.hcs.morning.weather.WeatherEntity;
 import jp.ac.hcs.morning.weather_alert.Weather_alertData;
 import jp.ac.hcs.morning.weather_alert.Weather_alertEntity;
+
 /**
  * メイン画面に必要な情報を取得するサービス
  */
@@ -68,14 +69,16 @@ public class MainService {
 			entity = this.convert(result);
 			in.close();
 			connection.disconnect();
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			WeatherData data = new WeatherData();
 			data.setCatchflg(true);
 			entity.getWeatherList().add(data);
 		}
 		return entity;
 	}
-// データをリストに格納するメソッド
+
+	// データをリストに格納するメソッド
 	private WeatherEntity convert(String json) {
 
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -86,22 +89,21 @@ public class MainService {
 			JsonNode weather = objectMapper.readValue(json, JsonNode.class);
 			if (weather.get("forecasts").get(0).get("telop").asText() == "null") {
 				data.setTelop("情報無し");
-			} else {
+			}
+			else {
 				data.setTelop(weather.get("forecasts").get(0).get("telop").asText());
 			}
-			if (weather.get("forecasts").get(0).get("temperature").get("max")
-					.get("celsius").asText() == "null") {
+			if (weather.get("forecasts").get(0).get("temperature").get("max").get("celsius").asText() == "null") {
 				data.setTemperature_max("--");
-			} else {
-				data.setTemperature_max(weather.get("forecasts").get(0).get("temperature").get("max")
-						.get("celsius").asText());
 			}
-			if (weather.get("forecasts").get(0).get("temperature").get("min")
-					.get("celsius").asText() == "null") {
+			else {
+				data.setTemperature_max(weather.get("forecasts").get(0).get("temperature").get("max").get("celsius").asText());
+			}
+			if (weather.get("forecasts").get(0).get("temperature").get("min").get("celsius").asText() == "null") {
 				data.setTemperature_min("--");
-			} else {
-				data.setTemperature_min(weather.get("forecasts").get(0).get("temperature").get("min")
-						.get("celsius").asText());
+			}
+			else {
+				data.setTemperature_min(weather.get("forecasts").get(0).get("temperature").get("min").get("celsius").asText());
 			}
 			data.setSvg(weather.get("forecasts").get(0).get("image").get("url").asText());
 
@@ -110,7 +112,8 @@ public class MainService {
 
 			entity.getWeatherList().add(data);
 
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			data.setTelop("");
 			data.setTemperature_max("");
 			data.setTemperature_min("");
@@ -124,14 +127,14 @@ public class MainService {
 		return entity;
 	}
 
-	/** メイン画面用占いデータ取得*/
+	/** メイン画面用占いデータ取得 */
 	public HoroscopeEntity getMainHoroscopeData() {
 		HoroscopeEntity entity = new HoroscopeEntity();
 		String result = "";
 
 		URL url;
 		try {
-			String date = simpleDateFormat();
+			String date = this.simpleDateFormat();
 			String horoscopeurl = HOROSCOPE + date;
 			url = new URL(horoscopeurl);
 			// APIへリクエスト送信
@@ -149,18 +152,16 @@ public class MainService {
 			entity = this.convert_top(result, date);
 			in.close();
 			connection.disconnect();
-		} catch (IOException e) {
-			HoroscopeData data = new HoroscopeData();
-			data.setCatchflg(true);
-			data.setTop("エラーが発生しました");
-			data.setPhotopath("");
-			entity.getHoroscopeList().add(data);
-
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			return HoroscopeEntity.error();
 		}
 		return entity;
 
 	}
-// データをリストに格納するメソッド
+
+	// データをリストに格納するメソッド
 	private HoroscopeEntity convert_top(String json, String date) {
 		ObjectMapper objectMapper = new ObjectMapper();
 
@@ -175,56 +176,15 @@ public class MainService {
 				int getrank = horoscope.get("horoscope").get(date).get(idx).get("rank").asInt();
 				if (getrank == 1) {
 					data.setTop(horoscope.get("horoscope").get(date).get(idx).get("sign").asText());
-					String photopath = null;
-					switch(horotitle) {
-					case "牡羊座":
-						photopath = "morning/ohitsuji.png";
-						break;
-					case "乙女座":
-						photopath = "morning/otome.png";
-						break;
-					case "天秤座":
-						photopath = "morning/tenbin.png";
-						break;
-					case "双子座":
-						photopath = "morning/futago.png";
-						break;
-					case "牡牛座":
-						photopath = "morning/oushi.png";
-						break;
-					case "獅子座":
-						photopath = "morning/shishi.png";
-						break;
-					case "蠍座":
-						photopath = "morning/sasori.png";
-						break;
-					case "蟹座":
-						photopath = "morning/kani.png";
-						break;
-					case "射手座":
-						photopath = "morning/ite.png";
-						break;
-					case "山羊座":
-						photopath = "morning/yagi.png";
-						break;
-					case "水瓶座":
-						photopath = "morning/mizugame.png";
-						break;
-					case "魚座":
-						photopath = "morning/uo.png";
-						break;
-					}
-					data.setPhotopath(photopath);
+					data.setSign(horotitle);
 					entity.getHoroscopeList().add(data);
 					break;
 				}
 			}
-		} catch (IOException e) {
-			// TODO 自動生成された catch ブロック
-			HoroscopeData data = new HoroscopeData();
-			data.setPhotopath("morning/uo.png");
-			data.setTop("取得エラー");
-			entity.getHoroscopeList().add(data);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			entity.getHoroscopeList().add(HoroscopeData.error());
 		}
 		return entity;
 	}
@@ -232,13 +192,13 @@ public class MainService {
 	private String simpleDateFormat() {
 		Calendar cl = Calendar.getInstance();
 
-		//日付をyyyy/MM/ddの形で出力する
+		// 日付をyyyy/MM/ddの形で出力する
 		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd");
 		String str1 = sdf1.format(cl.getTime());
 		return str1;
 	}
 
-	/** 警報・注意報取得  */
+	/** 警報・注意報取得 */
 	public Weather_alertEntity getMainWeather_alertData() {
 		Document document;
 		Weather_alertEntity entity = new Weather_alertEntity();
@@ -253,7 +213,8 @@ public class MainService {
 				data.setName(alert[1]);
 				entity.getWeather_alertnameList().add(data);
 				data.setAlert_color("white");
-			} else {
+			}
+			else {
 				int alertcount = alert.length;
 				for (int idx = 1; idx < alertcount; idx++) {
 					Weather_alertData data = new Weather_alertData();
@@ -261,11 +222,13 @@ public class MainService {
 						data.setName(alert[idx].replace("注意報", ""));
 
 						data.setAlert_color("yellow");
-					} else if ((alert[idx].matches(".*警報"))) {
+					}
+					else if ((alert[idx].matches(".*警報"))) {
 						data.setName(alert[idx].replace("警報", ""));
 
 						data.setAlert_color("red");
-					} else if ((alert[idx].matches(".*特別警報"))) {
+					}
+					else if ((alert[idx].matches(".*特別警報"))) {
 						data.setName(alert[idx].replace("特別警報", ""));
 
 						data.setAlert_color("black");
@@ -273,7 +236,8 @@ public class MainService {
 					entity.getWeather_alertnameList().add(data);
 				}
 			}
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			Weather_alertData data = new Weather_alertData();
 			data.setCatchflg(true);
 			data.setName("エラー");
@@ -299,7 +263,8 @@ public class MainService {
 			data.setBitcoin(bitcoin);
 			data.setRate(rate);
 			entity.getChartList().add(data);
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			data.setCatchflg(true);
 			data.setBitcoin("");
 			data.setRate("");
@@ -307,7 +272,8 @@ public class MainService {
 		}
 		return entity;
 	}
-/** 交通情報を取得*/
+
+	/** 交通情報を取得 */
 	public TrafficEntity getMainTrafficData() {
 		TrafficEntity entity = new TrafficEntity();
 		TrafficData data = new TrafficData();
@@ -322,7 +288,8 @@ public class MainService {
 					break;
 				}
 			}
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			data.setCatchflg(true);
 			data.setAlertflg(false);
 			entity.getTrafficList().add(data);
@@ -330,6 +297,7 @@ public class MainService {
 		entity.getTrafficflgList().add(data);
 		return entity;
 	}
+
 	/** Jr情報取得 */
 	public boolean getMainJrData() {
 		Document touzai;
@@ -340,10 +308,12 @@ public class MainService {
 			touzai = Jsoup.connect("https://transit.yahoo.co.jp/diainfo/13/0").get();
 			nanboku = Jsoup.connect("https://transit.yahoo.co.jp/diainfo/14/0").get();
 			touhou = Jsoup.connect("https://transit.yahoo.co.jp/diainfo/15/0").get();
-			if (touzai.select(".normal").text() == null || nanboku.select(".normal").text() == null || touhou.select(".normal").text() == null) {
+			if (touzai.select(".normal").text() == null || nanboku.select(".normal").text() == null
+					|| touhou.select(".normal").text() == null) {
 				flg = true;
 			}
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			System.out.println(e);
 		}
 		return flg;
