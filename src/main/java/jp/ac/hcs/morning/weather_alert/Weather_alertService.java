@@ -26,35 +26,35 @@ public class Weather_alertService {
 			Elements getdate = document.select(".warnDetail_timeTable_row-time");
 			String[] alert = getalert.text().split(" ");
 			String[] datelabel = getdate.text().split(" ");
-			boolean weatherflg = false;
-			boolean alertfirst = false;
+			boolean weatherflg = false; // 2段目の表を表示する警報が存在するかのフラグ
+			boolean alertfirst = false; // 1段目の表が存在するかのフラグ
 			Weather_alertData date = new Weather_alertData();
 			String firstdate = null;
-			int alertnamecount = 14;
-			int alertlabel = 16;
+			int alertnamecount = 14; //警報名取得用(風雪等)の開始添え字
+			int alertlabel = 16; // 警報の内容(注意報、警報)取得用の開始添え字
 			String name = null;
-			boolean errorflg = false;
+			boolean errorflg = false; //1段目10番目の要素が適切かのフラグ
 
 			Elements day = document.select(".warnDetail_timeTable_row-day");
 			String[] days = day.text().split(" ");
 			// 警報があるかの確認
-			if (alert[1].equals("発表なし")) {
+			if (alert[1].equals("発表なし")) { //警報がない場合、発表無しの要素をを入れてentityを返す
 				Weather_alertData data = new Weather_alertData();
 				data.setName(alert[1]);
 				data.setAlert_color("white");
 				entity.getWeather_alertnameList().add(data);
-			} else {
+			} else { //警報が存在する場合、中に入る
 				String[] alertdata = getalert2.text().split(" ");
 				int alertcount = alert.length;
 				int alertlength = alertdata.length;
 				for (int idx = 1; idx < alertcount; idx++) {
 					Weather_alertData data = new Weather_alertData();
-
+					//2段目を表示する必要があるかのチェック
 					if (alert[idx].equals("融雪注意報") || alert[idx].equals("乾燥注意報") || alert[idx].equals("なだれ注意報")
 							|| alert[idx].equals("低温注意報") || alert[idx].equals("霜注意報") || alert[idx].equals("着氷注意報")) {
-						weatherflg = true;
+						weatherflg = true;  
 						if (idx == 1) {
-							alertfirst = true;
+							alertfirst = true; //1段目を表示する必要が無いので、フラグをtrueにする
 						}
 					}
 					if ((alert[idx].matches(".*注意報"))) {
