@@ -22,17 +22,16 @@ public class JrService {
 
 		final JrEntity entity = new JrEntity();
 
-		for (String list : JRLIST) {
+		final List<JrData> jrList = JRLIST.stream().map(url -> {
 			Document document = null;
 
 			try {
-				document = Jsoup.connect(list).get();
+				document = Jsoup.connect(url).get();
 			}
 			catch (IOException e) {
 				// 例外が発生した場合は、エラー専用のオブジェクトを返す
 				e.printStackTrace();
-				entity.getJrList().add(JrData.error());
-				break;
+				return JrData.error();
 			}
 
 			final JrData data = new JrData();
@@ -56,8 +55,11 @@ public class JrService {
 				data.setContent(document.select(".trouble").text());
 			}
 
-			entity.getJrList().add(data);
-		}
+			return data;
+		}).toList();
+
+		entity.getJrList().addAll(jrList);
+
 		return entity;
 	}
 
