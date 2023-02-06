@@ -16,7 +16,7 @@ public class WeatherController {
 	/** メイン画面に表示するための天気データ（札幌固定) */
 	@RequestMapping("/Weather")
 	public String getWeatherData(Model model) {
-		WeatherEntity entity = this.weatherService.getWeatherData();
+		final WeatherEntity entity = this.weatherService.getWeatherData();
 
 		model.addAttribute("WeatherEntity", entity);
 

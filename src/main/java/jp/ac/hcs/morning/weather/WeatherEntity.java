@@ -11,6 +11,7 @@ public class WeatherEntity {
 	private List<WeatherData> weatherList = new ArrayList<>();
 
 	public static WeatherEntity error() {
-		return null;
+		final WeatherEntity weatherEntity = new WeatherEntity();
+		return weatherEntity;
 	}
 }
