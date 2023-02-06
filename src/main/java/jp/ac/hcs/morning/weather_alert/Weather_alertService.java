@@ -69,7 +69,7 @@ public class Weather_alertService {
 					}
 					entity.getWeather_alertnameList().add(data);
 				}
-				// データの取得
+				// 2段目の表のみの場合
 				if (weatherflg && alertfirst) {
 					date.setAlertdaydate1(days[1]);
 					date.setAlertdaydate2(days[2]);
@@ -77,13 +77,14 @@ public class Weather_alertService {
 					date.setAlertdaydate4(days[4]);
 					alertnamecount = 5;
 					alertlabel = 7;
+				// 2段目の表が存在する場合
 				} else if (weatherflg) {
 					date.setAlertdaydate1(days[4]);
 					date.setAlertdaydate2(days[5]);
 					date.setAlertdaydate3(days[6]);
 					date.setAlertdaydate4(days[7]);
 				}
-
+				// 1段目の表が存在する場合
 				if (alertfirst == false) {
 					firstdate = datelabel[1] + "時から";
 					date.setDate1(datelabel[1]);
@@ -105,8 +106,10 @@ public class Weather_alertService {
 					}
 
 					Weather_alertData data = new Weather_alertData();
+					// 警報名の取得（表の一番左）
 					name = alertdata[alertnamecount];
 					alertnamecount++;
+					// 追加の情報がある場合、取得し続ける（○○ 海上等)
 					while (!(alertdata[alertnamecount].equals(firstdate))) {
 						name = name + " " + alertdata[alertnamecount];
 						alertnamecount++;
@@ -116,8 +119,11 @@ public class Weather_alertService {
 					data.setName(name);
 					List<String> alertdatalist = new ArrayList<String>();
 					List<String> alertclasslist = new ArrayList<String>();
+					// 表の要素を左から10個分取得
 					for (int idx = 0; idx < 10; idx++) {
+					// 最後の要素の不具合をチェック
 						if (idx == 9) {
+					// 不具合があった場合、添え字を調整してエラーフラグをtrueにする
 							if (alertdata[alertlabel].equals("発表なし")) {
 								alertdatalist.add(alertdata[alertlabel]);
 								alertclasslist.add("white");
@@ -145,6 +151,7 @@ public class Weather_alertService {
 							} else {
 								alertlabel = alertlabel + 1;
 							}
+							// 不具合が存在しなかった場合、添え字を調整して要素を取得する
 							if (!(errorflg)) {
 								alertdatalist.add(alertdata[alertlabel]);
 								if (alertdata[alertlabel].equals("発表なし")) {
@@ -157,6 +164,7 @@ public class Weather_alertService {
 									alertclasslist.add("black");
 								}
 							}
+						// １～９の要素の場合
 						} else {
 							alertdatalist.add(alertdata[alertlabel]);
 							if (alertdata[alertlabel].equals("発表なし")) {
@@ -168,6 +176,7 @@ public class Weather_alertService {
 							} else if (alertdata[alertlabel].equals("特別警報級")) {
 								alertclasslist.add("black");
 							}
+							// 次が10個目の要素を取得する場合、添え字調整を行う
 							if (idx == 8) {
 								alertlabel = alertlabel + 1;
 							} else {
@@ -175,6 +184,7 @@ public class Weather_alertService {
 							}
 						}
 					}
+					// データの格納を行う
 					data.setAlertdata1(alertdatalist.get(0));
 					data.setAlertdata1class(alertclasslist.get(0));
 					data.setAlertdata2(alertdatalist.get(1));
@@ -196,6 +206,7 @@ public class Weather_alertService {
 					data.setAlertdata10(alertdatalist.get(9));
 					data.setAlertdata10class(alertclasslist.get(9));
 					entity.getWeather_alertList().add(data);
+					// まだ取得する要素が存在しているかのチェックを行う。存在しない場合はループを抜ける
 					if (alertnamecount + 21 < alertlength - 1 && !(alertdata[alertnamecount + 21].equals("日付"))) {
 						alertnamecount = alertnamecount + 21;
 						alertlabel = alertlabel + 3;
@@ -212,15 +223,18 @@ public class Weather_alertService {
 					Weather_alertData data = new Weather_alertData();
 					name = alertdata[alertnamecount];
 					alertnamecount++;
+					// 日付を取得する
 					while (!(alertdata[alertnamecount].matches(".*日"))) {
 						name = name + " " + alertdata[alertnamecount];
 						alertnamecount++;
 						alertlabel++;
 					}
 					alertnamecount = alertnamecount - 1;
+					// 警報名を取得
 					data.setName(name);
 					List<String> dayalertlist = new ArrayList<String>();
 					List<String> dayalertclasslist = new ArrayList<String>();
+					// 4日分の要素を取得する
 					for(int idx=0; idx<4; idx++) {
 						dayalertlist.add(alertdata[alertlabel]);
 					if (alertdata[alertlabel].equals("発表なし")) {
@@ -232,11 +246,12 @@ public class Weather_alertService {
 					} else if (alertdata[alertlabel].equals("特別警報級")) {
 						data.setDayalertdata1class("black");
 					}
+					// 最後の要素を取得する場合、添え字の調整を行う
 					if(!(idx == 3)) {
 						alertlabel = alertlabel + 2;
 					}
 					}
-
+					// データの格納を行う
 					data.setAlert1(dayalertlist.get(0));
 					data.setDayalertdata1class(dayalertclasslist.get(0));
 					data.setAlert2(dayalertlist.get(1));
@@ -246,6 +261,7 @@ public class Weather_alertService {
 					data.setAlert4(dayalertlist.get(3));
 					data.setDayalertdata4class(dayalertclasslist.get(3));
 					entity.getWeather_alert2List().add(data);
+					// まだ取得する要素が存在しているかのチェック。存在しない場合はループを抜ける
 					if (alertnamecount + 9 > alertlength - 1) {
 						alertnamecount = alertnamecount + 9;
 						alertlabel = alertlabel + 3;
