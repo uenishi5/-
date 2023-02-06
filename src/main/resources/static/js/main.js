@@ -197,9 +197,10 @@ $("#search-form-query")
 $("#search-form-reset").click(function () {
     $("#search-form-submit").attr("disabled", true);
     $("#search-form-reset").hide();
+    $("html").addClass("top-screen");
 });
 
-$("#change-theme").click(function () {
+$("#logo").click(function () {
     const body = $("body");
 
     const theme = $('#theme-list option:selected');
@@ -273,6 +274,7 @@ function filter_setting(e) {
 
 $("#search-form").on("submit", function (e) {
     e.preventDefault();  // デフォルトのイベント(ページの遷移やデータ送信など)を無効にする
+    $("html").removeClass("top-screen");
     $('#theme-list option:selected').click();
 });
 
@@ -283,6 +285,7 @@ const modal_footer = $("#item-window .modal-footer");
 
 
 function newsapi() {
+    
     $.ajax({
         url: "/newsapi",
         type: "POST",

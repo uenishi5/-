@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html class="top-screen" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head th:replace="common :: common-head">
     <title>View in VSCode</title>
@@ -51,22 +51,17 @@
     </div>
 
     <header class="p-4 sticky-top">
-        <div style="position: absolute; z-index: 2000;">
-            <button class="btn" id="change-theme"></button>
-            <select id="theme-list" hidden>
-                <option selected data-class-name="light" data-api-name="newsapi" onclick="newsapi();">ITMedia</option>
-                <option data-class-name="red" data-api-name="youtubeapi" onclick="youtubeapi();">Youtube</option>
-                <option data-class-name="dark" data-api-name="pornhubapi" onclick="pornhubapi();">PornHub</option>
-                
-            </select>
-        </div>
-
         <div class="container">
             <div class="row mb-2 d-grid align-items-center" id="aiueo" style="height: 4rem;">
-                <a class="d-flex fs-3" id="logo" style="grid-area: a;" href="#" th:href="@{/}">
+                <button class="d-flex fs-3 btn" id="logo">
                     <div></div>
                     <div></div>
-                </a>
+                </button>
+                <select id="theme-list" hidden>
+                    <option selected data-class-name="light" data-api-name="newsapi" onclick="newsapi();">ITMedia</option>
+                    <option data-class-name="red" data-api-name="youtubeapi" onclick="youtubeapi();">Youtube</option>
+                    <option data-class-name="dark" data-api-name="pornhubapi" onclick="pornhubapi();">PornHub</option>
+                </select>
                 <form id="search-form" style="grid-area: b;" th:action="@{/}">
                     <button class="btn btn-search-form m-1" id="search-form-submit" type="submit" disabled="disabled">
                         <svg focusable="false" width="24px" height="24px" viewbox="0 0 24 24">
@@ -94,7 +89,7 @@
                         </svg>
                     </button>
                 </form>
-                <nav class="text-end" aria-label="Page navigation" style="grid-area: c;">
+                <nav id="page" class="text-end" aria-label="Page navigation" style="grid-area: c;">
                     <ul class="pagination mb-0">
                         <li class="page-item">
                             <button class="page-link" id="page-item-prev" type="button" aria-hidden="true"
@@ -122,8 +117,7 @@
         </div>
     </main>
 
-    <footer hidden>
-        <iframe id="api"></iframe>
+    <footer>
     </footer>
 
     <div th:replace="common :: common-script">
