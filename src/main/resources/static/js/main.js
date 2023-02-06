@@ -190,14 +190,14 @@ $("#search-form-query")
             $("#search-form-reset").show();
         }
         else {
-            $("#search-form-reset").click();
+            $("#search-form-submit").attr("disabled", true);
+            $("#search-form-reset").hide();
         }
     });
 
 $("#search-form-reset").click(function () {
     $("#search-form-submit").attr("disabled", true);
     $("#search-form-reset").hide();
-    $("html").addClass("top-screen");
 });
 
 $("#logo").click(function () {
