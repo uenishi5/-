@@ -53,46 +53,38 @@ public class HoroscopeData {
 	 */
 	public void setSign(String sign) {
 		this.sign = sign;
+		this.setPhotopath(getSignResourcePath(sign));
+	}
 
+	public static String getSignResourcePath(String sign) {
 		switch (sign) {
 			case "牡羊座":
-				this.setPhotopath("morning/ohitsuji.png");
-				break;
+				return ("morning/ohitsuji.png");
 			case "乙女座":
-				this.setPhotopath("morning/otome.png");
-				break;
+				return ("morning/otome.png");
 			case "天秤座":
-				this.setPhotopath("morning/tenbin.png");
-				break;
+				return ("morning/tenbin.png");
 			case "双子座":
-				this.setPhotopath("morning/futago.png");
-				break;
+				return ("morning/futago.png");
 			case "牡牛座":
-				this.setPhotopath("morning/oushi.png");
-				break;
+				return ("morning/oushi.png");
 			case "獅子座":
-				this.setPhotopath("morning/shishi.png");
-				break;
+				return ("morning/shishi.png");
 			case "蠍座":
-				this.setPhotopath("morning/sasori.png");
-				break;
+				return ("morning/sasori.png");
 			case "蟹座":
-				this.setPhotopath("morning/kani.png");
-				break;
+				return ("morning/kani.png");
 			case "射手座":
-				this.setPhotopath("morning/ite.png");
-				break;
+				return ("morning/ite.png");
 			case "山羊座":
-				this.setPhotopath("morning/yagi.png");
-				break;
+				return ("morning/yagi.png");
 			case "水瓶座":
-				this.setPhotopath("morning/mizugame.png");
-				break;
+				return ("morning/mizugame.png");
 			case "魚座":
-				this.setPhotopath("morning/uo.png");
-				break;
+				return ("morning/uo.png");
 
 		}
+		return ("morning/uo.png");
 	}
 
 	public static HoroscopeData error() {
