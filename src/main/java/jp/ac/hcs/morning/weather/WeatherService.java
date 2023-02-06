@@ -46,7 +46,7 @@ public class WeatherService {
 			final JsonNode detail = forecast.get("detail");
 			final JsonNode chanceOfRain = forecast.get("chanceOfRain");
 			final JsonNode weather = detail.get("weather");
-			final JsonNode loaction = weather.get("location");
+			final JsonNode location = weatherNode.get("location");
 			final JsonNode temperature = forecast.get("temperature");
 
 			data.setDate(forecast.get("date").asText());
@@ -61,9 +61,9 @@ public class WeatherService {
 			data.setChanceOfRain_T06_12(getText(chanceOfRain.get("T06_12").asText(), "null", "--"));
 			data.setChanceOfRain_T12_18(getText(chanceOfRain.get("T12_18").asText(), "null", "--"));
 			data.setChanceOfRain_T18_24(getText(chanceOfRain.get("T18_24").asText(), "null", "--"));
-			data.setArea(loaction.get("area").asText());
-			data.setPrefecture(loaction.get("prefecture").asText());
-			data.setCity(loaction.get("city").asText());
+			data.setArea(location.get("area").asText());
+			data.setPrefecture(location.get("prefecture").asText());
+			data.setCity(location.get("city").asText());
 			data.setSvg(forecast.get("image").get("url").asText());
 
 			entity.getWeatherList().add(data);

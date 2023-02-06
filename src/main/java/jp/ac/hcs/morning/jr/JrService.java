@@ -17,6 +17,26 @@ public class JrService {
 	private static final String SHIDEN = "https://transit.yahoo.co.jp/diainfo/545/0";
 	private static final List<String> JRLIST = Arrays.asList(TOUZAI, NANBOKU, TOUHOU, SHIDEN);
 
+
+	/** メイン画面用Jr情報取得 */
+	public boolean getMainJrFlg() {
+		boolean flg = false;
+		try {
+			Document touzai = Jsoup.connect(TOUZAI).get();
+			Document nanboku = Jsoup.connect(NANBOKU).get();
+			Document touhou = Jsoup.connect(TOUHOU).get();
+			Document shiden = Jsoup.connect(SHIDEN).get();
+			if (touzai.select(".normal").text() == null || nanboku.select(".normal").text() == null
+					|| touhou.select(".normal").text() == null || shiden.select(".normal").text() == null) {
+				flg = true;
+			}
+		}
+		catch (IOException e) {
+			System.out.println(e);
+		}
+		return flg;
+	}
+	
 	// JR交通情報の取得を行うメソッド
 	public JrEntity getallJrData() {
 

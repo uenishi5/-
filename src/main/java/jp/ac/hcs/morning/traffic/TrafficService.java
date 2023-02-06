@@ -23,6 +23,31 @@ public class TrafficService {
 
 	private static final String NONE = "現在、運休の情報はありません。 道路状況等により遅延が発生する場合がありますので、 詳しくは各ターミナル・営業所にお問合せください。";
 
+	/** メイン画面用の交通情報を取得 */
+	public TrafficEntity getMainTrafficData() {
+		TrafficEntity entity = new TrafficEntity();
+		TrafficData data = new TrafficData();
+		Document document;
+		data.setAlertflg(false);
+		try {
+			for (int idx = 0; idx < 6; idx++) {
+				document = Jsoup.connect(BUSLIST.get(idx)).get();
+				Elements f16 = document.select(".F16");
+				if (!(f16.text().equals(NONE))) {
+					data.setAlertflg(true);
+					break;
+				}
+			}
+		}
+		catch (IOException e) {
+			data.setCatchflg(true);
+			data.setAlertflg(false);
+			entity.getTrafficList().add(data);
+		}
+		entity.getTrafficflgList().add(data);
+		return entity;
+	}
+	
 	/** 指定された交通情報を取得するメソッド */
 	public TrafficEntity getBusdata(int no) {
 
