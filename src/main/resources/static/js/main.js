@@ -305,16 +305,33 @@ const header = $('header');
 const headerHeight = header.height();
 
 var flag = false;
+var oldScrollY = -1;
 // scrollイベントを設定
 $(window).scroll(function () {
-    var passed_point = $(this).scrollTop() > headerHeight + 10;
 
-    if (passed_point && !flag) {
-        header.addClass("scrolling");
+    const passed_point = oldScrollY > headerHeight / 4;
+
+    const isScrollUp = ($(this).scrollTop() - oldScrollY) < 0;
+    const isScrollDown = (oldScrollY - $(this).scrollTop()) < 0;
+
+    oldScrollY = $(this).scrollTop();
+
+    console.log("isScrollUp=" + isScrollUp + ", isScrollDown=" + isScrollDown);
+    console.log("passed_point=" + passed_point);
+
+    if(passed_point){
+        if(isScrollDown){
+            header.addClass("scrolling");
+            flag = true;
+        }
+    }else{
+        if(isScrollUp){
+            header.removeClass("scrolling");
+            flag = false;
+        }
         flag = true;
-    } else if (!passed_point && flag) {
-        header.removeClass("scrolling");
-        flag = false;
     }
+
+    console.log("flag=" + flag);
 });
 

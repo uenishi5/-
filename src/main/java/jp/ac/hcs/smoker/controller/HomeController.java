@@ -253,17 +253,20 @@ public class HomeController {
 				content.setSource(String.format("https://www.youtube.com/embed/%s", resourceId.getVideoId()));
 				content.setPublishBy(searchResultSnippet.getChannelTitle());
 				content.setPublishAt(searchResultSnippet.getPublishedAt().toString());
+
 				return content;
 			}
 
 			public static Content map(Article article) {
 				final Content content = new Content();
+
 				content.setOriginalUrl(article.getUrl());
 				content.setIconUrl(article.getUrlToImage());
 				content.setTitle(article.getTitle());
 				content.setSource(article.getUrl());
 				content.setPublishBy(article.getAuthor());
 				content.setPublishAt(article.getPublishedAt());
+
 				return content;
 			}
 
@@ -312,25 +315,31 @@ public class HomeController {
 			}
 			catch (JsonProcessingException e) {
 				e.printStackTrace();
+				return JSON_EMPTY;
 			}
-			return "";
 		}
 
 		public static ResponseBodyContents map(SearchListResponse searchListResponse) {
 			ResponseBodyContents responseBodyContents = new ResponseBodyContents();
+
 			responseBodyContents.setContents(searchListResponse.getItems().stream().map(Content::map).toList());
+
 			return responseBodyContents;
 		}
 
 		public static ResponseBodyContents map(SearchResponse searchResponse) {
 			ResponseBodyContents responseBodyContents = new ResponseBodyContents();
+
 			responseBodyContents.setContents(searchResponse.getVideos().stream().map(Content::map).toList());
+
 			return responseBodyContents;
 		}
 
 		public static ResponseBodyContents map(Article.Response response) {
 			ResponseBodyContents responseBodyContents = new ResponseBodyContents();
+
 			responseBodyContents.setContents(response.getArticles().stream().map(Content::map).toList());
+
 			return responseBodyContents;
 		}
 	}
