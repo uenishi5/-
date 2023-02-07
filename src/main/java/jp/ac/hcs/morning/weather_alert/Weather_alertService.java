@@ -147,8 +147,7 @@ public class Weather_alertService {
 				for (int idx = 0, arrayIdx = 4; idx < 4; idx++, arrayIdx++) {
 					date.getLowerAlertList().get(idx).setAlertData(days[arrayIdx]);
 				}
-				Elements getcolspan = document.select(".warnDetail_timeTable_row-day");
-				
+								
 				// date.setAlertdaydate1(days[4]);
 				// date.setAlertdaydate2(days[5]);
 				// date.setAlertdaydate3(days[6]);
