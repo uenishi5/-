@@ -2,12 +2,17 @@ package jp.ac.hcs.morning.weather_alert;
 
 import java.util.List;
 
+import com.google.api.client.util.Lists;
+
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Data
 public class Weather_alertData {
+
+	private static int UPPER_DATA_SIZE = 10;
+	private static int LOWER_DATA_SIZE = 4;
 
 	/** メイン画面に表示する警報内容 */
 	private String alertname;
@@ -19,22 +24,37 @@ public class Weather_alertData {
 	private String name;
 
 	/** 上の警報のアイテムが必ず１０個入る */
-	private List<UpperAlertData> upperAlertList;
+	private final List<UpperAlertData> upperAlertList = Lists.newArrayListWithCapacity(UPPER_DATA_SIZE);
 
 	/** 下の警報のアイテムが必ず４個入る */
-	private List<LowerAlertData> lowerAlertList;
+	private final List<LowerAlertData> lowerAlertList = Lists.newArrayListWithCapacity(LOWER_DATA_SIZE);
 
 	/** 注意報,警報、緊急警報の色 */
-	private String alert_color;
+	private AlertColor alert_color;
 
 	/** エラーキャッチフラグ */
 	private boolean catchflg;
+
+	/** 空のWeather_alertDataオブジェクトを返す */
+	public static Weather_alertData empty() {
+		final Weather_alertData data = new Weather_alertData();
+
+		for (int i = 0; i < UPPER_DATA_SIZE; i++) {
+			data.upperAlertList.add(new UpperAlertData());
+		}
+
+		for (int i = 0; i < LOWER_DATA_SIZE; i++) {
+			data.lowerAlertList.add(new LowerAlertData());
+		}
+
+		return data;
+	}
 
 	public static Weather_alertData noneAlert() {
 		final Weather_alertData weatherAlertData = new Weather_alertData();
 
 		weatherAlertData.setName("発表なし");
-		weatherAlertData.setAlert_color("white");
+		weatherAlertData.setAlert_color(AlertColor.WHITE);
 
 		return weatherAlertData;
 	}
