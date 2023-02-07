@@ -17,7 +17,7 @@ import jp.ac.hcs.morning.weather_alert.Weather_alertData.UpperAlertData;
 @Service
 public class Weather_alertService {
 
-	private static String URL = "https://typhoon.yahoo.co.jp/weather/jp/warn/1b/1100/";
+	private static String URL = "https://typhoon.yahoo.co.jp/weather/jp/warn/15/15204/";
 
 	/** メイン画面用警報・注意報取得 */
 	public Weather_alertEntity getMainWeather_alertData() {
@@ -84,7 +84,7 @@ public class Weather_alertService {
 		String[] datelabel = getdate.text().split(" ");
 		boolean weatherflg = false; // 2段目の表を表示する警報が存在するかのフラグ
 		boolean alertfirst = false; // 1段目の表が存在するかのフラグ
-		Weather_alertData date = new Weather_alertData();
+		Weather_alertData date = Weather_alertData.empty();
 		String firstdate = null;
 		int alertnamecount = 14; // 警報名取得用(風雪等)の開始添え字
 		int alertlabel = 16; // 警報の内容(注意報、警報)取得用の開始添え字
