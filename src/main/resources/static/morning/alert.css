@@ -95,7 +95,7 @@ small {
     line-height: 1.35em!important;
 }
 /* 災害　色 */
-.yellow{
+.YELLOW{
 	background-color: yellow;
 	font-size: 20px;
 	width: 60px;
@@ -103,7 +103,7 @@ small {
 	text-align: center;
 	border: 2px solid #000000;
 }
-.red{
+.RED{
 	background-color: red;
 	color: white;
 	font-size: 20px;
@@ -112,7 +112,7 @@ small {
 	text-align: center;
 	border: 2px solid #000000;
 }
-.black{
+.BLACK{
 	background-color: black;
 	color: white;
 	font-size: 20px;
@@ -121,7 +121,7 @@ small {
 	text-align: center;
 	border: 2px solid #000000;
 }
-.white{
+.WHITE{
 	background-color: white;
 	color: black;
 	font-size: 20px;

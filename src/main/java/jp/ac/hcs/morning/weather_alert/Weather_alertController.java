@@ -29,6 +29,7 @@ public class Weather_alertController {
 			model.addAttribute("errormessage", "エラーが発生しました。");
 			main.getMainData(model);
 		}
+		System.out.println(entity);
 
 		model.addAttribute("Weather_alert", entity);
 		return Mapping.RESOURCE_WEATHER_ALERT;

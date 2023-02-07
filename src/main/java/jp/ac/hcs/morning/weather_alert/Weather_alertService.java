@@ -17,7 +17,7 @@ import jp.ac.hcs.morning.weather_alert.Weather_alertData.UpperAlertData;
 @Service
 public class Weather_alertService {
 
-	private static String URL = "https://typhoon.yahoo.co.jp/weather/jp/warn/15/15204/";
+	private static String URL = "https://typhoon.yahoo.co.jp/weather/jp/warn/39/39202/";
 
 	/** メイン画面用警報・注意報取得 */
 	public Weather_alertEntity getMainWeather_alertData() {
@@ -147,6 +147,8 @@ public class Weather_alertService {
 				for (int idx = 0, arrayIdx = 4; idx < 4; idx++, arrayIdx++) {
 					date.getLowerAlertList().get(idx).setAlertData(days[arrayIdx]);
 				}
+				Elements getcolspan = document.select(".warnDetail_timeTable_row-day");
+				
 				// date.setAlertdaydate1(days[4]);
 				// date.setAlertdaydate2(days[5]);
 				// date.setAlertdaydate3(days[6]);
@@ -156,7 +158,7 @@ public class Weather_alertService {
 			if (alertfirst == false) {
 				firstdate = datelabel[1] + "時から"; // 一番始めの時刻情報と分かるように文字列の作成
 				for (int idx = 0, arrayIdx = 1; idx < 10; idx++, arrayIdx++) {
-					date.getUpperAlertList().get(alertlength).setTime(datelabel[arrayIdx]);
+					date.getUpperAlertList().get(idx).setTime(datelabel[arrayIdx]);
 				}
 				// date.setDate1(datelabel[1]);
 				// date.setDate2(datelabel[2]);
@@ -169,6 +171,7 @@ public class Weather_alertService {
 				// date.setDate9(datelabel[9]);
 				// date.setDate10(datelabel[10]);
 			}
+			System.out.println(date);
 			entity.getWeather_dateList().add(date);
 			// １段目の表の要素を取得する（存在する場合)
 			while (!alertfirst) { // 1段目の表の要素が存在しない場合、処理を飛ばす
@@ -373,8 +376,9 @@ public class Weather_alertService {
 
 				for (int i = 0; i < 4; i++) {
 					final LowerAlertData lowerAlertData = date.getLowerAlertList().get(i);
-					lowerAlertData.setAlertData(dayalertlist.get(0));
+					lowerAlertData.setAlertData(dayalertlist.get(i));
 					lowerAlertData.setAlertDataClass(dayalertclasslist.get(i));
+					
 				}
 
 				// data.setAlert1(dayalertlist.get(0));
@@ -394,7 +398,6 @@ public class Weather_alertService {
 					alertlabel = alertlabel + 3;
 					break;
 				}
-				else {}
 			}
 
 		}
