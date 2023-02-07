@@ -123,6 +123,7 @@ header {
     background-color: inherit;
 
     border-bottom: 1px solid rgba(var(--border-color));
+    transition: 1s;
 }
 
 #change-theme::after {
@@ -396,4 +397,22 @@ header {
 
 #logo{
     background-color: transparent;
+}
+
+.scrolling{
+    display: none;;
+}
+.scrolling #aiueo{
+    grid-template:
+        "a . c" auto 
+        "b b b" auto
+        "d d d" auto / 1fr auto 1fr !important;
+}
+
+.scrolling #search-form{
+    display: none;
+}
+
+.scrolling #search-form-filter-tags{
+    display: none;
 }

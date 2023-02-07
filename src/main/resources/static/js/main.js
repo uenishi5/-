@@ -1,3 +1,11 @@
+const modal_title = $("#item-window .modal-title");
+const modal_body = $("#item-window .modal-body");
+const modal_footer = $("#item-window .modal-footer");
+
+// a : <数字>
+// b : a | <記号>
+
+// data -> <api> -> 
 const data = {
     newsapi: {
         filters: [
@@ -39,7 +47,7 @@ const data = {
                 ]
             }
         ],
-        ajax: function(){
+        ajax: function () {
             $.ajax({
                 url: "/newsapi",
                 type: "POST",
@@ -48,7 +56,8 @@ const data = {
                     q: $("#search-form-query").val(),
                     page: $("#page-item-value").val(),
                     size: $("#search-form-size").val(),
-                    date: $("#search-form-date").val()
+                    date: $("#search-form-date").val(),
+                    sort: $("#search-form-sort").val(),
                 }
             })
                 .done(function (response) {
@@ -59,11 +68,11 @@ const data = {
                                 .click(function () {
                                     modal_title.children().remove();
                                     modal_title.text(content.title);
-        
+
                                     modal_body.children().remove();
                                     modal_body
                                         .append($("<iframe>", { "class": "w-100", "src": content.source }));
-        
+
                                     modal_footer.children().remove();
                                     modal_footer
                                         .append($("<a>", { "class": "btn ms-auto", "text": "Original", "href": content.originalUrl }));
@@ -76,13 +85,13 @@ const data = {
                                 .append($("<div>", { "class": "originalUrl", "text": content.originalUrl })));
                     });
                 })
-                .fail(function (response) {})
-                .always(function (response) {});
+                .fail(function (response) { })
+                .always(function (response) { })
         }
     },
     pornhubapi: {
         filters: [],
-        ajax: function(){
+        ajax: function () {
             $.ajax({
                 url: "/pornhubapi",
                 type: "POST",
@@ -101,11 +110,11 @@ const data = {
                                 .click(function () {
                                     modal_title.children().remove();
                                     modal_title.text(title);
-        
+
                                     modal_body.children().remove();
                                     modal_body
                                         .append($("<iframe>", { "class": "w-100", "src": content.source }));
-        
+
                                     modal_footer.children().remove();
                                     modal_footer
                                         .append($("<a>", { "class": "btn ms-auto", "text": "Original", "href": content.originalUrl }));
@@ -118,60 +127,61 @@ const data = {
                                 .append($("<div>", { "class": "originalUrl", "text": content.originalUrl })));
                     });
                 })
-                .fail(function (response) {})
-                .always(function (response) {});
+                .fail(function (response) { })
+                .always(function (response) { })
         }
     },
     youtubeapi: {
         filters: [],
-        ajax: function(){
-                $.ajax({
-        url: "/youtubeapi",
-        type: "POST",
-        dataType: "json",
-        data: {
-            q: $("#search-form-query").val(),
-            page: $("#page-item-value").val(),
-        }
-    })
-        .done(function (response) {
-            $("#contents").children().remove();
-            response.contents.forEach(content => {
-                $("#contents")
-                    .append($("<button>", { "class": "item btn", "data-bs-toggle": "modal", "data-bs-target": "#item-window" })
-                        .click(function () {
-                            const param = 'v=';
-                            const indexOfFirst = content.originalUrl.indexOf(param) + param.length;
-                            const videoId = content.originalUrl.substring(indexOfFirst, content.originalUrl.length);
+        ajax: function () {
+            $.ajax({
+                url: "/youtubeapi",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    q: $("#search-form-query").val(),
+                    page: $("#page-item-value").val(),
+                }
+            })
+                .done(function (response) {
+                    $("#contents").children().remove();
+                    response.contents.forEach(content => {
+                        $("#contents")
+                            .append($("<button>", { "class": "item btn", "data-bs-toggle": "modal", "data-bs-target": "#item-window" })
+                                .click(function () {
+                                    const param = 'v=';
+                                    const indexOfFirst = content.originalUrl.indexOf(param) + param.length;
+                                    const videoId = content.originalUrl.substring(indexOfFirst, content.originalUrl.length);
 
-                            const url = "/youtube-dl?videoId=" + videoId + "&toMp3=" + true;
+                                    const url = "/youtube-dl?videoId=" + videoId + "&toMp3=" + true;
 
-                            modal_title.children().remove();
-                            modal_title.text(content.title);
+                                    modal_title.children().remove();
+                                    modal_title.text(content.title);
 
-                            modal_body.children().remove();
-                            modal_body
-                                .append($("<iframe>", { "class": "w-100", "src": content.source }));
+                                    modal_body.children().remove();
+                                    modal_body
+                                        .append($("<iframe>", { "class": "w-100", "src": content.source }));
 
-                            modal_footer.children().remove();
-                            modal_footer
-                                .append($("<a>", { "class": "btn", "text": "Download", "href": url }))
-                                .append($("<a>", { "class": "btn ms-auto", "text": "Original", "href": content.originalUrl }));
-                        })
-                        .append($("<img>", { "class": "iconUrl", "src": content.iconUrl }))
-                        .append($("<div>", { "class": "title", "text": content.title }))
-                        .append($("<div>", { "class": "publishBy", "text": content.publishBy }))
-                        .append($("<div>", { "class": "publishAt", "text": content.publishAt }))
-                        .append($("<div>", { "class": "source", "text": content.source }))
-                        .append($("<div>", { "class": "originalUrl", "text": content.originalUrl })));
-            });
-        })
-        .fail(function (response) {})
-        .always(function (response) {});
+                                    modal_footer.children().remove();
+                                    modal_footer
+                                        .append($("<a>", { "class": "btn", "text": "Download", "href": url }))
+                                        .append($("<a>", { "class": "btn ms-auto", "text": "Original", "href": content.originalUrl }));
+                                })
+                                .append($("<img>", { "class": "iconUrl", "src": content.iconUrl }))
+                                .append($("<div>", { "class": "title", "text": content.title }))
+                                .append($("<div>", { "class": "publishBy", "text": content.publishBy }))
+                                .append($("<div>", { "class": "publishAt", "text": content.publishAt }))
+                                .append($("<div>", { "class": "source", "text": content.source }))
+                                .append($("<div>", { "class": "originalUrl", "text": content.originalUrl })));
+                    });
+                })
+                .fail(function (response) { })
+                .always(function (response) { })
         }
     }
 }
 
+$("#theme-list option").click(function () { data[$(this).data('api-name')].ajax(); });
 
 $(window).ready(function () {
     filter_setting("newsapi");
@@ -247,7 +257,6 @@ $("#search-form-filter-apply").click(function () {
                     .append($("<div>", { "text": value, "name": tag_value.data("param-name") }))
                 ))
     });
-
 })
 
 //絞り込みの設定
@@ -278,136 +287,34 @@ $("#search-form").on("submit", function (e) {
     $('#theme-list option:selected').click();
 });
 
+$("#page-item-next").click(function () {
+    const page = parseInt($("#page-item-value").val());
 
-const modal_title = $("#item-window .modal-title");
-const modal_body = $("#item-window .modal-body");
-const modal_footer = $("#item-window .modal-footer");
+    $("#page-item-value").val(page + 1);
+    $("#search-form-submit").click();
+});
 
+$("#page-item-prev").click(function () {
+    const page = parseInt($("#page-item-value").val());
 
-function newsapi() {
-    
-    $.ajax({
-        url: "/newsapi",
-        type: "POST",
-        dataType: "json",
-        data: {
-            q: $("#search-form-query").val(),
-            page: $("#page-item-value").val(),
-            size: $("#search-form-size").val(),
-            date: $("#search-form-date").val()
-        }
-    })
-        .done(function (response) {
-            $("#contents").children().remove();
-            response.contents.forEach(content => {
-                $("#contents")
-                    .append($("<button>", { "class": "item btn", "data-bs-toggle": "modal", "data-bs-target": "#item-window" })
-                        .click(function () {
-                            modal_title.children().remove();
-                            modal_title.text(content.title);
+    $("#page-item-value").val(page - 1);
+    $("#search-form-submit").click();
+});
 
-                            modal_body.children().remove();
-                            modal_body
-                                .append($("<iframe>", { "class": "w-100", "src": content.source }));
+const header = $('header');
+const headerHeight = header.height();
 
-                            modal_footer.children().remove();
-                            modal_footer
-                                .append($("<a>", { "class": "btn ms-auto", "text": "Original", "href": content.originalUrl }));
-                        })
-                        .append($("<img>", { "class": "iconUrl", "src": content.iconUrl }))
-                        .append($("<div>", { "class": "title", "text": content.title }))
-                        .append($("<div>", { "class": "publishBy", "text": content.publishBy }))
-                        .append($("<div>", { "class": "publishAt", "text": content.publishAt }))
-                        .append($("<div>", { "class": "source", "text": content.source }))
-                        .append($("<div>", { "class": "originalUrl", "text": content.originalUrl })));
-            });
-        })
-        .fail(function (response) {})
-        .always(function (response) {});
-}
+var flag = false;
+// scrollイベントを設定
+$(window).scroll(function () {
+    var passed_point = $(this).scrollTop() > headerHeight + 10;
 
-function pornhubapi() {
-    $.ajax({
-        url: "/pornhubapi",
-        type: "POST",
-        dataType: "json",
-        data: {
-            q: $("#search-form-query").val(),
-            page: $("#page-item-value").val(),
-            thumbsize: $("#search-form-size").val()
-        }
-    })
-        .done(function (response) {
-            $("#contents").children().remove();
-            response.contents.forEach(content => {
-                $("#contents")
-                    .append($("<button>", { "class": "item btn", "data-bs-toggle": "modal", "data-bs-target": "#item-window" })
-                        .click(function () {
-                            modal_title.children().remove();
-                            modal_title.text(title);
+    if (passed_point && !flag) {
+        header.addClass("scrolling");
+        flag = true;
+    } else if (!passed_point && flag) {
+        header.removeClass("scrolling");
+        flag = false;
+    }
+});
 
-                            modal_body.children().remove();
-                            modal_body
-                                .append($("<iframe>", { "class": "w-100", "src": content.source }));
-
-                            modal_footer.children().remove();
-                            modal_footer
-                                .append($("<a>", { "class": "btn ms-auto", "text": "Original", "href": content.originalUrl }));
-                        })
-                        .append($("<img>", { "class": "iconUrl", "src": content.iconUrl }))
-                        .append($("<div>", { "class": "title", "text": content.title }))
-                        .append($("<div>", { "class": "publishBy", "text": content.publishBy }))
-                        .append($("<div>", { "class": "publishAt", "text": content.publishAt }))
-                        .append($("<div>", { "class": "source", "text": content.source }))
-                        .append($("<div>", { "class": "originalUrl", "text": content.originalUrl })));
-            });
-        })
-        .fail(function (response) {})
-        .always(function (response) {});
-}
-
-function youtubeapi() {
-    $.ajax({
-        url: "/youtubeapi",
-        type: "POST",
-        dataType: "json",
-        data: {
-            q: $("#search-form-query").val(),
-            page: $("#page-item-value").val(),
-        }
-    })
-        .done(function (response) {
-            $("#contents").children().remove();
-            response.contents.forEach(content => {
-                $("#contents")
-                    .append($("<button>", { "class": "item btn", "data-bs-toggle": "modal", "data-bs-target": "#item-window" })
-                        .click(function () {
-                            const param = 'v=';
-                            const indexOfFirst = content.originalUrl.indexOf(param) + param.length;
-                            const videoId = content.originalUrl.substring(indexOfFirst, content.originalUrl.length);
-
-                            const url = "/youtube-dl?videoId=" + videoId + "&toMp3=" + true;
-
-                            modal_title.children().remove();
-                            modal_title.text(content.title);
-
-                            modal_body.children().remove();
-                            modal_body
-                                .append($("<iframe>", { "class": "w-100", "src": content.source }));
-
-                            modal_footer.children().remove();
-                            modal_footer
-                                .append($("<a>", { "class": "btn", "text": "Download", "href": url }))
-                                .append($("<a>", { "class": "btn ms-auto", "text": "Original", "href": content.originalUrl }));
-                        })
-                        .append($("<img>", { "class": "iconUrl", "src": content.iconUrl }))
-                        .append($("<div>", { "class": "title", "text": content.title }))
-                        .append($("<div>", { "class": "publishBy", "text": content.publishBy }))
-                        .append($("<div>", { "class": "publishAt", "text": content.publishAt }))
-                        .append($("<div>", { "class": "source", "text": content.source }))
-                        .append($("<div>", { "class": "originalUrl", "text": content.originalUrl })));
-            });
-        })
-        .fail(function (response) {})
-        .always(function (response) {});
-}

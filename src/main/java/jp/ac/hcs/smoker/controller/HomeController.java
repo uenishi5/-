@@ -56,6 +56,8 @@ import retrofit2.Response;
 @Controller
 public class HomeController {
 
+	private static final String JSON_EMPTY = "";
+
 	@Autowired
 	private ApiKeyHolder holder;
 
@@ -91,10 +93,10 @@ public class HomeController {
 			else {
 				log.debug("{}", response.errorBody().string());
 			}
-
 		}
 		catch (IOException e) {
 			e.printStackTrace();
+			return JSON_EMPTY;
 		}
 
 		return responseBodyContents.json();

@@ -12,7 +12,7 @@ public class NewsForm {
 	private NewsSort sort = NewsSort.PUBLISHED_AT;
 
 	public Everything.Builder query(Everything.Builder b) {
-		b.sortBy(this.sort).languages(NewsLanguage.EN).q(this.getQ());
+		b.sortBy(this.getSort()).languages(NewsLanguage.EN).q(this.getQ());
 		return b;
 	}
 }
