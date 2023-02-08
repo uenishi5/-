@@ -1,6 +1,12 @@
 package jp.ac.hcs.morning.weather_alert;
 
+import java.io.IOException;
 import java.util.List;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import com.google.api.client.util.Lists;
 
@@ -34,6 +40,12 @@ public class Weather_alertData {
 
 	/** エラーキャッチフラグ */
 	private boolean catchflg;
+	
+	/** 1つ目のcolspan */
+	private int colspan1;
+	
+	/** 2つ目のcolspan */
+	private int colspan2;
 
 	/** 空のWeather_alertDataオブジェクトを返す */
 	public static Weather_alertData empty() {
@@ -109,5 +121,20 @@ public class Weather_alertData {
 			}
 			return WHITE;
 		}
+	}
+	public static int Colspan (String url){
+		Document document;
+		int colspan = 0;
+		try {
+			document = Jsoup.connect(url).get();
+			Elements pagedata = document.select(".warnDetail_timeTable_row-day");
+			Elements thdata = pagedata.select("th");
+			for(Element th : thdata) {
+			String strcolspan = th.attr("colspan");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return colspan;
 	}
 }
