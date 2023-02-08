@@ -310,14 +310,10 @@ var oldScrollY = -1;
 $(window).scroll(function () {
 
     const passed_point = oldScrollY > headerHeight / 4;
-
     const isScrollUp = ($(this).scrollTop() - oldScrollY) < 0;
     const isScrollDown = (oldScrollY - $(this).scrollTop()) < 0;
 
     oldScrollY = $(this).scrollTop();
-
-    console.log("isScrollUp=" + isScrollUp + ", isScrollDown=" + isScrollDown);
-    console.log("passed_point=" + passed_point);
 
     if(passed_point){
         if(isScrollDown){
@@ -331,7 +327,5 @@ $(window).scroll(function () {
         }
         flag = true;
     }
-
-    console.log("flag=" + flag);
 });
 
