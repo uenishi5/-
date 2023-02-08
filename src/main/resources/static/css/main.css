@@ -166,6 +166,7 @@
 
 .light #logo>div:last-child::after {
     content: "IT Media";
+    white-space: nowrap;
 }
 
 
@@ -288,6 +289,10 @@ header {
 
 main{
     overflow: auto;
+}
+
+#logo{
+    align-items: center;
 }
 
 #filterForm .form-select {
