@@ -2,8 +2,29 @@ const modal_title = $("#item-window .modal-title");
 const modal_body = $("#item-window .modal-body");
 const modal_footer = $("#item-window .modal-footer");
 
-// a : <数字>
-// b : a | <記号>
+
+const body = $("body");
+const bodyHeight = body.height();
+
+const header = $("header");
+const headerHeight = header.height();
+
+const main = $("main");
+
+const date = {
+    id: "#search-form-date",
+    label: "日付絞り込み",
+    tag: [
+        $("<select>", {
+            class: "filter-setting-value form-select", id: "search-form-date"
+        })
+            .append($("<option>", { value: "TODAY", text: "今日" }).attr("selected", true))
+            .append($("<option>", { value: "THIS_WEEK", text: "今週" }))
+            .append($("<option>", { value: "THIS_MONTH", text: "今月" }))
+            .append($("<option>", { value: "THIS_YEAR", text: "今年" }))
+            .append($("<option>", { value: "ALL", text: "すべて" }))
+    ]
+};
 
 // data -> <api> -> 
 const data = {
@@ -21,20 +42,6 @@ const data = {
                 ],
             },
             {
-                id: "#search-form-date",
-                label: "日付絞り込み",
-                tag: [
-                    $("<select>", {
-                        class: "filter-setting-value form-select", id: "search-form-date"
-                    })
-                        .append($("<option>", { value: "TODAY", text: "今日" }).attr("selected", true))
-                        .append($("<option>", { value: "THIS_WEEK", text: "今週" }))
-                        .append($("<option>", { value: "THIS_MONTH", text: "今月" }))
-                        .append($("<option>", { value: "THIS_YEAR", text: "今年" }))
-                        .append($("<option>", { value: "ALL", text: "すべて" }))
-                ]
-            },
-            {
                 id: "#search-form-sort",
                 label: "並び順",
                 tag: [
@@ -44,6 +51,40 @@ const data = {
                         .append($("<option>", { value: "PUBLISHED_AT", text: "公開日" }).attr("selected", true))
                         .append($("<option>", { value: "POPULARITY", text: "人気" }))
                         .append($("<option>", { value: "RELEVANCY", text: "関連性" }))
+                ]
+            },
+            {
+                id: "#search-form-language",
+                label: "言語",
+                tag: [
+                    $("<select>", {
+                        class: "filter-setting-value form-select", id: "search-form-language"
+                    })
+                        .append($("<option>", { value: "AR", text: "アラビア語" }))
+                        .append($("<option>", { value: "DE", text: "ドイツ語" }))
+                        .append($("<option>", { value: "EN", text: "英語" }).attr("selected", true))
+                        .append($("<option>", { value: "ES", text: "スペイン語" }))
+                        .append($("<option>", { value: "FR", text: "フランス語" }))
+                        .append($("<option>", { value: "HE", text: "英語" }))
+                        .append($("<option>", { value: "IT", text: "イタリア語" }))
+                        .append($("<option>", { value: "NL", text: "オランダ語" }))
+                        .append($("<option>", { value: "NO", text: "ノルウェー語" }))
+                        .append($("<option>", { value: "PT", text: "ポルトガル語" }))
+                        .append($("<option>", { value: "RU", text: "ロシア語" }))
+                        .append($("<option>", { value: "SV", text: "スウェーデン語" }))
+                        .append($("<option>", { value: "ZH", text: "中国語" }))
+                ]
+            },
+            {
+                id: "#search-form-searchIns",
+                label: "検索対象",
+                tag: [
+                    $("<select>", {
+                        class: "filter-setting-value form-select", id: "search-form-searchIns", "multiple": ""
+                    })
+                        .append($("<option>", { value: "CONTENT", text: "コンテンツ" }).attr("selected", true))
+                        .append($("<option>", { value: "DESCRIPTION", text: "ディスクリプション" }).attr("selected", true))
+                        .append($("<option>", { value: "TITLE", text: "タイトル" }).attr("selected", true))
                 ]
             }
         ],
@@ -58,6 +99,8 @@ const data = {
                     size: $("#search-form-size").val(),
                     date: $("#search-form-date").val(),
                     sort: $("#search-form-sort").val(),
+                    language: $("#search-form-language").val(),
+                    searchIns: $("#search-form-searchIns").val()
                 }
             })
                 .done(function (response) {
@@ -185,6 +228,11 @@ $("#theme-list option").click(function () { data[$(this).data('api-name')].ajax(
 
 $(window).ready(function () {
     filter_setting("newsapi");
+
+    const theme = $('#theme-list option:selected');
+    const theme_class_name = theme.data('class-name');
+
+    body.addClass(theme_class_name);
 });
 
 $("#search-form-query")
@@ -211,8 +259,6 @@ $("#search-form-reset").click(function () {
 });
 
 $("#logo").click(function () {
-    const body = $("body");
-
     const theme = $('#theme-list option:selected');
     const theme_class_name = theme.data('class-name');
 
@@ -301,13 +347,9 @@ $("#page-item-prev").click(function () {
     $("#search-form-submit").click();
 });
 
-const header = $('header');
-const headerHeight = header.height();
-
-var flag = false;
 var oldScrollY = -1;
 // scrollイベントを設定
-$(window).scroll(function () {
+main.scroll(function () {
 
     const passed_point = oldScrollY > headerHeight / 4;
     const isScrollUp = ($(this).scrollTop() - oldScrollY) < 0;
@@ -315,17 +357,12 @@ $(window).scroll(function () {
 
     oldScrollY = $(this).scrollTop();
 
-    if(passed_point){
-        if(isScrollDown){
-            header.addClass("scrolling");
-            flag = true;
-        }
-    }else{
-        if(isScrollUp){
-            header.removeClass("scrolling");
-            flag = false;
-        }
-        flag = true;
+
+    
+    if (passed_point && isScrollDown) {
+        header.addClass("scrolling");
+    }
+    if (isScrollUp) {
+        header.removeClass("scrolling");
     }
 });
-
