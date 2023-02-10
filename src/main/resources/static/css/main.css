@@ -590,3 +590,9 @@ main {
 .scrolling #search-form-filter-tags {
     display: none;
 }
+
+#akstn {
+    grid-template:
+    "a b c" auto
+    "d d d" auto / 1fr 6fr 1fr;
+}

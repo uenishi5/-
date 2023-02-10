@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../static/css/bootstrap-icons.css">
     <link rel="stylesheet" href="../static/css/bootstrap.min.css">
     <link rel="stylesheet" href="../static/css/main.css">
+    <link rel="stylesheet" href="../static/morning/main.css">
 </head>
 
 <body>
@@ -65,7 +66,8 @@
                 </select>
                 <form id="search-form" style="grid-area: b;" th:action="@{/}">
 
-                    <input class="form-control m-1" id="search-form-query" type="text" placeholder="ITMediaで検索" autocomplete="off">
+                    <input class="form-control m-1" id="search-form-query" type="text" placeholder="ITMediaで検索"
+                        autocomplete="off">
 
                     <button class="btn btn-search-form m-1" id="search-form-reset" type="reset" style="display: none;">
                         <svg focusable="false" width="24px" height="24px" viewbox="0 0 24 24">
@@ -117,6 +119,115 @@
                 </div>
             </div>
 
+            <div class="row mb-2 d-grid" id="#akstn">
+
+                
+                <!-- 天気メイン -->
+                <div class="col" id="main-weather" th:object="${WeatherEntity.weatherList[0]}">
+                    <table>
+                        <!-- 天気img表示 -->
+                        <td><img th:src="*{svg}"></td>
+                        <!-- 地域表示 -->
+                        <td>
+                            <nobr>
+                                <p class="where-weather"><span th:text="*{prefecture}"></span><span
+                                        th:text="*{city}"></span>の天気
+                                </p>
+                            </nobr>
+                            <!-- 天気表示 -->
+                            <p class="weather-information"><span th:text="*{telop}"></span></p>
+                            <!-- 最高気温 -->
+                            <p class="max-temperature">最高気温：<span th:text="*{temperature_max}"></span>℃</p>
+                            <!-- 最低気温 -->
+                            <p class="min-temperature">最低気温：<span th:text="*{temperature_min}"></span>℃</p>
+                        </td>
+                    </table>
+                </div>
+
+                <!-- 交通情報メイン -->
+                <div class="col " id="main-traffic">
+                    <!-- 運休情報の表示 -->
+
+                    <p class="traffic_title">バス</p>
+                    <th:block th:if="${flg}">
+                        <nobr>
+                            <p class="traffic-message-t">交通情報あり</p>
+                        </nobr>
+                    </th:block>
+                    <th:block th:if="!${flg}">
+                        <nobr>
+                            <p class="traffic-message-f">交通情報なし</p>
+                        </nobr>
+                    </th:block>
+
+                    <p class="traffic_title">ＪＲ</p>
+                    <th:block th:if="${jrflg}">
+                        <nobr>
+                            <p class="traffic-message-t">交通情報あり</p>
+                        </nobr>
+                    </th:block>
+                    <th:block th:if="!${jrflg}">
+                        <nobr>
+                            <p class="traffic-message-f">交通情報なし</p>
+                        </nobr>
+                    </th:block>
+                </div>
+
+                <!-- 占いメイン -->
+                <div class="col " id="main-divination">
+                    <div th:object="${HoroscopeEntity.horoscopeList[0]}">
+                        <table>
+                            <td>
+                                <nobr>
+                                    <p class="d-word1">今日一番</p>
+                                </nobr>
+                                <nobr>
+                                    <p class="d-word2">運のいい人は</p>
+                                </nobr>
+                                <!-- 1位の人物の星座を表示 -->
+                                <nobr>
+                                    <p class="lacky-man"><span th:text="*{sign}"></span></p>
+                                </nobr>
+                                <nobr>
+                                    <p class="d-word3">の方です</p>
+                                </nobr>
+                            </td>
+                            <!-- 1位の星座img表示 -->
+                            <td><img th:src="*{photopath}"></td>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 注意報警報メイン -->
+                <div class="col " id="main-alert">
+                    <nobr>
+                        <p class="alert-title">現在の警報注意報</p>
+                    </nobr>
+
+                    <table>
+                        <tr>
+                            <th:block th:each="alert : ${Weather_alertEntity.weather_alertnameList}">
+                                <td>
+                                    <p th:class="${alert.alert_color}"><span th:text="${alert.name}"></span></p>
+                                </td>
+                            </th:block>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- チャートメイン -->
+                <div class="col" id="main-chart" th:object="${ChartEntity.chartList[0]}">
+                    <nobr>
+                        <p class="chart-title">Bitcoin/日本円のチャート</p>
+                    </nobr>
+                    <!-- 現在チャート表示 -->
+                    <nobr>
+                        <p class="real-time-chart"><span th:text="*{bitcoin}"></span></p>
+                    </nobr>
+                    <!-- レートの上がり下がりの表示 -->
+                    <p class="chart-difference"><span th:text="*{rate}"></span>%</p>
+                </div>
+            </div>
         </div>
     </header>
 
