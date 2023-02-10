@@ -64,6 +64,8 @@ import jp.ac.hcs.mbraw.weather_alert.Weather_alertData;
 import jp.ac.hcs.mbraw.weather_alert.Weather_alertEntity;
 import jp.ac.hcs.mbraw.weather_alert.Weather_alertService;
 import lombok.Data;
+import lombok.NonNull;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import retrofit2.Response;
 
@@ -152,7 +154,7 @@ public class HomeController {
 		final ResponseBodyContents responseBodyContents = new ResponseBodyContents();
 
 		if (bindingResult.hasErrors()) {
-			responseBodyContents.setAllErrors(bindingResult.getAllErrors());
+			responseBodyContents.setErrors(bindingResult.getAllErrors());
 			return responseBodyContents.json();
 		}
 
@@ -163,7 +165,7 @@ public class HomeController {
 
 			if (response.isSuccessful()) {
 				final Article.Response articleResponse = Objects.nonNull(response.body()) ? response.body() : new Article.Response();
-				return ResponseBodyContents.map(articleResponse).json();
+				return ResponseBodyContents.Utils.map(articleResponse).json();
 			}
 			else {
 				log.debug("{}", response.errorBody().string());
@@ -187,7 +189,7 @@ public class HomeController {
 		final ResponseBodyContents responseBodyContents = new ResponseBodyContents();
 
 		if (bindingResult.hasErrors()) {
-			responseBodyContents.setAllErrors(bindingResult.getAllErrors());
+			responseBodyContents.setErrors(bindingResult.getAllErrors());
 			return responseBodyContents.json();
 		}
 
@@ -198,7 +200,7 @@ public class HomeController {
 
 			if (response.isSuccessful()) {
 				final SearchResponse searchResponse = Objects.nonNull(response.body()) ? response.body() : new SearchResponse();
-				return ResponseBodyContents.map(searchResponse).json();
+				return ResponseBodyContents.Utils.map(searchResponse).json();
 			}
 			else {
 				log.debug("{}", response.errorBody().string());
@@ -222,13 +224,13 @@ public class HomeController {
 		final ResponseBodyContents responseBodyContents = new ResponseBodyContents();
 
 		if (bindingResult.hasErrors()) {
-			responseBodyContents.setAllErrors(bindingResult.getAllErrors());
+			responseBodyContents.setErrors(bindingResult.getAllErrors());
 			return responseBodyContents.json();
 		}
 
 		try {
 			final SearchListResponse searchListResponse = YouTubeInstance.singleton().search().list(Collections.singletonList("id,snippet")).setKey(this.holder.getYoutube()).setQ(form.getQ()).setType(Collections.singletonList("video")).setOrder(EnumYoutubeSort.DATE.name().toLowerCase()).setFields("items(id/kind, id/videoId, snippet/title, snippet/publishedAt, snippet/thumbnails/high/url, snippet/channelTitle)").setMaxResults((long) pageable.getPageSize()).execute();
-			return ResponseBodyContents.map(searchListResponse).json();
+			return ResponseBodyContents.Utils.map(searchListResponse).json();
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -299,88 +301,48 @@ public class HomeController {
 		}
 	}
 
+	/**
+	 * API通信した後、必要な情報を格納を行いResponseBodyとしてレスポンスするためのクラスです。
+	 *
+	 *
+	 * @author s20203029
+	 */
 	@Data
 	public static class ResponseBodyContents {
 
-		private List<ObjectError> allErrors;
+		/**
+		 * 何かしらのエラーを格納するための変数
+		 */
+		private List<ObjectError> errors;
+
+		/**
+		 * API通信して格納するための変数
+		 */
 		private List<Content> contents;
 
-		@Data
+		/**
+		 * フロントサイドのcssに存在するitemクラスのためのクラス
+		 *
+		 * このクラスに宣言されている変数は必要な情報である。 そのため必ず値が代入されるべきである。
+		 *
+		 * @author s20203029
+		 */
+		@Value(staticConstructor = "create")
 		public static class Content {
 
-			private String originalUrl;
-			private String iconUrl;
-			private String title;
-			private String source;
-			private String publishBy;
-			private String publishAt;
+			private final @NonNull String originalUrl;
+			private final @NonNull String iconUrl;
+			private final @NonNull String title;
+			private final @NonNull String source;
+			private final @NonNull String publishBy;
+			private final @NonNull String publishAt;
 
-			public static Content map(SearchResult searchResult) {
-				final Content content = new Content();
-
-				final ResourceId resourceId = searchResult.getId();
-				final SearchResultSnippet searchResultSnippet = searchResult.getSnippet();
-				final Thumbnail thumbnail = searchResultSnippet.getThumbnails().getHigh();
-
-				content.setOriginalUrl(String.format("https://www.youtube.com/watch?v=%s", resourceId.getVideoId()));
-				content.setIconUrl(thumbnail.getUrl());
-				content.setTitle(searchResultSnippet.getTitle());
-				content.setSource(String.format("https://www.youtube.com/embed/%s", resourceId.getVideoId()));
-				content.setPublishBy(searchResultSnippet.getChannelTitle());
-				content.setPublishAt(searchResultSnippet.getPublishedAt().toString());
-
-				return content;
-			}
-
-			public static Content map(Article article) {
-				final Content content = new Content();
-
-				content.setOriginalUrl(article.getUrl());
-				content.setIconUrl(article.getUrlToImage());
-				content.setTitle(article.getTitle());
-				content.setSource(article.getUrl());
-				content.setPublishBy(article.getAuthor());
-				content.setPublishAt(article.getPublishedAt());
-
-				return content;
-			}
-
-			public static Content map(VideoResponse videoResponse) {
-				final Content content = new Content();
-
-				String publishBy = "";
-
-				try {
-					publishBy = new SimpleDateFormat(
-							"yyyy-MM-dd hh:mm:ss").parse(videoResponse.getPublishDate()).toInstant().toString();
-				}
-				catch (ParseException e) {
-					e.printStackTrace();
-				}
-
-				final String publishAt = videoResponse.getPornstars().isEmpty() ? "" : videoResponse.getPornstars().get(0).getPornstarName();
-
-				content.setOriginalUrl(videoResponse.getUrl());
-				content.setIconUrl(videoResponse.getThumb());
-				content.setTitle(videoResponse.getTitle());
-				content.setSource("https://jp.pornhub.com/embed/" + videoResponse.getVideoId());
-				content.setPublishBy(publishBy);
-				content.setPublishAt(publishAt);
-
-				return content;
-			}
-
-			public void setPublishAt(String value) {
-				this.setPublishAt(DateTime.parse(value));
-			}
-
-			public void setPublishAt(DateTime value) {
-				final Period period = new Period(value, DateTime.now());
+			public static String getTimeAgo(DateTime dateTime) {
+				final Period period = new Period(dateTime, DateTime.now());
 
 				final String timeAgo = DateUtils.of(period).add(Unit.YEARS, "year", "years").add(Unit.MONTHS, "month", "months").add(Unit.WEEKS, "week", "weeks").add(Unit.DAYS, "day", "days").add(Unit.HOURS, "hour", "hours").add(Unit.MINUTES, "minute", "minutes").add(Unit.SECONDS, "second", "seconds").print();
-				final String time = timeAgo.isBlank() ? "today" : String.format("%s %s", timeAgo, "ago");
-
-				this.publishAt = time;
+				final String output = timeAgo.isBlank() ? "today" : String.format("%s %s", timeAgo, "ago");
+				return output;
 			}
 		}
 
@@ -394,29 +356,87 @@ public class HomeController {
 			}
 		}
 
-		public static ResponseBodyContents map(SearchListResponse searchListResponse) {
-			ResponseBodyContents responseBodyContents = new ResponseBodyContents();
+		public static class Utils {
+			public static Content map(SearchResult searchResult) {
+				final ResourceId resourceId = searchResult.getId();
+				final SearchResultSnippet searchResultSnippet = searchResult.getSnippet();
+				final Thumbnail thumbnail = searchResultSnippet.getThumbnails().getHigh();
 
-			responseBodyContents.setContents(searchListResponse.getItems().stream().map(Content::map).toList());
+				final String originalUrl = String.format("https://www.youtube.com/watch?v=%s", resourceId.getVideoId());
+				final String iconUrl = thumbnail.getUrl();
+				final String title = searchResultSnippet.getTitle();
+				final String source = String.format("https://www.youtube.com/embed/%s", resourceId.getVideoId());
+				final String publishBy = searchResultSnippet.getChannelTitle();
+				final String publishAt = searchResultSnippet.getPublishedAt().toString();
 
-			return responseBodyContents;
+				return Content.create(originalUrl, iconUrl, title, source, publishBy, publishAt);
+			}
+
+			public static Content map(Article article) {
+				final String originalUrl = article.getUrl();
+				final String iconUrl = article.getUrlToImage();
+				final String title = article.getTitle();
+				final String source = article.getUrl();
+				final String publishBy = article.getAuthor();
+				final String publishAt = article.getPublishedAt();
+
+				return Content.create(originalUrl, iconUrl, title, source, publishBy, publishAt);
+			}
+
+			public static Content map(VideoResponse videoResponse) {
+				final String originalUrl = videoResponse.getUrl();
+				final String iconUrl = videoResponse.getThumb();
+				final String title = videoResponse.getTitle();
+				final String source = String.format("https://jp.pornhub.com/embed/%s", videoResponse.getVideoId());
+				final String publishBy = convertDate(videoResponse.getPublishDate());
+				final String publishAt = videoResponse.getPornstars().isEmpty() ? "" : videoResponse.getPornstars().get(0).getPornstarName();
+
+				return Content.create(originalUrl, iconUrl, title, source, publishBy, publishAt);
+			}
+
+			public static ResponseBodyContents map(SearchListResponse searchListResponse) {
+				return map(searchListResponse.getItems().stream().map(Utils::map).toList());
+			}
+
+			public static ResponseBodyContents map(SearchResponse searchResponse) {
+				return map(searchResponse.getVideos().stream().map(Utils::map).toList());
+			}
+
+			public static ResponseBodyContents map(Article.Response response) {
+				return map(response.getArticles().stream().map(Utils::map).toList());
+			}
+
+			public static ResponseBodyContents map(List<Content> contents) {
+				final ResponseBodyContents responseBodyContents = new ResponseBodyContents();
+
+				responseBodyContents.setContents(contents);
+
+				return responseBodyContents;
+			}
+
+			/**
+			 * Parses text from the beginning of the given string to produce a date.The
+			 * method may not use the entire text of the given string.
+			 *
+			 * See the parse(String, ParsePosition) method for more informationon date
+			 * parsing.
+			 *
+			 * @param value
+			 * @return If catched exception,Return String length 0;
+			 */
+			private static String convertDate(String value) {
+
+				try {
+					return new SimpleDateFormat(
+							"yyyy-MM-dd hh:mm:ss").parse(value).toInstant().toString();
+				}
+				catch (ParseException e) {
+					e.printStackTrace();
+					return "";
+				}
+			}
 		}
 
-		public static ResponseBodyContents map(SearchResponse searchResponse) {
-			ResponseBodyContents responseBodyContents = new ResponseBodyContents();
-
-			responseBodyContents.setContents(searchResponse.getVideos().stream().map(Content::map).toList());
-
-			return responseBodyContents;
-		}
-
-		public static ResponseBodyContents map(Article.Response response) {
-			ResponseBodyContents responseBodyContents = new ResponseBodyContents();
-
-			responseBodyContents.setContents(response.getArticles().stream().map(Content::map).toList());
-
-			return responseBodyContents;
-		}
 	}
 
 }
