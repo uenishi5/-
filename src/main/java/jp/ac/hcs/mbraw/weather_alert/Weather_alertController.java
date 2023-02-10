@@ -6,7 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.ac.hcs.config.Mapping;
-import jp.ac.hcs.mbraw.main.MainController;
 
 /** 警報注意報のコントローラー */
 @Controller
@@ -30,10 +29,6 @@ public class Weather_alertController {
 
 		if (!(entity.isError())) {
 			model.addAttribute("flg", name.equals("発表なし"));
-		} else {
-			final MainController main = new MainController();
-			model.addAttribute("errormessage", "エラーが発生しました。");
-			main.getMainData(model);
 		}
 		System.out.println(entity);
 
