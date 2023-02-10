@@ -107,7 +107,7 @@ const data = {
                     $("#contents").children().remove();
                     response.contents.forEach(content => {
                         $("#contents")
-                            .append($("<button>", { "class": "item btn", "data-bs-toggle": "modal", "data-bs-target": "#item-window" })
+                            .append($("<button>", { "class": "col item btn", "data-bs-toggle": "modal", "data-bs-target": "#item-window" })
                                 .click(function () {
                                     modal_title.children().remove();
                                     modal_title.text(content.title);
@@ -149,7 +149,7 @@ const data = {
                     $("#contents").children().remove();
                     response.contents.forEach(content => {
                         $("#contents")
-                            .append($("<button>", { "class": "item btn", "data-bs-toggle": "modal", "data-bs-target": "#item-window" })
+                            .append($("<button>", { "class": "col item btn", "data-bs-toggle": "modal", "data-bs-target": "#item-window" })
                                 .click(function () {
                                     modal_title.children().remove();
                                     modal_title.text(title);
@@ -190,7 +190,7 @@ const data = {
                     $("#contents").children().remove();
                     response.contents.forEach(content => {
                         $("#contents")
-                            .append($("<button>", { "class": "item btn", "data-bs-toggle": "modal", "data-bs-target": "#item-window" })
+                            .append($("<button>", { "class": "col item btn", "data-bs-toggle": "modal", "data-bs-target": "#item-window" })
                                 .click(function () {
                                     const param = 'v=';
                                     const indexOfFirst = content.originalUrl.indexOf(param) + param.length;
@@ -366,3 +366,4 @@ main.scroll(function () {
         header.removeClass("scrolling");
     }
 });
+
