@@ -119,11 +119,12 @@
                 </div>
             </div>
 
-            <div class="row mb-2 d-grid mx-auto w-75" id="akstn">
-
+            <div class="row mb-2 d-grid" id="akstn">
 
                 <!-- 天気メイン -->
                 <div class="col" id="main-weather" th:object="${WeatherEntity.weatherList[0]}">
+                    <div>天気</div>
+                    
                     <table>
                         <!-- 天気img表示 -->
                         <td><img th:src="*{svg}"></td>
@@ -145,7 +146,8 @@
                 </div>
 
                 <!-- 交通情報メイン -->
-                <div class="col " id="main-traffic-jr">
+                <div class="col" id="main-traffic-jr">
+                    <div>JR交通情報</div>
                     <!-- 運休情報の表示 -->
 
                     <p class="traffic_title">ＪＲ</p>
@@ -162,6 +164,7 @@
                 </div>
 
                 <div class="col " id="main-traffic-bus">
+                    <div>バス交通情報</div>
                     <!-- 運休情報の表示 -->
 
                     <p class="traffic_title">バス</p>
@@ -179,6 +182,7 @@
 
                 <!-- 占いメイン -->
                 <div class="col " id="main-divination">
+                    <div>占い</div>
                     <div th:object="${HoroscopeEntity.horoscopeList[0]}">
                         <table>
                             <td>
@@ -204,6 +208,8 @@
 
                 <!-- 注意報警報メイン -->
                 <div class="col " id="main-alert">
+                    <div>警報注意報</div>
+
                     <nobr>
                         <p class="alert-title">現在の警報注意報</p>
                     </nobr>
@@ -221,6 +227,8 @@
 
                 <!-- チャートメイン -->
                 <div class="col" id="main-chart" th:object="${ChartEntity.chartList[0]}">
+                    <div>チャート</div>
+
                     <nobr>
                         <p class="chart-title">Bitcoin/日本円のチャート</p>
                     </nobr>
