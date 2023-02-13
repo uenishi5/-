@@ -15,7 +15,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Data
-public class Weather_alertData {
+public class WeatherAlertData {
 
 	private static int UPPER_DATA_SIZE = 10;
 	private static int LOWER_DATA_SIZE = 4;
@@ -48,8 +48,8 @@ public class Weather_alertData {
 	private int colspan2;
 
 	/** 空のWeather_alertDataオブジェクトを返す */
-	public static Weather_alertData empty() {
-		final Weather_alertData data = new Weather_alertData();
+	public static WeatherAlertData empty() {
+		final WeatherAlertData data = new WeatherAlertData();
 
 		for (int i = 0; i < UPPER_DATA_SIZE; i++) {
 			data.upperAlertList.add(new UpperAlertData());
@@ -62,8 +62,8 @@ public class Weather_alertData {
 		return data;
 	}
 
-	public static Weather_alertData noneAlert() {
-		final Weather_alertData weatherAlertData = new Weather_alertData();
+	public static WeatherAlertData noneAlert() {
+		final WeatherAlertData weatherAlertData = new WeatherAlertData();
 
 		weatherAlertData.setName("発表なし");
 		weatherAlertData.setAlert_color(AlertColor.WHITE);

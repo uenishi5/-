@@ -9,18 +9,18 @@ import jp.ac.hcs.config.Mapping;
 
 /** 警報注意報のコントローラー */
 @Controller
-public class Weather_alertController {
+public class WeatherAlertController {
 
 	@Autowired
-	private Weather_alertService weather_alertService;
+	private WeatherAlertService weatherAlertService;
 
 	@RequestMapping("/Weather_alert")
 	public String getMainData(Model model) {
-		final Weather_alertEntity entity = this.weather_alertService.getWeather_alertData();
-		final Weather_alertData data = entity.getWeather_alertnameList().get(0);
+		final WeatherAlertEntity entity = this.weatherAlertService.getWeather_alertData();
+		final WeatherAlertData data = entity.getWeather_alertnameList().get(0);
 		final String name = data.getName();
 		if (!(name.equals("発表なし"))) {
-			final Weather_alertData datelist = entity.getWeather_dateList().get(0);
+			final WeatherAlertData datelist = entity.getWeather_dateList().get(0);
 			final int col1 = datelist.getColspan1();
 			final int col2 = datelist.getColspan2();
 			model.addAttribute("colspan1", col1);

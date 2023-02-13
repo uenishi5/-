@@ -10,39 +10,39 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
-import jp.ac.hcs.mbraw.controller.weather_alert.Weather_alertData.AlertColor;
-import jp.ac.hcs.mbraw.controller.weather_alert.Weather_alertData.LowerAlertData;
-import jp.ac.hcs.mbraw.controller.weather_alert.Weather_alertData.UpperAlertData;
+import jp.ac.hcs.mbraw.controller.weather_alert.WeatherAlertData.AlertColor;
+import jp.ac.hcs.mbraw.controller.weather_alert.WeatherAlertData.LowerAlertData;
+import jp.ac.hcs.mbraw.controller.weather_alert.WeatherAlertData.UpperAlertData;
 
 /** 警報注意報を取得するクラス */
 @Service
-public class Weather_alertService {
+public class WeatherAlertService {
 
 	private static String URL = "https://typhoon.yahoo.co.jp/weather/jp/warn/25/25206/";
 
 	/** メイン画面用警報・注意報取得 */
-	public Weather_alertEntity getMainWeather_alertData() {
+	public WeatherAlertEntity getMainWeather_alertData() {
 		Document document;
 		try {
 			document = Jsoup.connect(URL).get();
 		} catch (IOException e1) {
 			e1.printStackTrace();
-			return Weather_alertEntity.error();
+			return WeatherAlertEntity.error();
 		}
 
-		final Weather_alertEntity entity = new Weather_alertEntity();
+		final WeatherAlertEntity entity = new WeatherAlertEntity();
 
 		Elements getalert = document.select(".warnDetail_head");
 		String[] alert = getalert.text().split(" ");
 		if (alert[1].equals("発表なし")) {
-			Weather_alertData data = new Weather_alertData();
+			WeatherAlertData data = new WeatherAlertData();
 			data.setName(alert[1]);
 			entity.getWeather_alertnameList().add(data);
 			data.setAlert_color(AlertColor.WHITE);
 		} else {
 			int alertcount = alert.length;
 			for (int idx = 1; idx < alertcount; idx++) {
-				Weather_alertData data = new Weather_alertData();
+				WeatherAlertData data = new WeatherAlertData();
 				if ((alert[idx].matches(".*注意報"))) {
 					data.setName(alert[idx].replace("注意報", ""));
 
@@ -63,16 +63,16 @@ public class Weather_alertService {
 	}
 
 	/** 警報注意報を取得するメソッド */
-	public Weather_alertEntity getWeather_alertData() {
+	public WeatherAlertEntity getWeather_alertData() {
 		Document document;
 		try {
 			document = Jsoup.connect(URL).get();
 		} catch (IOException e) {
 			e.printStackTrace();
-			return Weather_alertEntity.error();
+			return WeatherAlertEntity.error();
 		}
 
-		final Weather_alertEntity entity = new Weather_alertEntity();
+		final WeatherAlertEntity entity = new WeatherAlertEntity();
 		Elements getalert = document.select(".warnDetail_head");
 		Elements getalert2 = document.select(".warnDetail_timeTable");
 		Elements getdate = document.select(".warnDetail_timeTable_row-time");
@@ -80,7 +80,7 @@ public class Weather_alertService {
 		String[] datelabel = getdate.text().split(" ");
 		boolean weatherflg = false; // 2段目の表を表示する警報が存在するかのフラグ
 		boolean alertfirst = false; // 1段目の表が存在するかのフラグ
-		Weather_alertData date = Weather_alertData.empty();
+		WeatherAlertData date = WeatherAlertData.empty();
 		String firstdate = null;
 		int alertnamecount = 14; // 警報名取得用(風雪等)の開始添え字
 		int alertlabel = 16; // 警報の内容(注意報、警報)取得用の開始添え字
@@ -91,7 +91,7 @@ public class Weather_alertService {
 		String[] days = day.text().split(" ");
 		// 警報があるかの確認
 		if (alert[1].equals("発表なし")) { // 警報がない場合、発表無しの要素をを入れてentityを返す
-			Weather_alertData data = new Weather_alertData();
+			WeatherAlertData data = new WeatherAlertData();
 			data.setName(alert[1]);
 			data.setAlert_color(AlertColor.WHITE);
 			entity.getWeather_alertnameList().add(data);
@@ -100,7 +100,7 @@ public class Weather_alertService {
 			int alertcount = alert.length;
 			int alertlength = alertdata.length;
 			for (int idx = 1; idx < alertcount; idx++) {
-				Weather_alertData data = new Weather_alertData();
+				WeatherAlertData data = new WeatherAlertData();
 				// 2段目を表示する必要があるかのチェック
 				if (alert[idx].equals("融雪注意報") || alert[idx].equals("乾燥注意報") || alert[idx].equals("なだれ注意報")
 						|| alert[idx].equals("低温注意報") || alert[idx].equals("霜注意報")) {
@@ -183,7 +183,7 @@ public class Weather_alertService {
 				// break;
 				// }
 
-				Weather_alertData data = Weather_alertData.empty();
+				WeatherAlertData data = WeatherAlertData.empty();
 				// 警報名の取得（表の一番左）
 				name = alertdata[alertnamecount];
 				alertnamecount++; // 添え字を進める
@@ -337,7 +337,7 @@ public class Weather_alertService {
 			}
 			// 2段目の表の要素を取得する（存在する場合)
 			while (weatherflg) {
-				Weather_alertData data = Weather_alertData.empty();
+				WeatherAlertData data = WeatherAlertData.empty();
 				name = alertdata[alertnamecount];
 				alertnamecount++;
 				// 追加の情報がある場合、取得し続ける（"○○ 海上" 等)

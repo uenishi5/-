@@ -61,9 +61,9 @@ import jp.ac.hcs.mbraw.controller.traffic.TrafficService;
 import jp.ac.hcs.mbraw.controller.weather.WeatherData;
 import jp.ac.hcs.mbraw.controller.weather.WeatherEntity;
 import jp.ac.hcs.mbraw.controller.weather.WeatherService;
-import jp.ac.hcs.mbraw.controller.weather_alert.Weather_alertData;
-import jp.ac.hcs.mbraw.controller.weather_alert.Weather_alertEntity;
-import jp.ac.hcs.mbraw.controller.weather_alert.Weather_alertService;
+import jp.ac.hcs.mbraw.controller.weather_alert.WeatherAlertData;
+import jp.ac.hcs.mbraw.controller.weather_alert.WeatherAlertEntity;
+import jp.ac.hcs.mbraw.controller.weather_alert.WeatherAlertService;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.Value;
@@ -95,7 +95,7 @@ public class HomeController {
 	private WeatherService weatherService;
 
 	@Autowired
-	private Weather_alertService weather_alertService;
+	private WeatherAlertService weatherAlertService;
 
 	@Autowired
 	private ChartService chartService;
@@ -133,10 +133,10 @@ public class HomeController {
 		model.addAttribute("HoroscopeEntity", horoscopeEntity);
 
 		/** 札幌の警報を取得 */
-		final Weather_alertEntity weather_alertEntity = new Weather_alertEntity();
-		final Weather_alertData weather_alertData = this.weather_alertService.getMainWeather_alertData().getWeather_alertnameList().get(0);
-		weather_alertEntity.getWeather_alertnameList().add(weather_alertData);
-		model.addAttribute("Weather_alertEntity", weather_alertEntity);
+		final WeatherAlertEntity weatherAlertEntity = new WeatherAlertEntity();
+		final WeatherAlertData weatherAlertData = this.weatherAlertService.getMainWeather_alertData().getWeather_alertnameList().get(0);
+		weatherAlertEntity.getWeather_alertnameList().add(weatherAlertData);
+		model.addAttribute("Weather_alertEntity", weatherAlertEntity);
 
 		/** ビットコインチャートを取得 */
 		final ChartEntity chartEntity = new ChartEntity();
