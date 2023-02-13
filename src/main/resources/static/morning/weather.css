@@ -9,20 +9,24 @@
 .weather-menu{
 	display: flex;
    	flex-wrap: wrap;
-   	width: min(120%,1000px);
+   	width: 70%;
    	margin-left: auto;
    	margin-right: auto;
 }
 /* その日の天気の情報の箱 */
 .weather-box{
-	margin-left: 15px;
+	margin-left: 10px;
 	margin-bottom: 15px;
-	width: 300px;
+	margin-top: 10px;
+	margin-right:10px;
+	width: 47%;
+	height: 300px;
 	border: solid 3px #000000;
 }
 /* imgのデザイン */
 .weather-box img{
-	width: 300px;
+	width: 75px;
+	height: 75px;
 }
 /* 仕切り線 */
 .weather-box hr{
@@ -37,10 +41,24 @@
 }
 /* 天気の名 */
 .weather{
-	font-size: 25px;
+	font-size: 23px;
 	font-weight: bold;
 	margin-left: 30px;
 	margin-bottom: -10px;
+}
+/* 今日、明日の天気を入れる箱*/
+.weather-telopbox{
+	padding:0.3em 0.6em;
+	margin: auto;
+	width: 70%;
+	height: 40px;
+	background: #e5eaf7;
+	border-top: solid 1px #bbc7e3;
+	font-weight: 700;
+}
+/* テロップの文字*/
+.telop{
+	margin-top: 10px;
 }
 
 /* 降水量 */
@@ -53,10 +71,28 @@
 	text-align: right;
 	color: red;
 	margin-right: 25px;
+	list-style:none;
+	padding-left:0;
 }
 /* 最低気温 */
 .low-temperature{
 	color: blue;
 	text-align: right;
 	margin-right: 25px;
+	list-style:none;
+	padding-left:0;
+}
+.pict{
+	display: inline-block;
+	min-width: 123px;
+	margin:0px;
+	font-size:1rem;
+	font-weight:700;
+	vertical-align:middle;
+	white-space: nowrap;
+}
+.temp{
+	display:inline-block;
+	margin:0,-8px,3px,0;
+	white-space: nowrap;
 }

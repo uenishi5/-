@@ -18,6 +18,10 @@ public class TrafficController {
 	/** 交通画面に遷移 */
 	@RequestMapping("/Traffic")
 	public String mainTrafficData(Model model) {
+		final TrafficEntity entity = this.trafficService.getTrafficFlg();
+		final TrafficData data = entity.getTrafficflgList().get(0);
+		model.addAttribute("trafficflgList" , data.getTrafficFlgList());
+		System.out.println(data.getTrafficFlgList());
 		// //結果を取得
 		// TrafficEntity entity = trafficService.getMainTrafficData();
 

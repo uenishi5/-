@@ -39,7 +39,7 @@ public class WeatherService {
 
 		final WeatherEntity entity = new WeatherEntity();
 
-		for (int idx = 0; idx < 3; idx++) {
+		for (int idx = 0; idx < 2; idx++) {
 			final WeatherData data = new WeatherData();
 			final JsonNode forecasts = weatherNode.get("forecasts");
 			final JsonNode forecast = forecasts.get(idx);
@@ -52,7 +52,7 @@ public class WeatherService {
 			data.setDate(forecast.get("date").asText());
 			data.setDateLabel(forecast.get("dateLabel").asText());
 			data.setTelop(forecast.get("telop").asText());
-			data.setWeather(getText(weather.asText(), "null", "情報なし"));
+			data.setWeather(getText(weather.asText().replaceAll("　| ", ""), "null", "情報なし"));
 			data.setWave(detail.get("wave").asText());
 			data.setWind(detail.get("wind").asText());
 			data.setTemperature_max(getText(temperature.get("max").get("celsius").asText(), "null", "--"));

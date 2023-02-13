@@ -17,6 +17,9 @@ public class TrafficEntity {
 
 	/** フラグ */
 	private List<TrafficData> trafficflgList = new ArrayList<>();
+	
+	/** 交通画面情報有無フラグリスト */
+	private List<TrafficData> trafficdataflgList = new ArrayList<>();
 
 	public static TrafficEntity error() {
 		final TrafficEntity trafficEntity = new TrafficEntity();
