@@ -14,7 +14,7 @@ public class WeatherAlertController {
 	@Autowired
 	private WeatherAlertService weatherAlertService;
 
-	@RequestMapping("/Weather_alert")
+	@RequestMapping(Mapping.MAPPING_WEATHER_ALERT)
 	public String getMainData(Model model) {
 		final WeatherAlertEntity entity = this.weatherAlertService.getWeather_alertData();
 		final WeatherAlertData data = entity.getWeather_alertnameList().get(0);

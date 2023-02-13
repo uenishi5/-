@@ -1,11 +1,21 @@
 package jp.ac.hcs.config;
 
 public class Mapping {
+
+	// -----mapping-----
+
 	public static final String MAPPING_ROOT = "/";
 	public static final String MAPPING_NEWSAPI = MAPPING_ROOT + "newsapi";
 	public static final String MAPPING_PORNHUBAPI = MAPPING_ROOT + "pornhubapi";
 	public static final String MAPPING_YOUTUBEAPI = MAPPING_ROOT + "youtubeapi";
 	public static final String MAPPING_YOUTUBE_DL = MAPPING_ROOT + "youtube-dl";
+	public static final String MAPPING_WEATHER = MAPPING_ROOT + "Weather";
+	public static final String MAPPING_HOROSCOPE = MAPPING_ROOT + "Horoscope";
+	public static final String MAPPING_CHART = MAPPING_ROOT + "Chart";
+	public static final String MAPPING_JR = MAPPING_ROOT + "Jr";
+	public static final String MAPPING_TRAFFIC = MAPPING_ROOT + "Traffic";
+	public static final String MAPPING_TRAFFIC_BUS = MAPPING_ROOT + "TrafficBus";
+	public static final String MAPPING_WEATHER_ALERT = MAPPING_ROOT + "Weather_alert";
 
 	// -----directory-----
 

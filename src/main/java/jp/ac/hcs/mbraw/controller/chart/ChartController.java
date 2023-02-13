@@ -14,7 +14,7 @@ public class ChartController {
 	@Autowired
 	private ChartService chartService;
 
-	@RequestMapping("/Chart")
+	@RequestMapping(Mapping.MAPPING_CHART)
 	public String getMainData(Model model) {
 		final ChartEntity entity = this.chartService.getChartData();
 

@@ -14,7 +14,7 @@ public class JrController {
 	@Autowired
 	private JrService jrService;
 
-	@RequestMapping("/Jr")
+	@RequestMapping(Mapping.MAPPING_JR)
 	public String mainTrafficData(Model model) {
 		final JrEntity entity = this.jrService.getallJrData();
 

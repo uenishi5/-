@@ -47,12 +47,12 @@ import com.ren130302.webapi.pornhubapi.response.SearchResponse;
 import com.ren130302.webapi.pornhubapi.response.VideoResponse;
 
 import jp.ac.hcs.config.ApiKeyHolder;
+import jp.ac.hcs.config.EntityHolder;
 import jp.ac.hcs.config.Mapping;
 import jp.ac.hcs.mbraw.DownloadHelper;
 import jp.ac.hcs.mbraw.controller.chart.ChartData;
 import jp.ac.hcs.mbraw.controller.chart.ChartEntity;
 import jp.ac.hcs.mbraw.controller.chart.ChartService;
-import jp.ac.hcs.mbraw.controller.horoscope.HoroscopeData;
 import jp.ac.hcs.mbraw.controller.horoscope.HoroscopeEntity;
 import jp.ac.hcs.mbraw.controller.horoscope.HoroscopeService;
 import jp.ac.hcs.mbraw.controller.jr.JrService;
@@ -82,8 +82,6 @@ import retrofit2.Response;
 public class HomeController {
 
 	private static final String JSON_EMPTY = "";
-
-	public static List<HoroscopeData> HOROSCOPE_TODAY = null;
 
 	@Autowired
 	private ApiKeyHolder holder;
@@ -121,15 +119,15 @@ public class HomeController {
 		 */
 		final HoroscopeEntity horoscopeEntity = new HoroscopeEntity();
 
-		if (Objects.isNull(HOROSCOPE_TODAY)) {
-			HOROSCOPE_TODAY = this.horoscopeService.getHoroscopeData().getHoroscopeList();
+		if (Objects.isNull(EntityHolder.HOROSCOPE_TODAY)) {
+			EntityHolder.HOROSCOPE_TODAY = this.horoscopeService.getHoroscopeData().getHoroscopeList();
 		}
 
 		// final HoroscopeData horoscopeDataRank1 = HOROSCOPE_TODAY.get(0);
 		// horoscopeEntity.getHoroscopeList().add(horoscopeDataRank1);
 		// model.addAttribute("HoroscopeEntity", horoscopeEntity);
 
-		horoscopeEntity.getHoroscopeList().addAll(HOROSCOPE_TODAY);
+		horoscopeEntity.getHoroscopeList().addAll(EntityHolder.HOROSCOPE_TODAY);
 		model.addAttribute("HoroscopeEntity", horoscopeEntity);
 
 		/** 札幌の警報を取得 */

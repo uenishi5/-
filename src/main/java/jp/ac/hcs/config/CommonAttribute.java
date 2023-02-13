@@ -2,6 +2,7 @@ package jp.ac.hcs.config;
 
 import java.security.Principal;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,5 +23,10 @@ public class CommonAttribute {
 		// notice = "";
 		// }
 		// model.addAttribute("notice", notice);
+	}
+
+	@Scheduled(cron = "")
+	public void a() {
+
 	}
 }
