@@ -1,4 +1,4 @@
-package jp.ac.hcs.mbraw.controller;
+package jp.ac.hcs.mbraw;
 
 import java.io.BufferedInputStream;
 import java.io.File;

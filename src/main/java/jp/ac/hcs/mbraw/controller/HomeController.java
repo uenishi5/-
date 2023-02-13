@@ -48,6 +48,7 @@ import com.ren130302.webapi.pornhubapi.response.VideoResponse;
 
 import jp.ac.hcs.config.ApiKeyHolder;
 import jp.ac.hcs.config.Mapping;
+import jp.ac.hcs.mbraw.DownloadHelper;
 import jp.ac.hcs.mbraw.controller.chart.ChartData;
 import jp.ac.hcs.mbraw.controller.chart.ChartEntity;
 import jp.ac.hcs.mbraw.controller.chart.ChartService;
