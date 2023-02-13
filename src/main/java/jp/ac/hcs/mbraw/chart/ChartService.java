@@ -14,11 +14,14 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ChartService {
+
+	private static final String URL = "https://bitflyer.com/ja-jp/bitcoin-chart";
+
 	public ChartEntity getChartData() {
 		Document document = null;
 
 		try {
-			document = Jsoup.connect("https://bitflyer.com/ja-jp/bitcoin-chart").get();
+			document = Jsoup.connect(URL).get();
 		}
 		catch (IOException e) {
 			e.printStackTrace();

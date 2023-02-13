@@ -3,13 +3,14 @@ package jp.ac.hcs.mbraw.horoscope;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jp.ac.hcs.mbraw.HttpConnectUtils;
+import jp.ac.hcs.mbraw.horoscope.pojo.HoroscopeObject;
 
 @Service
 public class HoroscopeService {
@@ -45,11 +46,11 @@ public class HoroscopeService {
 	 */
 	private HoroscopeEntity convert(String json) {
 
-		JsonNode horoscope = null;
+		HoroscopeObject horoscopeObject = null;
 
 		try {
 			final ObjectMapper objectMapper = new ObjectMapper();
-			horoscope = objectMapper.readValue(json, JsonNode.class);
+			horoscopeObject = objectMapper.readValue(json, HoroscopeObject.class);
 
 		}
 		catch (IOException e) {
@@ -61,24 +62,25 @@ public class HoroscopeService {
 		// 正常に変換できたのでJsonNodeからデータを取得して各種値を設定する
 		final HoroscopeEntity entity = new HoroscopeEntity();
 
-		final JsonNode horoscopeToday = horoscope.get("horoscope").get(TODAY);
+		final List<jp.ac.hcs.mbraw.horoscope.pojo.HoroscopeData> horoscopeToday = horoscopeObject.getHoroscope().get(TODAY);
 
-		for (int idx = 0; idx < 12; idx++) {
-			final JsonNode horosort = horoscopeToday.get(idx);
+		final List<HoroscopeData> horoscopes = horoscopeToday.stream().map(horosort -> {
 			final HoroscopeData data = new HoroscopeData();
 
-			data.setContent(horosort.get("content").asText());
-			data.setLucky_item(horosort.get("item").asText());
-			data.setMoney(horosort.get("money").asText());
-			data.setTotal(horosort.get("total").asText());
-			data.setJob(horosort.get("job").asText());
-			data.setColor(horosort.get("color").asText());
-			data.setLove(horosort.get("love").asText());
-			data.setRank(horosort.get("rank").asInt());
-			data.setSign(horosort.get("sign").asText());
+			data.setContent(horosort.getContent());
+			data.setLucky_item(horosort.getItem());
+			data.setMoney(horosort.getMoney());
+			data.setTotal(horosort.getTotal());
+			data.setJob(horosort.getJob());
+			data.setColor(horosort.getColor());
+			data.setLove(horosort.getLove());
+			data.setRank(horosort.getRank());
+			data.setSign(horosort.getSign());
 
-			entity.getHoroscopeList().add(data);
-		}
+			return data;
+		}).toList();
+
+		entity.getHoroscopeList().addAll(horoscopes);
 
 		entity.getHoroscopeList().sort((d1, d2) -> {
 			return d1.getRank() - d2.getRank();

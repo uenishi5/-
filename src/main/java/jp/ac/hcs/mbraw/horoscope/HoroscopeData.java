@@ -32,16 +32,16 @@ public class HoroscopeData {
 	private String sign;
 
 	/** 金運（５段階評価） */
-	private String money;
+	private int money;
 
 	/** 仕事運（５段階評価） */
-	private String job;
+	private int job;
 
 	/** 恋愛運（５段階評価） */
-	private String love;
+	private int love;
 
 	/** 総合運（５段階評価） */
-	private String total;
+	private int total;
 
 	/** エラーキャッチフラグ */
 	private boolean catchflg;

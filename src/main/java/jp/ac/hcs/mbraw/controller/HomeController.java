@@ -82,6 +82,8 @@ public class HomeController {
 
 	private static final String JSON_EMPTY = "";
 
+	public static List<HoroscopeData> HOROSCOPE_TODAY = null;
+
 	@Autowired
 	private ApiKeyHolder holder;
 
@@ -117,7 +119,12 @@ public class HomeController {
 		 * 占いデータをHoroscopeServiceから取得して 占いの順位が良い1位のデータをHoroscopeEntityに格納する
 		 */
 		final HoroscopeEntity horoscopeEntity = new HoroscopeEntity();
-		final HoroscopeData horoscopeDataRank1 = this.horoscopeService.getHoroscopeData().getHoroscopeList().get(0);
+
+		if (Objects.isNull(HOROSCOPE_TODAY)) {
+			HOROSCOPE_TODAY = this.horoscopeService.getHoroscopeData().getHoroscopeList();
+		}
+
+		final HoroscopeData horoscopeDataRank1 = HOROSCOPE_TODAY.get(0);
 		horoscopeEntity.getHoroscopeList().add(horoscopeDataRank1);
 		model.addAttribute("HoroscopeEntity", horoscopeEntity);
 

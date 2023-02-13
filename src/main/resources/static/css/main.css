@@ -19,6 +19,8 @@
 
     --bs-border-color: transparent;
     --bs-border-color-translucent: transparent;
+
+    --search-form-width: 560px;
 }
 
 .aqua {
@@ -128,7 +130,8 @@ body {
     --bottom-left-color: 0, 0, 0, 1;
     --bottom-right-color: 0, 0, 0, 1;
 
-    --alpha1: 0.5; /*0.5*/
+    --alpha1: 0.5;
+    /*0.5*/
 
     width: 100%;
     height: 100vh;
@@ -175,24 +178,24 @@ main {
     overflow: auto;
 }
 
-#akstn{
+#akstn {
     display: none !important;
-    
+
     grid-template-areas:
-    "a a b c"  
-    "d d e f";
+        "a a b c"
+        "d d e f";
     grid-auto-rows: 1fr;
     grid-auto-columns: 1fr;
     grid-gap: 0.5rem;
 }
 
-#akstn .col{
+#akstn .col {
     border-radius: 10px;
     border-style: solid;
     border-width: 1px;
     border-color: rgba(var(--border-color));
 
-    background-color:rgba(var(--search-form-bg-color)) !important;
+    background-color: rgba(var(--search-form-bg-color)) !important;
 }
 
 #logo {
@@ -273,11 +276,12 @@ main {
     margin-right: 0.25rem;
 }
 
-#page{
+#page {
     grid-area: c;
+    display: flex;
 }
 
-#search-form-filter-tags{
+#search-form-filter-tags {
     grid-area: d;
 }
 
@@ -329,9 +333,11 @@ main {
 }
 
 .top-screen #aiueo {
-    grid-template: 
-            ". a ." auto 
-            "b b b" auto / 0 100% 0 !important;
+    grid-template:
+        ". a ." auto "b b b" auto / 0 100% 0 !important;
+
+    grid-auto-rows: auto;
+    grid-auto-columns: 1fr;
 
     justify-content: center;
     align-content: center;
@@ -339,7 +345,7 @@ main {
     height: 70vh;
 }
 
-.top-screen #akstn{
+.top-screen #akstn {
     display: grid !important;
 }
 
@@ -406,7 +412,7 @@ main {
     box-shadow: var(--box-shadow);
 }
 
-.col.item{
+.col.item {
     grid-template: "a a" auto "b b" auto "c d" auto / 1fr 1fr !important;
 }
 
@@ -463,12 +469,12 @@ main {
     content: "Next";
 }
 
-@media (max-width: 992px) {
+@media (max-width: 1200px) {
     #aiueo {
-        grid-template:
-            "a c" auto
-            "b b" auto
-            "d d" auto / 1fr 1fr !important;
+        grid-template-areas:
+            "a c"
+            "b b"
+            "d d" !important;
     }
 
     #aiueo #page>ul {
@@ -476,10 +482,12 @@ main {
     }
 }
 
-#aiueo {
-    grid-template:
-        "a b c" auto
-        "d d d" auto / 1fr 6fr 1fr;
+@media (min-width: 1200px) {
+    #aiueo {
+        grid-template:
+            "a b c" auto
+            "d d d" auto / 1fr 1fr 1fr;
+    }
 }
 
 #logo {
@@ -505,30 +513,28 @@ main {
     display: none;
 }
 
-#main-weather{
+#main-weather {
     grid-area: a;
 }
 
-#main-traffic-jr{
+#main-traffic-jr {
     grid-area: b;
 }
 
-#main-traffic-bus{
+#main-traffic-bus {
     grid-area: c;
 }
 
-#main-divination{
+#main-divination {
     grid-area: d;
 }
 
-#main-alert{
+#main-alert {
     grid-area: e;
 }
 
-#main-chart{
-    grid-area:f;
+#main-chart {
+    grid-area: f;
 }
 
-.tile{
-
-}
+.col.tile {    grid-gap: 0.5rem;}
