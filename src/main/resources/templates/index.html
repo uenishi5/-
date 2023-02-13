@@ -99,7 +99,7 @@
                     </button>
                 </form>
 
-                <nav id="page" class="justify-content-end" aria-label="Page navigation">
+                <nav id="page" aria-label="Page navigation">
                     <ul class="pagination mb-0">
                         <li class="page-item">
                             <button class="page-link" id="page-item-prev" type="button" aria-hidden="true"
@@ -115,18 +115,19 @@
                         </li>
                     </ul>
                 </nav>
-                <div id="search-form-filter-tags" class="row g-2 align-items-center">
+                <div id="search-form-filter-tags" class="row g-2 ">
                 </div>
             </div>
 
-            <div class="row mb-2 d-grid" id="akstn">
+            <div class="row mb-2 d-grid" id="tiles">
 
                 <!-- 天気メイン -->
-                <div class="col tile" id="main-weather" th:object="${WeatherEntity.weatherList[0]}">
+                <a class="col tile" id="main-weather" th:object="${WeatherEntity.weatherList[0]}" th:href="@{}">
                     <div class="title">天気</div>
                     <section>
                         <div style="grid-area: a;">
-                            <img th:src="*{svg}" src="https://www.jma.go.jp/bosai/forecast/img/215.svg">
+                            <img th:src="*{svg}" src="https://www.jma.go.jp/bosai/forecast/img/215.svg"
+                                data-bs-toggle="tooltip" data-bs-placement="top" th:title="*{telop}">
                         </div>
                         <div style="grid-area: b;">
                             <div>
@@ -146,21 +147,33 @@
                                 <div class="time" style="grid-area:aa;">100%</div>
                                 <div class="time" style="grid-area: t1;">0</div>
                                 <div class="chanceRain" style="grid-area: c1;" data-percentage="100%"
-                                    th:data-percentage="*{chanceOfRain_T00_06}"></div>
+                                    data-bs-toggle="tooltip" data-bs-placement="top" th:title="*{chanceOfRain_T00_06}"
+                                    th:data-percentage="*{chanceOfRain_T00_06}">
+                                    <div></div>
+                                </div>
                                 <div class="time" style="grid-area: t2;">6</div>
                                 <div class="chanceRain" style="grid-area: c2;" data-percentage="60%"
-                                    th:data-percentage="*{chanceOfRain_T06_12}"></div>
+                                    data-bs-toggle="tooltip" data-bs-placement="top" th:title="*{chanceOfRain_T06_12}"
+                                    th:data-percentage="*{chanceOfRain_T06_12}">
+                                    <div></div>
+                                </div>
                                 <div class="time" style="grid-area: t3;">12</div>
                                 <div class="chanceRain" style="grid-area: c3;" data-percentage="40%"
-                                    th:data-percentage="*{chanceOfRain_T12_18}"></div>
+                                    data-bs-toggle="tooltip" data-bs-placement="top" th:title="*{chanceOfRain_T12_18}"
+                                    th:data-percentage="*{chanceOfRain_T12_18}">
+                                    <div></div>
+                                </div>
                                 <div class="time" style="grid-area: t4;">18</div>
                                 <div class="chanceRain" style="grid-area: c4;" data-percentage="0%"
-                                    th:data-percentage="*{chanceOfRain_T18_24}"></div>
+                                    data-bs-toggle="tooltip" data-bs-placement="top" th:title="*{chanceOfRain_T18_24}"
+                                    th:data-percentage="*{chanceOfRain_T18_24}">
+                                    <div></div>
+                                </div>
                                 <div class="time" style="grid-area: t5;">24</div>
                             </div>
                         </div>
                     </section>
-                </div>
+                </a>
 
                 <!-- 交通情報メイン -->
                 <div class="col" id="main-traffic-jr">
@@ -175,19 +188,18 @@
                     <div th:text="${flg} ? あり : なし"></div>
                 </div>
                 <!-- 占いメイン -->
-                <div class="col " id="main-divination" th:object="${HoroscopeEntity}">
+                <div class="col tile" id="main-divination" th:object="${HoroscopeEntity}">
                     <div class="title">占い</div>
                     <section th:each="horo, stat : *{horoscopeList}" th:object="${horo}">
-                        <div th:if="${stat.first}" style="grid-area: a;">
+                        <div th:if="${stat.first}" data-bs-toggle="tooltip" data-bs-placement="top" th:title="*{info.sign}">
                             <div>今日の1位</div>
-                            <span th:text="*{sign}"></span>
-                            <img th:src="*{photopath}">
+                            <img th:src="*{sign.resourcePng}">
+                            <span th:text="*{info.sign}"></span>
                         </div>
-                        <div th:unlss="${stat.first}" style="grid-area: b;">
-                            <div>
-                                <span th:text="*{sign}"></span>
-                                <img th:src="*{photopath}">
-                            </div>
+                        <div th:unless="${stat.first}" data-bs-toggle="tooltip" data-bs-placement="top"
+                            th:title="*{info.sign}">
+                            <img th:src="*{sign.resourcePng}">
+                            <span th:text="*{info.sign}"></span>
                         </div>
                     </section>
                 </div>
@@ -226,7 +238,6 @@
         <script type="text/javascript" src="../static/js/bootstrap.bundle.min.js"></script>
         <script type="text/javascript" src="../static/js/jquery-3.6.0.min.js"></script>
         <script type="text/javascript" src="../static/js/main.js"></script>
-
     </div>
 
 </body>

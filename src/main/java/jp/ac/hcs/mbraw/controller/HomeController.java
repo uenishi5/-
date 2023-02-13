@@ -48,21 +48,21 @@ import com.ren130302.webapi.pornhubapi.response.VideoResponse;
 
 import jp.ac.hcs.config.ApiKeyHolder;
 import jp.ac.hcs.config.Mapping;
-import jp.ac.hcs.mbraw.chart.ChartData;
-import jp.ac.hcs.mbraw.chart.ChartEntity;
-import jp.ac.hcs.mbraw.chart.ChartService;
-import jp.ac.hcs.mbraw.horoscope.HoroscopeData;
-import jp.ac.hcs.mbraw.horoscope.HoroscopeEntity;
-import jp.ac.hcs.mbraw.horoscope.HoroscopeService;
-import jp.ac.hcs.mbraw.jr.JrService;
-import jp.ac.hcs.mbraw.traffic.TrafficData;
-import jp.ac.hcs.mbraw.traffic.TrafficService;
-import jp.ac.hcs.mbraw.weather.WeatherData;
-import jp.ac.hcs.mbraw.weather.WeatherEntity;
-import jp.ac.hcs.mbraw.weather.WeatherService;
-import jp.ac.hcs.mbraw.weather_alert.Weather_alertData;
-import jp.ac.hcs.mbraw.weather_alert.Weather_alertEntity;
-import jp.ac.hcs.mbraw.weather_alert.Weather_alertService;
+import jp.ac.hcs.mbraw.controller.chart.ChartData;
+import jp.ac.hcs.mbraw.controller.chart.ChartEntity;
+import jp.ac.hcs.mbraw.controller.chart.ChartService;
+import jp.ac.hcs.mbraw.controller.horoscope.HoroscopeData;
+import jp.ac.hcs.mbraw.controller.horoscope.HoroscopeEntity;
+import jp.ac.hcs.mbraw.controller.horoscope.HoroscopeService;
+import jp.ac.hcs.mbraw.controller.jr.JrService;
+import jp.ac.hcs.mbraw.controller.traffic.TrafficData;
+import jp.ac.hcs.mbraw.controller.traffic.TrafficService;
+import jp.ac.hcs.mbraw.controller.weather.WeatherData;
+import jp.ac.hcs.mbraw.controller.weather.WeatherEntity;
+import jp.ac.hcs.mbraw.controller.weather.WeatherService;
+import jp.ac.hcs.mbraw.controller.weather_alert.Weather_alertData;
+import jp.ac.hcs.mbraw.controller.weather_alert.Weather_alertEntity;
+import jp.ac.hcs.mbraw.controller.weather_alert.Weather_alertService;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.Value;
@@ -124,8 +124,11 @@ public class HomeController {
 			HOROSCOPE_TODAY = this.horoscopeService.getHoroscopeData().getHoroscopeList();
 		}
 
-		final HoroscopeData horoscopeDataRank1 = HOROSCOPE_TODAY.get(0);
-		horoscopeEntity.getHoroscopeList().add(horoscopeDataRank1);
+		// final HoroscopeData horoscopeDataRank1 = HOROSCOPE_TODAY.get(0);
+		// horoscopeEntity.getHoroscopeList().add(horoscopeDataRank1);
+		// model.addAttribute("HoroscopeEntity", horoscopeEntity);
+
+		horoscopeEntity.getHoroscopeList().addAll(HOROSCOPE_TODAY);
 		model.addAttribute("HoroscopeEntity", horoscopeEntity);
 
 		/** 札幌の警報を取得 */
