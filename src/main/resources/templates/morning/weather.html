@@ -12,48 +12,88 @@
 
 	<!-- メニューバー -->
 	<div class="menu-bar">
-		<div class="menu-today"><script src="morning/days.js"></script></div>
+		<div class="menu-today">
+			<script src="morning/days.js"></script>
+		</div>
 		<div class="menu-bar-menu">
-		<table>
-			<td><nobr><a th:href="@{/Weather}">天気</a></nobr>
-			<nobr><a th:href="@{/Weather_alert}">警報・注意報</a></nobr>
-			<nobr><a th:href="@{/Horoscope}">占い</a></nobr>
-			<td><nobr><p class="menu-bar-title"><a th:href="@{/main}"><img src="morning/Morning.png"/></a></p></nobr>
-			<td><nobr><a th:href="@{/Traffic}">バス情報</a></nobr>
-			<nobr><a th:href="@{/Jr}">ＪＲ情報</a></nobr>
-			<nobr><a th:href="@{/Chart}">チャート</a></nobr>
-		</table>
+			<table>
+				<td><nobr>
+						<a th:href="@{/Weather}">天気</a>
+					</nobr> <nobr>
+						<a th:href="@{/Weather_alert}">警報・注意報</a>
+					</nobr> <nobr>
+						<a th:href="@{/Horoscope}">占い</a>
+					</nobr>
+				<td><nobr>
+						<p class="menu-bar-title">
+							<a th:href="@{/main}"><img src="morning/Morning.png" /></a>
+						</p>
+					</nobr>
+				<td><nobr>
+						<a th:href="@{/Traffic}">バス情報</a>
+					</nobr> <nobr>
+						<a th:href="@{/Jr}">ＪＲ情報</a>
+					</nobr> <nobr>
+						<a th:href="@{/Chart}">チャート</a>
+					</nobr>
+			</table>
 		</div>
 		<!-- 台的なもの -->
 		<footer class="platform">
-			<p>© 2022 - 2023  HCS CORPORATION.</p>
+			<p>© 2022 - 2023 HCS CORPORATION.</p>
 		</footer>
 	</div>
-	<div class="speace"><p>error</p></div>
-	
+	<div class="speace">
+		<p>error</p>
+	</div>
+
 	<!-- タイトル -->
-	<p class="title" th:object="${WeatherEntity.weatherList[0]}"><span th:text="*{city}"></span>の天気</p>
-	
+	<p class="title" th:object="${WeatherEntity.weatherList[0]}">
+		<span th:text="*{city}"></span>の天気
+	</p>
+
 	<!-- 天気の表示 -->
+
 	<div class="wether-contents">
+		<!--  今日、明日の天気テロップ -->
+		<div class="weather-telopbox">
+			<p class="telop">今日明日の天気</p>
+		</div>
 		<div class="weather-menu">
-			<!-- 今日、明日、明後日の天気 -->
+			<!-- 今日、明日の入れもの -->
+
+
+
+			<!-- 今日、明日の天気 -->
 			<th:block th:each=" weather :${WeatherEntity.weatherList}">
-			<div class="weather-box">
-				<!-- 日付の表示 -->
-				<p class="weather-day"><span th:text="${weather.dateLabel}"></span></p>
-				<hr>
-				<!-- 天気imgの表示 -->
-				<img th:src="${weather.svg}">
-				<!-- 詳細の天気の表示 -->
-				<p class="weather"><span th:text="${weather.weather}"></span></p>
-				<!-- 降水量表示 -->
-				<p class="precipitation-amount">降水量：<span th:text="${weather.chanceOfRain_T12_18}"></span></p>
-				<!-- 最高気温表示 -->
-				<p class="high-temperature">最高気温：<span th:text="${weather.temperature_max}"></span>℃</p>
-				<!-- 最低気温表示 -->
-				<p class="low-temperature">最低気温：<span th:text="${weather.temperature_min}"></span>℃</p>
-			</div>
+				<div class="weather-box">
+					<!-- 日付の表示 -->
+					<p class="weather-day">
+						<span th:text="${weather.dateLabel}"></span>
+					</p>
+					<hr>
+					<!-- 天気imgの表示 -->
+					<p class="pict">
+						<img th:src="${weather.svg}">
+						<!-- 詳細の天気の表示 -->
+						<span th:text="${weather.weather}"></span>
+					</p>
+					<ul class="temp">
+						<!-- 最高気温表示 -->
+						<li class ="high-temperature">
+							最高気温：<span th:text="${weather.temperature_max}"></span>℃
+						</li>
+						<!-- 最低気温表示 -->
+						<li class="low-temperature">
+							最低気温：<span th:text="${weather.temperature_min}"></span>℃
+						</li>
+					</ul>
+					<!-- 降水量表示 -->
+					<p class="precipitation-amount">
+						降水量：<span th:text="${weather.chanceOfRain_T12_18}"></span>
+					</p>
+
+				</div>
 			</th:block>
 		</div>
 	</div>
