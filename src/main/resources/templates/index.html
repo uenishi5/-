@@ -123,22 +123,43 @@
 
                 <!-- 天気メイン -->
                 <div class="col tile" id="main-weather" th:object="${WeatherEntity.weatherList[0]}">
-                    <div>天気</div>
-
-                    <div>
-                        <span th:text="*{prefecture}">北海道</span>
-                        <span th:text="*{city}">札幌</span>
-                    </div>
-
-                    <img th:src="*{svg}" src="https://www.jma.go.jp/bosai/forecast/img/215.svg">
-
-                    <div class="">
-                        <span th:text="|*{temperature_min}|">--</span>
-                        <span>/</span>
-                        <span th:text="|*{temperature_max}|">1</span>
-                        <span>℃</span>
-                    </div>
-
+                    <div class="title">天気</div>
+                    <section>
+                        <div style="grid-area: a;">
+                            <img th:src="*{svg}" src="https://www.jma.go.jp/bosai/forecast/img/215.svg">
+                        </div>
+                        <div style="grid-area: b;">
+                            <div>
+                                <span th:text="*{prefecture}">北海道</span>
+                                <span th:text="*{city}">札幌</span>
+                            </div>
+                            <div class="mt-2">
+                                <span style="font-size: larger;" th:text="|*{temperature_min}|">--</span>
+                                <span>~</span>
+                                <span style="font-size: larger;" th:text="|*{temperature_max}|">1</span>
+                                <span>℃</span>
+                            </div>
+                        </div>
+                        <div style="grid-area: c;" id="chanceOfRain">
+                            <div>降水確率</div>
+                            <div id="chanceOfRainGraph">
+                                <div class="time" style="grid-area:aa;">100%</div>
+                                <div class="time" style="grid-area: t1;">0</div>
+                                <div class="chanceRain" style="grid-area: c1;" data-percentage="100%"
+                                    th:data-percentage="*{chanceOfRain_T00_06}"></div>
+                                <div class="time" style="grid-area: t2;">6</div>
+                                <div class="chanceRain" style="grid-area: c2;" data-percentage="60%"
+                                    th:data-percentage="*{chanceOfRain_T06_12}"></div>
+                                <div class="time" style="grid-area: t3;">12</div>
+                                <div class="chanceRain" style="grid-area: c3;" data-percentage="40%"
+                                    th:data-percentage="*{chanceOfRain_T12_18}"></div>
+                                <div class="time" style="grid-area: t4;">18</div>
+                                <div class="chanceRain" style="grid-area: c4;" data-percentage="0%"
+                                    th:data-percentage="*{chanceOfRain_T18_24}"></div>
+                                <div class="time" style="grid-area: t5;">24</div>
+                            </div>
+                        </div>
+                    </section>
                 </div>
 
                 <!-- 交通情報メイン -->
@@ -153,15 +174,22 @@
                     <!-- 運休情報の表示 -->
                     <div th:text="${flg} ? あり : なし"></div>
                 </div>
-
                 <!-- 占いメイン -->
-                <div class="col " id="main-divination" th:object="${HoroscopeEntity.horoscopeList[0]}">
-                    <div>占い</div>
-
-                    <div>今日一番</div>
-                    <div>運のいい人は</div>
-                    <span th:text="*{sign}"></span>
-                    <img th:src="*{photopath}">
+                <div class="col " id="main-divination" th:object="${HoroscopeEntity}">
+                    <div class="title">占い</div>
+                    <section th:each="horo, stat : *{horoscopeList}" th:object="${horo}">
+                        <div th:if="${stat.first}" style="grid-area: a;">
+                            <div>今日の1位</div>
+                            <span th:text="*{sign}"></span>
+                            <img th:src="*{photopath}">
+                        </div>
+                        <div th:unlss="${stat.first}" style="grid-area: b;">
+                            <div>
+                                <span th:text="*{sign}"></span>
+                                <img th:src="*{photopath}">
+                            </div>
+                        </div>
+                    </section>
                 </div>
 
                 <!-- 注意報警報メイン -->

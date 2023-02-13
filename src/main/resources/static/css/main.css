@@ -180,14 +180,35 @@ main {
 
 #akstn {
     display: none !important;
-
-    grid-template-areas:
-        "a a b c"
-        "d d e f";
-    grid-auto-rows: 1fr;
-    grid-auto-columns: 1fr;
+    grid-auto-columns: minmax(150px, 1fr);
     grid-gap: 0.5rem;
 }
+
+@media (min-width: 1200px) {
+    #akstn {
+        grid-template-areas:
+            "a a b c"
+            "d d e f";
+    }
+
+    #chanceOfRainGraph{
+        display: flex;
+    }
+}
+
+@media (max-width: 1200px) {
+    #akstn {
+        grid-template-areas:
+            "a b"
+            "c d"
+            "e f";
+    }
+
+    #chanceOfRainGraph{
+        display: none;
+    }
+}
+
 
 #akstn .col {
     border-radius: 10px;
@@ -416,34 +437,34 @@ main {
     grid-template: "a a" auto "b b" auto "c d" auto / 1fr 1fr !important;
 }
 
-.col .iconUrl {
+.col.item .iconUrl {
     grid-area: a;
     justify-self: center;
     align-self: start;
     max-width: 100%;
 }
 
-.col .title {
+.col.item .title {
     grid-area: b;
     align-self: start;
 }
 
-.col .publishBy {
+.col.item .publishBy {
     grid-area: c;
     align-self: end;
 }
 
-.col .publishAt {
+.col.item .publishAt {
     grid-area: d;
     align-self: end;
     text-align: end;
 }
 
-.col .originalUrl {
+.col.item .originalUrl {
     display: none;
 }
 
-.col .source {
+.col.item .source {
     display: none;
 }
 
@@ -517,6 +538,24 @@ main {
     grid-area: a;
 }
 
+#main-weather section{
+    grid-template: 
+    "a b" 1fr
+    "a c" 1fr / 1fr 1fr;
+}
+
+@media (max-width: 992px) {
+    #main-weather section{
+        grid-template: 
+        "a b" 1fr
+        "a b" 1fr / 1fr 1fr;
+    }
+
+    #chanceOfRain{
+        display: none;
+    }
+}
+
 #main-traffic-jr {
     grid-area: b;
 }
@@ -529,6 +568,12 @@ main {
     grid-area: d;
 }
 
+#main-divination section{
+    grid-template: 
+    "a b" 1fr
+    "a b" 1fr / 1fr 1fr;
+}
+
 #main-alert {
     grid-area: e;
 }
@@ -537,4 +582,92 @@ main {
     grid-area: f;
 }
 
-.col.tile {    grid-gap: 0.5rem;}
+.col.tile {
+    grid-gap: 1rem;
+}
+
+.col.tile .title {
+    height: auto;
+}
+
+.col.tile section {
+    display: grid;
+}
+
+.col.tile section>* {
+    width: 100%;
+    height: auto;
+
+    display: flex;
+
+    justify-content: center;
+    justify-items: center;
+    align-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    text-align: center;
+}
+
+.col.tile section>*>img {
+    aspect-ratio: 1/1;
+
+    width: 100%;
+    max-width: 150px;
+}
+
+#chanceOfRainGraph{
+    display: grid;
+    grid-template:
+                "aa .. .. .. .. .. .. .. .."
+                ".. c1 .. c2 .. c3 .. c4 .." 3fr
+                "t1 .. t2 .. t3 .. t4 .. t5" 1fr;
+    grid-auto-columns: 1rem;
+
+    justify-content: center;
+}
+
+.col.tile section .time {
+    width: 1rem;
+    align-self: end;
+    font-size: small;
+}
+
+.col.tile section .chanceRain{
+    align-self: end;
+    width: 1rem;
+    background-color: rgba(var(--box-shadow-color));
+}
+.chanceRain[data-percentage="100%"]{
+    height: 100%;
+}
+.chanceRain[data-percentage="90%"]{
+    height: 90%;
+}
+.chanceRain[data-percentage="80%"]{
+    height: 80%;
+}
+.chanceRain[data-percentage="70%"]{
+    height: 70%;
+}
+.chanceRain[data-percentage="60%"]{
+    height: 60%;
+}
+.chanceRain[data-percentage="50%"]{
+    height: 50%;
+}
+.chanceRain[data-percentage="40%"]{
+    height: 40%;
+}
+.chanceRain[data-percentage="30%"]{
+    height: 30%;
+}
+.chanceRain[data-percentage="20%"]{
+    height: 20%;
+}
+.chanceRain[data-percentage="10%"]{
+    height: 10%;
+}
+.chanceRain[data-percentage="0%"]{
+    height: 0%;
+}

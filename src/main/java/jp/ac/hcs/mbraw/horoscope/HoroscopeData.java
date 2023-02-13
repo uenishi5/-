@@ -95,4 +95,23 @@ public class HoroscopeData {
 
 		return horoscopeData;
 	}
+
+	public enum Sign {
+		SAGITTARIUS("射手座"),
+		VIRGO("乙女座"),
+		TAURUS("牡牛座"),
+		CANCER("蟹座"),
+		GEMINI("双子座"),
+		ARIES("牡羊座"),
+		PISCES("魚座"),
+		SCORPIO("蠍座"),
+		CAPRICORN("山羊座"),
+		LEO("獅子座"),
+		AQUARIUS("水瓶座"),
+		LIBRA("天秤座");
+
+		private Sign(String... str) {
+
+		}
+	}
 }
