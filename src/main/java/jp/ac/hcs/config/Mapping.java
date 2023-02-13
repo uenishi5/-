@@ -24,30 +24,30 @@ public class Mapping {
 	public static final String RESOURCE_WEATHER = DIRECTORY_MORNING + "weather";
 	public static final String RESOURCE_WEATHER_ALERT = DIRECTORY_MORNING + "alert";
 
-	public static final String RESOURCE_PNG_SAGITTARIUS = DIRECTORY_MORNING + "ite.png";
-	public static final String RESOURCE_PNG_VIRGO = DIRECTORY_MORNING + "otome.png";
-	public static final String RESOURCE_PNG_TAURUS = DIRECTORY_MORNING + "oushi.png";
-	public static final String RESOURCE_PNG_CANCER = DIRECTORY_MORNING + "kani.png";
-	public static final String RESOURCE_PNG_GEMINI = DIRECTORY_MORNING + "futago.png";
-	public static final String RESOURCE_PNG_ARIES = DIRECTORY_MORNING + "ohitsuji.png";
-	public static final String RESOURCE_PNG_PISCES = DIRECTORY_MORNING + "uo.png";
-	public static final String RESOURCE_PNG_SCORPIO = DIRECTORY_MORNING + "sasori.png";
-	public static final String RESOURCE_PNG_CAPRICORN = DIRECTORY_MORNING + "yagi.png";
-	public static final String RESOURCE_PNG_LEO = DIRECTORY_MORNING + "shishi.png";
-	public static final String RESOURCE_PNG_AQUARIUS = DIRECTORY_MORNING + "mizugame.png";
-	public static final String RESOURCE_PNG_LIBRA = DIRECTORY_MORNING + "tenbin.png";
+	public static final String RESOURCE_SAGITTARIUS_PNG = DIRECTORY_MORNING + "ite.png";
+	public static final String RESOURCE_VIRGO_PNG = DIRECTORY_MORNING + "otome.png";
+	public static final String RESOURCE_TAURUS_PNG = DIRECTORY_MORNING + "oushi.png";
+	public static final String RESOURCE_CANCER_PNG = DIRECTORY_MORNING + "kani.png";
+	public static final String RESOURCE_GEMINI_PNG = DIRECTORY_MORNING + "futago.png";
+	public static final String RESOURCE_ARIES_PNG = DIRECTORY_MORNING + "ohitsuji.png";
+	public static final String RESOURCE_PISCES_PNG = DIRECTORY_MORNING + "uo.png";
+	public static final String RESOURCE_SCORPIO_PNG = DIRECTORY_MORNING + "sasori.png";
+	public static final String RESOURCE_CAPRICORN_PNG = DIRECTORY_MORNING + "yagi.png";
+	public static final String RESOURCE_LEO_PNG = DIRECTORY_MORNING + "shishi.png";
+	public static final String RESOURCE_AQUARIUS_PNG = DIRECTORY_MORNING + "mizugame.png";
+	public static final String RESOURCE_LIBRA_PNG = DIRECTORY_MORNING + "tenbin.png";
 
-	public static final String RESOURCE_SVG_SAGITTARIUS = DIRECTORY_MORNING + "sagittarius.svg";
-	public static final String RESOURCE_SVG_VIRGO = DIRECTORY_MORNING + "virgo.svg";
-	public static final String RESOURCE_SVG_TAURUS = DIRECTORY_MORNING + "taurus.svg";
-	public static final String RESOURCE_SVG_CANCER = DIRECTORY_MORNING + "cancer.svg";
-	public static final String RESOURCE_SVG_GEMINI = DIRECTORY_MORNING + "gemeni.svg";
-	public static final String RESOURCE_SVG_ARIES = DIRECTORY_MORNING + "aries.svg";
-	public static final String RESOURCE_SVG_PISCES = DIRECTORY_MORNING + "pisces.svg";
-	public static final String RESOURCE_SVG_SCORPIO = DIRECTORY_MORNING + "scorpio.svg";
-	public static final String RESOURCE_SVG_CAPRICORN = DIRECTORY_MORNING + "capricorn.svg";
-	public static final String RESOURCE_SVG_LEO = DIRECTORY_MORNING + "leo.svg";
-	public static final String RESOURCE_SVG_AQUARIUS = DIRECTORY_MORNING + "aquarius.svg";
-	public static final String RESOURCE_SVG_LIBRA = DIRECTORY_MORNING + "libra.svg";
+	public static final String RESOURCE_SAGITTARIUS_SVG = DIRECTORY_MORNING + "sagittarius.svg";
+	public static final String RESOURCE_VIRGO_SVG = DIRECTORY_MORNING + "virgo.svg";
+	public static final String RESOURCE_TAURUS_SVG = DIRECTORY_MORNING + "taurus.svg";
+	public static final String RESOURCE_CANCER_SVG = DIRECTORY_MORNING + "cancer.svg";
+	public static final String RESOURCE_GEMINI_SVG = DIRECTORY_MORNING + "gemeni.svg";
+	public static final String RESOURCE_ARIES_SVG = DIRECTORY_MORNING + "aries.svg";
+	public static final String RESOURCE_PISCES_SVG = DIRECTORY_MORNING + "pisces.svg";
+	public static final String RESOURCE_SCORPIO_SVG = DIRECTORY_MORNING + "scorpio.svg";
+	public static final String RESOURCE_CAPRICORN_SVG = DIRECTORY_MORNING + "capricorn.svg";
+	public static final String RESOURCE_LEO_SVG = DIRECTORY_MORNING + "leo.svg";
+	public static final String RESOURCE_AQUARIUS_SVG = DIRECTORY_MORNING + "aquarius.svg";
+	public static final String RESOURCE_LIBRA_SVG = DIRECTORY_MORNING + "libra.svg";
 
 }
