@@ -1,11 +1,10 @@
 package jp.ac.hcs.mbraw.controller.weather;
 
-import java.io.IOException;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jp.ac.hcs.mbraw.HttpConnectUtils;
 
@@ -25,15 +24,9 @@ public class WeatherService {
 
 	/** データをリストに格納するメソッド */
 	private WeatherEntity convert(String json) {
-		final ObjectMapper objectMapper = new ObjectMapper();
+		final JsonNode weatherNode = HttpConnectUtils.getJsonNode(json);
 
-		JsonNode weatherNode = null;
-
-		try {
-			weatherNode = objectMapper.readValue(json, JsonNode.class);
-		}
-		catch (IOException e) {
-			e.printStackTrace();
+		if (Objects.isNull(weatherNode)) {
 			return WeatherEntity.error();
 		}
 

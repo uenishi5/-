@@ -13,6 +13,9 @@ public class JrData {
 	// 名前
 	private String title;
 
+	/** htmlタグのクラス(.normal)にテキストが書かれていた場合は、false。それ以外は、true */
+	private boolean alert;
+
 	public static JrData error() {
 		final JrData jrData = new JrData();
 

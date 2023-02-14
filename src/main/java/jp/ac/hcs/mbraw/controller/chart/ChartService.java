@@ -1,12 +1,12 @@
 package jp.ac.hcs.mbraw.controller.chart;
 
-import java.io.IOException;
 import java.util.Objects;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
+
+import jp.ac.hcs.mbraw.HttpConnectUtils;
 
 /**
  * Bitcoinのチャート情報を取得するサービス
@@ -18,14 +18,7 @@ public class ChartService {
 	private static final String URL = "https://bitflyer.com/ja-jp/bitcoin-chart";
 
 	public ChartEntity getChartData() {
-		Document document = null;
-
-		try {
-			document = Jsoup.connect(URL).get();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
+		final Document document = HttpConnectUtils.getDocument(URL);
 
 		if (Objects.isNull(document)) {
 			// 通信に失敗した場合は、ChartEntityクラスのエラー専用のオブジェクトを返す

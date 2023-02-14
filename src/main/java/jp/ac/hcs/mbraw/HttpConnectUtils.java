@@ -6,6 +6,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class HttpConnectUtils {
 
 	/**
@@ -25,7 +31,7 @@ public class HttpConnectUtils {
 			connection.connect();
 		}
 		catch (IOException e) {
-			// URL解析した結果エラーが発生したまたは接続失敗した場合、エラー専用のHoroscopeEntityオブジェクトを返す
+			// URL解析した結果エラーが発生したまたは接続失敗した場合、空の文字列を返す
 			e.printStackTrace();
 			return "";
 		}
@@ -39,12 +45,47 @@ public class HttpConnectUtils {
 		}
 		catch (IOException e) {
 			e.printStackTrace();
-			// データ取得最中に異常が発生した場合、エラー専用のHoroscopeEntityオブジェクトを返す
+			// データ取得最中に異常が発生した場合、空の文字列を返す
 			return "";
 		}
 
 		connection.disconnect();
 
 		return buf.toString();
+	}
+
+	/**
+	 * 指定されたURLに接続を行う
+	 *
+	 * エラーの場合は、nullを返す。それ以外は、nullではないDocumentオブジェクトを返す。
+	 *
+	 * @param url
+	 * @return
+	 */
+	public static Document getDocument(String url) {
+		try {
+			return Jsoup.connect(url).get();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	/**
+	 * エラーの場合は、nullを返す。それ以外は、nullではないJsonNodeオブジェクトを返す。
+	 *
+	 * @param jsonData
+	 * @return
+	 */
+	public static JsonNode getJsonNode(String jsonData) {
+		try {
+			return new ObjectMapper().readValue(jsonData, JsonNode.class);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }
