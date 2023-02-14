@@ -367,20 +367,23 @@ main.scroll(function () {
     }
 });
 
-$(".sign").mouseenter(function () {
+var isSignClosed = true;
+$(".sign").click(function () {
 
-    const a1 = $(this);
+    const that = $(this);
+    if (isSignClosed) {
+        $(".sign").each(function () {
+            $(this).hide();
+        });
 
-    $(".sign").each(function () {
-        if (a1.eq($(this))) {
-            $(this).addClass("hide");
-        }
-    });
+        that.show().removeClass("sign-icon-only").parent("section").addClass("hovering");
+    }
+    else {
+        $(".sign").each(function () {
+            $(this).show();
+        });
 
-    $(this).find(".info").show();
-});
-
-$(".sign").mouseleave(function () {
-    $(".sign").each(function () { $(this).removeClass("hide") });
-    $(this).find(".info").hide();
+        that.addClass("sign-icon-only").parent().removeClass("hovering");
+    }
+    isSignClosed = !isSignClosed;
 });
