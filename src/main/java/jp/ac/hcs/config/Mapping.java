@@ -51,7 +51,7 @@ public class Mapping {
 	public static final String RESOURCE_VIRGO_SVG = DIRECTORY_MORNING + "virgo.svg";
 	public static final String RESOURCE_TAURUS_SVG = DIRECTORY_MORNING + "taurus.svg";
 	public static final String RESOURCE_CANCER_SVG = DIRECTORY_MORNING + "cancer.svg";
-	public static final String RESOURCE_GEMINI_SVG = DIRECTORY_MORNING + "gemeni.svg";
+	public static final String RESOURCE_GEMINI_SVG = DIRECTORY_MORNING + "gemini.svg";
 	public static final String RESOURCE_ARIES_SVG = DIRECTORY_MORNING + "aries.svg";
 	public static final String RESOURCE_PISCES_SVG = DIRECTORY_MORNING + "pisces.svg";
 	public static final String RESOURCE_SCORPIO_SVG = DIRECTORY_MORNING + "scorpio.svg";

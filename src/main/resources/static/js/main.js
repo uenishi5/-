@@ -358,7 +358,7 @@ main.scroll(function () {
     oldScrollY = $(this).scrollTop();
 
 
-    
+
     if (passed_point && isScrollDown) {
         header.addClass("scrolling");
     }
@@ -367,3 +367,20 @@ main.scroll(function () {
     }
 });
 
+$(".sign").mouseenter(function () {
+
+    const a1 = $(this);
+
+    $(".sign").each(function () {
+        if (a1.eq($(this))) {
+            $(this).addClass("hide");
+        }
+    });
+
+    $(this).find(".info").show();
+});
+
+$(".sign").mouseleave(function () {
+    $(".sign").each(function () { $(this).removeClass("hide") });
+    $(this).find(".info").hide();
+});
