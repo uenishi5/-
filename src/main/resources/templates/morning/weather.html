@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Morning 天気画面</title>
+<script src="today.js"></script>
 </head>
 <link rel="stylesheet" th:href="@{/morning/weather.css}"
 	href="../static/morning/weather.css">
@@ -47,17 +48,15 @@
 		<p>error</p>
 	</div>
 
-	<!-- タイトル -->
-	<p class="title" th:object="${WeatherEntity.weatherList[0]}">
-		<span th:text="*{city}"></span>の天気
-	</p>
-
 	<!-- 天気の表示 -->
+	<!--  今日、明日の天気テロップ -->
 
-	<div class="wether-contents">
-		<!--  今日、明日の天気テロップ -->
-		<div class="weather-telopbox">
-			<p class="telop">今日明日の天気</p>
+	<div class="weather-contents">
+		<div class="weather-telopbox"
+			th:object="${WeatherEntity.weatherList[0]}">
+			<p class="telop">
+				<span th:text="*{city}"></span>市の天気
+			</p>
 		</div>
 		<div class="weather-menu">
 			<!-- 今日、明日の入れもの -->
@@ -65,35 +64,63 @@
 
 
 			<!-- 今日、明日の天気 -->
+
 			<th:block th:each=" weather :${WeatherEntity.weatherList}">
+
 				<div class="weather-box">
 					<!-- 日付の表示 -->
+					
 					<p class="weather-day">
-						<span th:text="${weather.dateLabel}"></span>
+				
+					<script src="morning/today.js"></script>
+					の天気
 					</p>
 					<hr>
-					<!-- 天気imgの表示 -->
-					<p class="pict">
-						<img th:src="${weather.svg}">
+					<div class="weather-detailbox">
+						<div class="detail-weather" style="text-align: center;">
+							<!-- 天気imgの表示 -->
+							<img th:src="${weather.svg}">
+						</div>
+						<div class="detail-name" style="text-align: center;">
+							<span th:text="${weather.weather}"></span>
+						</div>
 						<!-- 詳細の天気の表示 -->
-						<span th:text="${weather.weather}"></span>
-					</p>
-					<ul class="temp">
-						<!-- 最高気温表示 -->
-						<li class ="high-temperature">
-							最高気温：<span th:text="${weather.temperature_max}"></span>℃
-						</li>
-						<!-- 最低気温表示 -->
-						<li class="low-temperature">
-							最低気温：<span th:text="${weather.temperature_min}"></span>℃
-						</li>
-					</ul>
-					<!-- 降水量表示 -->
-					<p class="precipitation-amount">
-						降水量：<span th:text="${weather.chanceOfRain_T12_18}"></span>
-					</p>
 
+						<div class="detail-temp" style="text-align: center;">
+							<ul class="temp">
+								<!-- 最高気温表示 -->
+								<li class="high-temperature">最高気温：<span
+									th:text="${weather.temperature_max}"></span>℃
+								</li>
+								<!-- 最低気温表示 -->
+								<li class="low-temperature">最低気温：<span
+									th:text="${weather.temperature_min}"></span>℃
+								</li>
+							</ul>
+						</div>
+						<div class="detail-rain" style="text-align: center;">
+							<!-- 降水量表示 -->
+							<table>
+								<tbody>
+									<tr class="time">
+										<th>時間</th>
+										<td>0-6</td>
+										<td>6-12</td>
+										<td>12-18</td>
+										<td>18-24</td>
+									<tr>
+										<th>降水</th>
+										<td th:text="${weather.chanceOfRain_T00_06}"></td>
+										<td th:text="${weather.chanceOfRain_T06_12}"></td>
+										<td th:text="${weather.chanceOfRain_T12_18}"></td>
+										<td th:text="${weather.chanceOfRain_T18_24}"></td>
+								</tbody>
+							</table>
+						</div>
+					</div>
 				</div>
+
+
 			</th:block>
 		</div>
 	</div>

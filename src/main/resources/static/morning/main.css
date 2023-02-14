@@ -216,3 +216,57 @@
 	margin-right: 10px;
 	color:#99CC33	;
 }
+
+/*  ------------
+  ボタンボックス
+----------------*/
+
+.remove-box{
+	border: solid 3px #000000;
+	flex: 1;
+	padding: 0 0 5px 0;
+	margin: 0 0 0 3px;
+	width: 103px;
+	position:fixed;
+	left: 0;
+	top: 35%;
+	border-radius: 10px;
+}
+
+.remove-box p{
+	margin: 1px 0 0 2px;
+	font-size: 13px;
+}
+
+group {
+	display: flex;
+}
+
+group input {
+  display: flex;
+  justify-content: space-between;
+  color: #CC9966;
+  font-size: 14px;
+  font-weight: 700;
+  border: 2px solid #CC9966;
+}
+
+group input::after {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-top: 3px solid #CC9900;
+  border-right: 3px solid #CC9900;
+  transform: rotate(45deg);
+}
+
+group input:hover {
+  color: #333333;
+  text-decoration: none;
+  background-color: #CC9900	;
+}
+
+group input:hover::after {
+  border-top: 3px solid #333333;
+  border-right: 3px solid #333333;
+}

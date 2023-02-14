@@ -13,7 +13,6 @@ import jp.ac.hcs.mbraw.HttpConnectUtils;
 public class WeatherService {
 	/** エンドポイント */
 	private static final String WEATHERURL = "https://weather.tsukumijima.net/api/forecast/city/016010";
-
 	/** 天気情報を取得するメソッド */
 	public WeatherEntity getWeatherData() {
 		final String data = HttpConnectUtils.connectAndGetText(WEATHERURL);
@@ -62,6 +61,7 @@ public class WeatherService {
 			entity.getWeatherList().add(data);
 
 		}
+		
 
 		return entity;
 	}
