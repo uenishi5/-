@@ -5,9 +5,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.api.services.youtube.model.SearchListResponse;
-import com.google.api.services.youtube.model.Video;
-import com.google.api.services.youtube.model.VideoListResponse;
 import com.ren130302.webapi.newsapi.NewsApiClient;
 import com.ren130302.webapi.newsapi.response.Article;
 import com.ren130302.webapi.pornhubapi.PornhubApiClient;
@@ -264,55 +260,26 @@ public class HomeController {
 	}
 
 	/**
-	 * Youtube動画をダウンロードするためのメソッドです。
+	 * 動画をダウンロードするためのメソッドです。
 	 *
 	 * @param videoId
 	 * @param toMp3
 	 * @return
 	 */
 	@GetMapping(Mapping.MAPPING_YOUTUBE_DL)
-	public ResponseEntity<byte[]> postYoutubeDL(String videoId, boolean toMp3) {
+	public ResponseEntity<byte[]> postYoutubeDL(@Validated YoutubeDLForm form, BindingResult bindingResult) {
 
-		if (videoId.isEmpty()) {
+		if (bindingResult.hasErrors()) {
 			return ResponseEntity.badRequest().build();
 		}
 
-		// videoIdが存在するかリクエストをする
-		// エラーが起きた場合、正常なリクエストでない、またはAPIサーバが落ちている可能性がある
-		// いずれにせよサーバ側でエラーが起きたことを通知するため、レスポンス(500エラー)を返す
-		VideoListResponse videoListResponse = null;
-		try {
-			videoListResponse = YouTubeInstance.singleton().videos().list(Collections.singletonList("id,snippet")).setKey(this.holder.getYoutube()).setId(Arrays.asList(videoId)).execute();
-		}
-		catch (IOException e1) {
-			e1.printStackTrace();
-		}
-
-		if (Objects.isNull(videoListResponse)) {
-			return ResponseEntity.internalServerError().build();
-		}
-
-		// リクエストおよびレスポンスが正常に行われたため次の段階へすすむ
-		// クライアントから正常なリクエストかどうかを確認する機構で
-		// 受け取ったレスポンスの中身にあるプロパティ名"Items"が空でなければ正常とする
-		// 空である場合は不具合として扱いレスポンス(400エラー)を返す
-		final List<Video> items = videoListResponse.getItems();
-
-		// 一件でも掛かればヨシ！
-		if (items.isEmpty()) {
-			return ResponseEntity.badRequest().build();
-		}
-
-		// 動画の情報
-		final Video video = videoListResponse.getItems().get(0);
-		final String url = String.format("https://www.youtube.com/watch?v=%s", video.getId());
-		final String extension = toMp3 ? "mp3" : "mp4";
-		final String filename = String.format("%s.%s", video.getSnippet().getTitle(), extension);
+		final String extension = form.isToMp3() ? "mp3" : "mp4";
+		final String filename = String.format("%s.%s", form.getVideoId(), extension);
 		final Path path = FileSystems.getDefault().getPath(Paths.get(System.getProperty("user.home"), "downloads", filename).toAbsolutePath().toString());
 
 		log.debug("path={}", path);
 
-		return DownloadHelper.execute(path, url, toMp3);
+		return DownloadHelper.execute(path, form.getUrl(), form.isToMp3());
 	}
 
 }

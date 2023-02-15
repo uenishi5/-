@@ -2,8 +2,6 @@ const modal_title = $("#item-window .modal-title");
 const modal_body = $("#item-window .modal-body");
 const modal_footer = $("#item-window .modal-footer");
 
-const main = $("main");
-
 const date = {
     id: "#search-form-date",
     label: "日付絞り込み",
@@ -19,9 +17,10 @@ const date = {
     ]
 };
 
-// data -> <api> -> 
 const data = {
     newsapi: {
+        placeholder: "ITMediaで検索", sname: "newsapi",
+        theme_color: "aqua",
         filters: [
             {
                 id: "#search-form-size",
@@ -126,6 +125,8 @@ const data = {
         }
     },
     pornhubapi: {
+        placeholder: "Pornhubで検索", sname: "pornhubapi",
+        theme_color: "dark",
         filters: [],
         ajax: function () {
             $.ajax({
@@ -145,7 +146,7 @@ const data = {
                             .append($("<button>", { "class": "col item btn", "data-bs-toggle": "modal", "data-bs-target": "#item-window" })
                                 .click(function () {
                                     modal_title.children().remove();
-                                    modal_title.text(title);
+                                    modal_title.text(content.title);
 
                                     modal_body.children().remove();
                                     modal_body
@@ -153,6 +154,7 @@ const data = {
 
                                     modal_footer.children().remove();
                                     modal_footer
+                                        .append($("<a>", { "class": "btn", "text": "Download", "href": getVideoId("viewkey=", false, content.originalUrl)}))
                                         .append($("<a>", { "class": "btn ms-auto", "text": "Original", "href": content.originalUrl }));
                                 })
                                 .append($("<img>", { "class": "iconUrl", "src": content.iconUrl }))
@@ -168,6 +170,9 @@ const data = {
         }
     },
     youtubeapi: {
+        placeholder: "YouTubeで検索",
+        sname: "youtubeapi",
+        theme_color: "red",
         filters: [],
         ajax: function () {
             $.ajax({
@@ -185,12 +190,6 @@ const data = {
                         $("#contents")
                             .append($("<button>", { "class": "col item btn", "data-bs-toggle": "modal", "data-bs-target": "#item-window" })
                                 .click(function () {
-                                    const param = 'v=';
-                                    const indexOfFirst = content.originalUrl.indexOf(param) + param.length;
-                                    const videoId = content.originalUrl.substring(indexOfFirst, content.originalUrl.length);
-
-                                    const url = "/youtube-dl?videoId=" + videoId + "&toMp3=" + true;
-
                                     modal_title.children().remove();
                                     modal_title.text(content.title);
 
@@ -200,7 +199,8 @@ const data = {
 
                                     modal_footer.children().remove();
                                     modal_footer
-                                        .append($("<a>", { "class": "btn", "text": "Download", "href": url }))
+                                        .append($("<a>", { "class": "btn", "text": "Movie Download", "href": getVideoId("v=", false, content.originalUrl) }))
+                                        .append($("<a>", { "class": "btn", "text": "Audio Download", "href": getVideoId("v=", true, content.originalUrl) }))
                                         .append($("<a>", { "class": "btn ms-auto", "text": "Original", "href": content.originalUrl }));
                                 })
                                 .append($("<img>", { "class": "iconUrl", "src": content.iconUrl }))
@@ -217,16 +217,76 @@ const data = {
     }
 }
 
-$("#theme-list option").click(function () { data[$(this).data('api-name')].ajax(); });
+function getVideoId(param, toMp3, url) {
+    const indexOfFirst = url.indexOf(param) + param.length;
+    const videoId = url.substring(indexOfFirst, url.length);
+
+    return "/youtube-dl?url="+ url +"&videoId=" + videoId + "&toMp3=" + toMp3;
+}
+
+function filter_setting(e) {
+    const modal_body = $("#filterForm .modal-body");
+
+    modal_body.children().remove();
+
+    data[e].filters.forEach(filter => {
+        const filter_setting = $("<div>", { "class": "filter-setting row mb-3" })
+        const label = $("<div>", { "class": "col-3" }).append($("<div>", { "class": "filter-setting-label", "text": filter.label }));
+        const value = $("<div>", { "class": "col-9" });
+
+        filter.tag.forEach(t => value.append(t))
+
+        filter_setting
+            .append(label)
+            .append(value);
+
+        modal_body.append(filter_setting);
+    });
+    $("#search-form-filter-apply").click();
+}
+
+function calc_main_height() {
+    const mainHeight = $("body").innerHeight() - $("header").outerHeight() - rem(1.5);
+    $("main").innerHeight(mainHeight);
+}
+
+function rem(rem) {
+    const fontSize = getComputedStyle(document.documentElement).fontSize;
+    return rem * parseFloat(fontSize);
+}
 
 $(window).ready(function () {
-    filter_setting("newsapi");
+    const localStorage_theme = localStorage.getItem("theme");
+    const theme_api_name = localStorage_theme ? localStorage_theme : data[0].sname;
+    const theme_class_name = data[theme_api_name].theme_color;
+
+    filter_setting(theme_api_name);
     calc_main_height();
-
-    const theme = $('#theme-list option:selected');
-    const theme_class_name = theme.data('class-name');
-
+    $("#search-form-query").attr("placeholder", data[localStorage_theme].placeholder);
     $("body").addClass(theme_class_name);
+});
+
+$("#logo").click(function () {
+    const localStorage_theme = localStorage.getItem("theme");
+
+    const theme = $("#theme-list option[data-api-name=" + localStorage_theme + "]");
+    const theme_api_name = theme.data('api-name');
+    const theme_class_name = data[theme_api_name].theme_color;
+
+    const next_theme = theme.next();
+    const next_theme_api_name = next_theme.data('api-name');
+
+    const new_theme = next_theme_api_name ? next_theme : $('#theme-list option:first');
+    const new_theme_api_name = new_theme.data('api-name');
+
+    const new_theme_class_name = data[new_theme_api_name].theme_color;
+
+    localStorage.setItem("theme", new_theme_api_name);
+    new_theme.prop('selected', 'selected');
+    $("body").toggleClass(theme_class_name).toggleClass(new_theme_class_name);
+    $("#search-form-query").attr("placeholder", data[new_theme_api_name].placeholder);
+    filter_setting(new_theme_api_name);
+    calc_main_height();
 });
 
 $("#search-form-query")
@@ -252,30 +312,7 @@ $("#search-form-reset").click(function () {
     $("#search-form-reset").hide();
 });
 
-$("#logo").click(function () {
-    const theme = $('#theme-list option:selected');
-    const theme_class_name = theme.data('class-name');
-
-    const next_theme = theme.next();
-    const next_theme_class_name = next_theme.data('class-name');
-
-    const new_theme = next_theme_class_name ? next_theme : $('#theme-list option:first');
-    const new_theme_class_name = new_theme.data('class-name');
-
-    new_theme.prop('selected', 'selected');
-    $("body").toggleClass(theme_class_name).toggleClass(new_theme_class_name);
-
-    const theme_list_selected = $('#theme-list option:selected');
-
-    $("#search-form-query").attr("placeholder", theme_list_selected.text() + "で検索");
-
-    filter_setting(new_theme.data("api-name"));
-
-    calc_main_height();
-});
-
 $("#search-form-filter-apply").click(function () {
-
     const search_form_filter_tags = $("#search-form-filter-tags");
 
     search_form_filter_tags.children().remove();
@@ -301,42 +338,12 @@ $("#search-form-filter-apply").click(function () {
     });
 })
 
-//絞り込みの設定
-function filter_setting(e) {
-    const modal_body = $("#filterForm .modal-body");
-
-    modal_body.children().remove();
-
-    data[e].filters.forEach(filter => {
-        const filter_setting = $("<div>", { "class": "filter-setting row mb-3" })
-        const label = $("<div>", { "class": "col-3" }).append($("<div>", { "class": "filter-setting-label", "text": filter.label }));
-        const value = $("<div>", { "class": "col-9" });
-
-        filter.tag.forEach(t => value.append(t))
-
-        filter_setting
-            .append(label)
-            .append(value);
-
-        modal_body.append(filter_setting);
-    });
-    $("#search-form-filter-apply").click();
-}
-
-function calc_main_height(){
-    const mainHeight = $("body").innerHeight() - $("header").outerHeight() - rem(1.5);
-    $("main").innerHeight(mainHeight);
-}
-
-function rem(rem) {
-    const fontSize = getComputedStyle(document.documentElement).fontSize;
-    return rem * parseFloat(fontSize);
-  }
-
 $("#search-form").on("submit", function (e) {
+    const localStorage_theme = localStorage.getItem("theme");
+
     e.preventDefault();  // デフォルトのイベント(ページの遷移やデータ送信など)を無効にする
     $("html").removeClass("top-screen");
-    $('#theme-list option:selected').click();
+    data[localStorage_theme].ajax();
     calc_main_height();
 });
 
@@ -355,16 +362,13 @@ $("#page-item-prev").click(function () {
 });
 
 var oldScrollY = -1;
-// scrollイベントを設定
-main.scroll(function () {
+$("main").scroll(function () {
 
     const passed_point = oldScrollY > $("header").outerHeight() / 4;
     const isScrollUp = ($(this).scrollTop() - oldScrollY) < 0;
     const isScrollDown = (oldScrollY - $(this).scrollTop()) < 0;
 
     oldScrollY = $(this).scrollTop();
-
-
 
     if (passed_point && isScrollDown) {
         $("header").addClass("scrolling");
@@ -400,7 +404,7 @@ $("#sign-list .sign").click(function () {
     sign_detail.show();
 });
 
-$("#sign-detail").click(function(){
+$("#sign-detail").click(function () {
     $("#sign-detail").hide();
 
     const sign_list = $("#sign-list");

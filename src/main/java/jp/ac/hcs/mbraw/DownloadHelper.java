@@ -48,7 +48,7 @@ public class DownloadHelper {
 		}
 	}
 
-	public static Process processDownload(String url, boolean toMp3) throws IOException {
+	public static Process download(String url, boolean toMp3) throws IOException {
 		// コマンド実行のためのビルダー
 		final ProcessBuilder builder = new ProcessBuilder();
 		final List<String> command = new ArrayList<>();
@@ -60,14 +60,18 @@ public class DownloadHelper {
 		// 使用しているOSを調べる
 		final String osName = SystemProperties.get("os.name");
 		final boolean isWindows = osName.startsWith("Windows");
+		final boolean isMacOS = osName.startsWith("MacOS");
 		System.out.println(String.format("OS name=%s, isWindows=%b", osName, isWindows));
 
 		// 使用するOSによって実行するコマンドファイルを変更する
 		if (isWindows) {
-			command.add("cmds\\youtube-dl.exe");
+			command.add("cmds\\yt-dlp.exe");
+		}
+		else if(isMacOS) {
+			command.add("cmds\\yt-dlp_macos");
 		}
 		else {
-			command.add("youtube-dl");
+			command.add("cmds\\yt-dlp");
 		}
 
 		System.out.println(String.format("Directory=%s", builder.directory()));
@@ -79,8 +83,10 @@ public class DownloadHelper {
 		// ダウンロードしたい動画の url を設定
 		command.add(url);
 		// 保存場所を ユーザのダウンロードへ設定
+		// ファイル名をidにする
 		command.add("--output");
-		command.add("~/downloads/%(title)s.%(ext)s");
+		command.add("~/downloads/%(id)s.%(ext)s");
+
 
 		// mp3に変換するコマンド
 		if (toMp3) {
@@ -116,7 +122,7 @@ public class DownloadHelper {
 
 		// 指定されたURLの動画をダウンロードするコマンドを実行
 		try {
-			process = processDownload(url, toMp3);
+			process = download(url, toMp3);
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -159,5 +165,9 @@ public class DownloadHelper {
 
 		System.out.println("Download complete");
 		return sendToClient(path.toFile());
+	}
+	
+	public static void main(String[] args) throws IOException {
+		download("https://jp.pornhub.com/view_video.php?viewkey=ph615a85ea5ca11",false);
 	}
 }

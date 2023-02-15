@@ -33,7 +33,7 @@
     --theme-sub-color: 15, 15, 15;
     --theme-alpha-color: 1;
     --top-color: 255, 255, 255, 0.01;
-    --bottom-color: 255, 255, 255, 1;
+    --bottom-color: 255, 255, 255, 0.5;
 }
 
 .aqua #logo>div:first-child,
@@ -57,7 +57,7 @@
     --theme-sub-color: 15, 15, 15;
     --theme-alpha-color: 2;
     --top-color: 64, 32, 32, 0.1;
-    --bottom-color: 255, 225, 225, 1;
+    --bottom-color: 255, 225, 225, 0.5;
 }
 
 .red #logo {
@@ -204,9 +204,9 @@ main {
 @media (min-width: 1200px) {
     #tiles {
         grid-template-areas:
-        "a d"
-        "b c"
-        "e f";
+            "a d"
+            "b c"
+            "e f";
     }
 
 }
@@ -771,29 +771,52 @@ div[chance-rain="0%"]>div {
 }
 
 .lucky-color::before,
-.lucky-item::before {
+.lucky-item::before,
+.lucky-color::after,
+.lucky-item::after{
     width: 100%;
+}
+.lucky-color::before,
+.lucky-item::before {
     text-align: start;
 }
 
 .lucky-color::after,
 .lucky-item::after {
-    width: 100%;
     text-align: end;
 }
 
 .lucky-stars {
+    display: grid !important;
     justify-content: center !important;
     width: 100% !important;
+    grid-template-areas:
+        "a b"
+        "c d";
+    grid-auto-columns: 1fr;
 }
 
-.stars {
-    grid-area: b;
-    display: flex;
-    flex-direction: column;
+@media (min-width: 1200px), (min-width: 992px) {
+    .lucky-stars {
+        grid-template-areas:
+            "a b c d";
+    }
+}
 
-    margin: auto;
-    align-items: center;
+.stars.total {
+    grid-area: a;
+}
+
+.stars.love {
+    grid-area: b;
+}
+
+.stars.money {
+    grid-area: c;
+}
+
+.stars.job {
+    grid-area: d;
 }
 
 div[stars] {

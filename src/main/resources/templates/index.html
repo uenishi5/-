@@ -60,12 +60,11 @@
                     <div></div>
                 </button>
                 <select id="theme-list" hidden>
-                    <option selected data-class-name="aqua" data-api-name="newsapi">ITMedia</option>
-                    <option data-class-name="red" data-api-name="youtubeapi">Youtube</option>
-                    <option data-class-name="dark" data-api-name="pornhubapi">PornHub</option>
+                    <option selected data-api-name="newsapi"></option>
+                    <option data-api-name="youtubeapi"></option>
+                    <option data-api-name="pornhubapi"></option>
                 </select>
                 <form id="search-form" th:action="@{/}">
-
                     <input class="form-control m-1" id="search-form-query" type="text" placeholder="ITMediaで検索"
                         autocomplete="off">
 
@@ -204,6 +203,7 @@
                             th:data-content="*{info.content}" th:data-lucky-item="*{info.item}"
                             th:data-lucky-color="*{info.color}">
                             <img th:src="*{sign.resourceSvg}">
+                            <div th:text="*{info.rank}"></div>
                             <div th:text="*{info.sign}"></div>
                         </div>
                     </section>
