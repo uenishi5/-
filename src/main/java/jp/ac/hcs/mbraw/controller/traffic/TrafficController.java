@@ -19,7 +19,7 @@ public class TrafficController {
 	@RequestMapping(Mapping.MAPPING_TRAFFIC)
 	public String mainTrafficData(Model model) {
 		final TrafficEntity entity = this.trafficService.getTrafficFlg();
-		final TrafficData data = entity.getTrafficList().get(0);
+		final TrafficData data = entity.getTrafficflgList().get(0);
 		model.addAttribute("trafficflgList", data.getTrafficFlgList());
 		System.out.println(data.getTrafficFlgList());
 		// //結果を取得
