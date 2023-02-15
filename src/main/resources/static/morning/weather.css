@@ -1,6 +1,7 @@
 @charset "UTF-8";
 
-/* 天気を表示する地域名を表示するデザイン */
+/
+* 天気を表示する地域名を表示するデザイン */
 .specify-city{
 	font-size: 2.7em;
 	font-weight: bold;
@@ -9,7 +10,7 @@
 .weather-menu{
 	display: flex;
    	flex-wrap: wrap;
-   	width: 70%;
+   	width: 1200px;
    	margin-left: auto;
    	margin-right: auto;
 }
@@ -19,18 +20,59 @@
 	margin-bottom: 15px;
 	margin-top: 10px;
 	margin-right:10px;
-	width: 47%;
-	height: 300px;
-	border: solid 3px #000000;
+	width: 575px;
+	height: 220px;
+	border:1px solid #c5cee8;
+}
+.weather-detailbox{
+	display: flex;
+	flex-wrap: wrap;
+}
+.weather-detailbox div{
+	width: 50%;
 }
 /* imgのデザイン */
-.weather-box img{
-	width: 75px;
-	height: 75px;
+.detail-weather img{
+	width: 100px;
+}
+.detail-name {
+	justify-content: center;
+	margin: auto;
+	font-weight: 700;
+}
+.detail-temp{
+	margin:auto;
+}
+.time{
+	background-color: #f2f4fa;
+}
+.detail-rain table{
+	width: 99%;
+    margin: 5px 0;
+    border-spacing: 0;
+    border-collapse: separate;
+    border-top: 1px solid #c5cee8;
+    border-right: 1px solid #c5cee8;
+    border-left: 1px solid #c5cee8;
+    border-bottom: 1px solid #c5cee8;
+    table-layout: fixed;
+	margin-top: 18px;
+}
+.detail-rain th{
+	width: 25%;
+    font-size: .8rem;
+    line-height: 1.4;
+    text-align: center;
+}
+.detail-rain td{
+	width: 25%;
+    font-size: .8rem;
+    line-height: 1.4;
+    text-align: center;
 }
 /* 仕切り線 */
 .weather-box hr{
-	border: solid 1px #000000;
+	border: 1px solid #c5cee8;
 }
 /* 日付のデザイン */
 .weather-day{
@@ -46,11 +88,11 @@
 	margin-left: 30px;
 	margin-bottom: -10px;
 }
-/* 今日、明日の天気を入れる箱*/
+/* 今日、明日のテロップを入れる箱*/
 .weather-telopbox{
 	padding:0.3em 0.6em;
-	margin: auto;
-	width: 70%;
+	margin: 150px auto auto auto;
+	width: 1170px;
 	height: 40px;
 	background: #e5eaf7;
 	border-top: solid 1px #bbc7e3;
@@ -68,6 +110,7 @@
 }
 /* 最高気温 */
 .high-temperature{
+	display: flex;
 	text-align: right;
 	color: red;
 	margin-right: 25px;
@@ -76,23 +119,65 @@
 }
 /* 最低気温 */
 .low-temperature{
+	display: flex;
 	color: blue;
 	text-align: right;
 	margin-right: 25px;
 	list-style:none;
 	padding-left:0;
 }
+.temp .left{
+	flex-shrink: 0;
+	width:90px;
+	text-align:left;
+}
+.temp .right{
+	flex-shrink: 0;
+	width:50%;
+	text-align:right;
+}
+/* 天気画像と予報名*/
 .pict{
 	display: inline-block;
 	min-width: 123px;
 	margin:0px;
-	font-size:1rem;
+	font-size:0.9rem;
 	font-weight:700;
 	vertical-align:middle;
 	white-space: nowrap;
 }
+/* 温度*/
 .temp{
 	display:inline-block;
 	margin:0,-8px,3px,0;
 	white-space: nowrap;
 }
+/* 画面が横幅1050px以下の調整*/
+@media screen and (max-width:1200px){
+.weather-telopbox{
+	display: flex;
+	padding:0.3em 0.6em;
+	margin: 150px auto auto auto;
+	height: 40px;
+	background: #e5eaf7;
+	border-top: solid 1px #bbc7e3;
+	font-weight: 700;
+	width: 550px;
+	min-width: 550px;
+}
+.weather-contents{
+	width: 80%;
+	min-width: 675px;
+	margin: auto;
+}
+.weather-menu{
+	display: flex;
+   	flex-wrap: wrap;
+   	width: 80%;
+   	min-width: 675px;
+   	margin-left: auto;
+   	margin-right: auto;
+   	justify-content: center;
+}
+}
+

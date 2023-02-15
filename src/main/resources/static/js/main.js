@@ -358,7 +358,7 @@ main.scroll(function () {
     oldScrollY = $(this).scrollTop();
 
 
-    
+
     if (passed_point && isScrollDown) {
         header.addClass("scrolling");
     }
@@ -367,3 +367,23 @@ main.scroll(function () {
     }
 });
 
+var isSignClosed = true;
+$(".sign").click(function () {
+
+    const that = $(this);
+    if (isSignClosed) {
+        $(".sign").each(function () {
+            $(this).hide();
+        });
+
+        that.show().removeClass("sign-icon-only").parent("section").addClass("hovering");
+    }
+    else {
+        $(".sign").each(function () {
+            $(this).show();
+        });
+
+        that.addClass("sign-icon-only").parent().removeClass("hovering");
+    }
+    isSignClosed = !isSignClosed;
+});

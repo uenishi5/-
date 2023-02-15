@@ -174,8 +174,9 @@ header {
 }
 
 main {
-    height: 100%;
     overflow: auto;
+
+    height: 100%;
 }
 
 #tiles {
@@ -191,7 +192,7 @@ main {
             "d d e f";
     }
 
-    #chanceOfRainGraph{
+    #chanceOfRainGraph {
         display: flex;
     }
 }
@@ -204,7 +205,7 @@ main {
             "e f";
     }
 
-    #chanceOfRainGraph{
+    #chanceOfRainGraph {
         display: none;
     }
 }
@@ -488,6 +489,8 @@ main {
 
 .col.tile section {
     display: grid;
+    grid-gap: 0.5rem;
+    margin: 1.5rem!important;
 }
 
 .col.tile section>* {
@@ -505,16 +508,6 @@ main {
     text-align: center;
 }
 
-.col.tile section img {
-    aspect-ratio: 1/1;
-
-    width: 100%;
-    max-width: 150px;
-}
-
-
-
-
 .pagination {
     --bs-pagination-bg: transparent;
     --bs-pagination-border-color: rgba(var(--border-color));
@@ -529,7 +522,7 @@ main {
     --bs-pagination-active-border-color: transparent;
 }
 
-#page{
+#page {
     justify-content: end;
 }
 
@@ -541,9 +534,7 @@ main {
     content: "Next";
 }
 
-#search-form-filter-tags{
-    
-}
+#search-form-filter-tags {}
 
 @media (max-width: 1200px) {
     #aiueo {
@@ -593,20 +584,27 @@ main {
     grid-area: a;
 }
 
-#main-weather section{
-    grid-template: 
-    "a b" 1fr
-    "a c" 1fr / 1fr 1fr;
+#main-weather img {
+    aspect-ratio: 1/1;
+
+    width: 100%;
+    max-width: 150px;
+}
+
+#main-weather section {
+    grid-template:
+        "a b" 1fr
+        "a c" 1fr / 1fr 1fr;
 }
 
 @media (max-width: 992px) {
-    #main-weather section{
-        grid-template: 
-        "a b" 1fr
-        "a b" 1fr / 1fr 1fr;
+    #main-weather section {
+        grid-template:
+            "a b" 1fr
+            "a b" 1fr / 1fr 1fr;
     }
 
-    #chanceOfRain{
+    #chanceOfRain {
         display: none;
     }
 }
@@ -623,10 +621,14 @@ main {
     grid-area: d;
 }
 
-#main-divination section{
-    grid-template: 
-    "a b" 1fr
-    "a b" 1fr / 1fr 1fr;
+#main-divination section {
+    grid-template-areas:
+        "r1 r2 r3  r4  r5  r6"
+        "r7 r8 r9 r10 r11 r12";
+    grid-auto-rows: 1fr;
+    grid-auto-columns: 1fr;
+
+
 }
 
 #main-alert {
@@ -637,12 +639,12 @@ main {
     grid-area: f;
 }
 
-#chanceOfRainGraph{
+#chanceOfRainGraph {
     display: grid;
     grid-template:
-                "aa .. .. .. .. .. .. .. .." 1fr
-                ".. c1 .. c2 .. c3 .. c4 .." 3fr
-                "t1 .. t2 .. t3 .. t4 .. t5" 1fr;
+        "aa .. .. .. .. .. .. .. .." 1fr
+        ".. c1 .. c2 .. c3 .. c4 .." 3fr
+        "t1 .. t2 .. t3 .. t4 .. t5" 1fr;
     grid-auto-columns: 1rem;
 
     justify-content: center;
@@ -654,54 +656,246 @@ main {
     font-size: small;
 }
 
-
-.chanceRain{
+.chance-rain {
     display: flex;
 
     align-items: end;
     width: 100%;
     height: 100%;
 }
-.chanceRain:hover{
+
+.chance-rain:hover {
     background-color: rgba(var(--box-shadow-color)) !important;
 }
-.chanceRain > div{
+
+.chance-rain>div {
     width: 100%;
     background-color: rgba(var(--box-shadow-color));
     border-color: rgba(var(--box-shadow-color));
     border-style: solid;
     border-width: 1px
 }
-.chanceRain[data-percentage="100%"] > div{
+
+div[chance-rain="100%"]>div {
     height: 100%;
 }
-.chanceRain[data-percentage="90%"] > div{
+
+div[chance-rain="90%"]>div {
     height: 90%;
 }
-.chanceRain[data-percentage="80%"] > div{
+
+div[chance-rain="80%"]>div {
     height: 80%;
 }
-.chanceRain[data-percentage="70%"] > div{
+
+div[chance-rain="70%"]>div {
     height: 70%;
 }
-.chanceRain[data-percentage="60%"] > div{
+
+div[chance-rain="60%"]>div {
     height: 60%;
 }
-.chanceRain[data-percentage="50%"] > div{
+
+div[chance-rain="50%"]>div {
     height: 50%;
 }
-.chanceRain[data-percentage="40%"] > div{
+
+div[chance-rain="40%"]>div {
     height: 40%;
 }
-.chanceRain[data-percentage="30%"] > div{
+
+div[chance-rain="30%"]>div {
     height: 30%;
 }
-.chanceRain[data-percentage="20%"] > div{
+
+div[chance-rain="20%"]>div {
     height: 20%;
 }
-.chanceRain[data-percentage="10%"] > div{
+
+div[chance-rain="10%"]>div {
     height: 10%;
 }
-.chanceRain[data-percentage="0%"] > div{
+
+div[chance-rain="0%"]>div {
     height: 0%;
+}
+
+
+.hovering.sign.sign-icon-only {
+    display: none !important;
+}
+
+.sign.sign-icon-only .icons div {
+    display: none;
+}
+
+.sign.sign-icon-only .lucky-stars {
+    display: none;
+}
+
+.sign.sign-icon-only .lucky-item {
+    display: none;
+}
+
+.sign.sign-icon-only .lucky-color {
+    display: none;
+}
+
+.sign.sign-icon-only .content {
+    display: none;
+}
+
+.sign .content {
+    grid-area: e;
+
+
+    border-color: rgba(var(--border-color));
+
+    border-style: solid;
+    border-left: 1px;
+    border-right: 1px;
+}
+
+.icons {
+    grid-area: a;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-items: center;
+    align-items: center;
+}
+
+.lucky-item {
+    grid-area: c;
+    display: flex;
+    flex-direction: row !important;
+
+    width: 75%;
+}
+
+.lucky-item>div {
+    display: flex;
+
+    width: 100%;
+}
+
+.lucky-item>div:first-child {
+    justify-content: start;
+}
+
+.lucky-item>div:last-child {
+    justify-content: end;
+}
+
+.lucky-color {
+    grid-area: d;
+    display: flex;
+    flex-direction: row !important;
+
+    width: 75%;
+}
+
+.lucky-color>div {
+    display: flex;
+    width: 100%;
+}
+
+.lucky-color>div:first-child {
+    justify-content: start;
+}
+
+.lucky-color>div:last-child {
+    justify-content: end;
+}
+
+.lucky-stars {
+    display: flex;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.stars {
+    grid-area: b;
+    display: flex;
+    flex-direction: column;
+
+    margin: auto;
+    align-items: center;
+}
+
+div[stars] {
+    display: flex;
+}
+
+div[stars]::before {
+    color: gold;
+}
+
+div[stars]::after {
+    color: gray;
+}
+
+div[stars="0"]::before {
+    content: "";
+}
+
+div[stars="0"]::after {
+    content: "★★★★★";
+}
+
+div[stars="1"]::before {
+    content: "★";
+}
+
+div[stars="1"]::after {
+    content: "★★★★";
+}
+
+div[stars="2"]::before {
+    content: "★★";
+}
+
+div[stars="2"]::after {
+    content: "★★★";
+}
+
+div[stars="3"]::before {
+    content: "★★★";
+}
+
+div[stars="3"]::after {
+    content: "★★";
+}
+
+div[stars="4"]::before {
+    content: "★★★★";
+}
+
+div[stars="4"]::after {
+    content: "★";
+}
+
+div[stars="5"]::before {
+    content: "★★★★★";
+}
+
+div[stars="5"]::after {
+    content: "";
+}
+
+#main-divination section.hovering {
+    display: block;
+}
+
+#main-divination section.hovering .sign {
+    display: grid;
+    grid-template:
+        "a"
+        "b"
+        "e"
+        "c"
+        "d";
+
 }
