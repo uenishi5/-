@@ -1,185 +1,157 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
-	<meta charset="UTF-8">
-	<title>Morning メイン画面</title>
+<meta charset="UTF-8">
+<title>Morning メイン画面</title>
 </head>
-<link rel="stylesheet" th:href="@{/morning/main.css}" href="../static/morning/main.css">
-<link rel="stylesheet" th:href="@{/morning/stay.css}" href="../static/morning/stay.css">
-
+<link rel="stylesheet" th:href="@{/css/main.css}"
+	href="../static/css/main.css">
+<link rel="stylesheet" th:href="@{/css/stay.css}"
+	href="../static/css/stay.css">
 <body>
-
+	
 	<!-- メニューバー -->
 	<div class="menu-bar">
-		<div class="menu-today">
-			<script src="morning/days.js"></script>
-		</div>
+		<div class="menu-today"><script src="js/days.js"></script></div>
 		<div class="menu-bar-menu">
-			<table>
-				<td>
-					<nobr><a th:href="@{/Weather}">天気</a></nobr>
-					<nobr><a th:href="@{/Weather_alert}">警報・注意報</a></nobr>
-					<nobr><a th:href="@{/Horoscope}">占い</a></nobr>
-				<td>
-					<nobr>
-						<p class="menu-bar-title"><a th:href="@{/main}"><img src="morning/Morning.png" /></a></p>
-					</nobr>
-				<td>
-					<nobr><a th:href="@{/Traffic}">バス情報</a></nobr>
-					<nobr><a th:href="@{/Jr}">ＪＲ情報</a></nobr>
-					<nobr><a th:href="@{/Chart}">チャート</a></nobr>
-			</table>
+		<table>
+			<td><nobr><a th:href="@{/Weather}">天気</a></nobr>
+			<nobr><a th:href="@{/Weather_alert}">警報・注意報</a></nobr>
+			<nobr><a th:href="@{/Horoscope}">占い</a></nobr>
+			<td><nobr><p class="menu-bar-title"><a th:href="@{/main}"><img src="img/Morning.png"/></a></p></nobr>
+			<td><nobr><a th:href="@{/Traffic}">バス情報</a></nobr>
+			<nobr><a th:href="@{/Jr}">ＪＲ情報</a></nobr>
+			<nobr><a th:href="@{/Chart}">チャート</a></nobr>
+		</table>
 		</div>
 		<!-- 台的なもの -->
 		<footer class="platform">
-			<p>© 2022 - 2023 HCS CORPORATION.</p>
+			<p>© 2022 - 2023  HCS CORPORATION.</p>
 		</footer>
 	</div>
-	<div class="speace">
-		<p>error</p>
-	</div>
-
+	<div class="speace"><p>error</p></div>
+	
 	<!-- タイトル表示 -->
 	<p class="title">メイン画面</p>
-
-	<p class="no-box">
-		<nobr>
-			<a href="https://jobnavi.hcs.ac.jp/#f">
-				＜＜JobNaviはこちら
-			</a>
-		</nobr>
-		　
-		<nobr>
-			<a href="https://script.google.com/a/hcs.ac.jp/macros/s/
-	AKfycbyCyUOgSx984uCoPwBS2fdT2NCwQ_dLqcUDx9Ce-3KO5LZ-0zzk/exec" style="line-height: 2.0;">
-				＜＜けんおんちゃんはこちら</a>
-		</nobr>
-
-
-		<nobr>
-			<a href="tel:011-831-5511" style="line-height: 2.0;">
-				＜＜北海道情報専門学校:011-831-5511</a>
-		</nobr>
+	
+	<p class="no-box" >
+	<nobr>
+	<a href="https://jobnavi.hcs.ac.jp/#f">
+	＜＜JobNaviはこちら
+	</a>
+	</nobr>
+	　
+	<nobr>
+	<a href="https://script.google.com/a/hcs.ac.jp/macros/s/
+	AKfycbyCyUOgSx984uCoPwBS2fdT2NCwQ_dLqcUDx9Ce-3KO5LZ-0zzk/exec"
+	style="line-height: 2.0;">
+	＜＜けんおんちゃんはこちら</a>
+	</nobr>
+	　
+	<nobr>
+	<a href="tel:011-831-5511"
+	style="line-height: 2.0;">
+	＜＜北海道情報専門学校:011-831-5511</a>
+	</nobr>
 	</p>
-
+	
 	<div class="contents">
-
-		<!-- 天気メイン -->
-		<div class="main-weather" th:object="${WeatherEntity.weatherList[0]}">
-			<table>
-				<!-- 天気img表示 -->
-				<td><img th:src="*{svg}"></td>
-				<!-- 地域表示 -->
-				<td>
-					<nobr>
-						<p class="where-weather"><span th:text="*{prefecture}"></span><span th:text="*{city}"></span>の天気
-						</p>
-					</nobr>
-					<!-- 天気表示 -->
-					<p class="weather-information"><span th:text="*{telop}"></span></p>
-					<!-- 最高気温 -->
-					<p class="max-temperature">最高気温：<span th:text="*{temperature_max}"></span>℃</p>
-					<!-- 最低気温 -->
-					<p class="min-temperature">最低気温：<span th:text="*{temperature_min}"></span>℃</p>
-				</td>
-			</table>
-		</div>
-
-		<!-- 交通情報メイン -->
-		<div class="main-traffic">
-			<!-- 運休情報の表示 -->
-
-			<p class="traffic_title">バス</p>
-			<th:block th:if="${flg}">
-				<nobr>
-					<p class="traffic-message-t">交通情報あり</p>
-				</nobr>
-			</th:block>
-			<th:block th:if="!${flg}">
-				<nobr>
-					<p class="traffic-message-f">交通情報なし</p>
-				</nobr>
-			</th:block>
-
-			<p class="traffic_title">ＪＲ</p>
-			<th:block th:if="${jrflg}">
-				<nobr>
-					<p class="traffic-message-t">交通情報あり</p>
-				</nobr>
-			</th:block>
-			<th:block th:if="!${jrflg}">
-				<nobr>
-					<p class="traffic-message-f">交通情報なし</p>
-				</nobr>
-			</th:block>
-		</div>
-
-		<!-- 占いメイン -->
-		<div class="main-divination">
-			<div th:object="${HoroscopeEntity.horoscopeList[0]}">
-				<table>
-					<td>
-						<nobr>
-							<p class="d-word1">今日一番</p>
-						</nobr>
-						<nobr>
-							<p class="d-word2">運のいい人は</p>
-						</nobr>
-						<!-- 1位の人物の星座を表示 -->
-						<nobr>
-							<p class="lacky-man"><span th:text="*{sign}"></span></p>
-						</nobr>
-						<nobr>
-							<p class="d-word3">の方です</p>
-						</nobr>
-					</td>
-					<!-- 1位の星座img表示 -->
-					<td><img th:src="*{photopath}"></td>
-				</table>
-			</div>
-		</div>
-
-		<!-- 注意報警報メイン -->
-		<div class="main-alert">
-			<nobr>
-				<p class="alert-title">現在の警報注意報</p>
-			</nobr>
-
-			<table>
-				<tr>
-					<th:block th:each="alert : ${Weather_alertEntity.weather_alertnameList}">
-						<td>
-							<p th:class="${alert.alert_color}"><span th:text="${alert.name}"></span></p>
-						</td>
-					</th:block>
-				</tr>
-			</table>
-		</div>
-
-		<!-- チャートメイン -->
-		<div class="main-chart" th:object="${ChartEntity.chartList[0]}">
-			<nobr>
-				<p class="chart-title">Bitcoin/日本円のチャート</p>
-			</nobr>
-			<!-- 現在チャート表示 -->
-			<nobr>
-				<p class="real-time-chart"><span th:text="*{bitcoin}"></span></p>
-			</nobr>
-			<!-- レートの上がり下がりの表示 -->
-			<p class="chart-difference"><span th:text="*{rate}"></span>%</p>
-		</div>
+	<!-- 天気メイン -->
+	<div class="hoge" name="天気" style="display:inline;">
+	<div class="main-weather" th:object="${WeatherEntity.weatherList[0]}">
+		<table>
+			<!-- 天気img表示 -->
+			<td><img th:src="*{svg}"></td>
+			<!-- 地域表示 -->
+			<td><nobr><p class="where-weather"><span th:text="*{prefecture}"></span><span th:text="*{city}"></span>の天気</p></nobr>
+			<!-- 天気表示 -->
+			<p class="weather-information"><span th:text="*{telop}"></span></p>
+			<!-- 最高気温 -->
+			<p class="max-temperature">最高気温：<span th:text="*{temperature_max}"></span>℃</p>
+			<!-- 最低気温 -->
+			<p class="min-temperature">最低気温：<span th:text="*{temperature_min}"></span>℃</p></td>
+		</table>
 	</div>
+	</div>
+	
+	<!-- 交通情報メイン -->
+	<div class="hoge" name="交通情報">
+	<div class="main-traffic">
+	<!-- 運休情報の表示 -->
+	
+	<p class="traffic_title">バス</p>
+		<th:block th:if="${flg}">
+			<nobr><p class="traffic-message-t">交通情報あり</p></nobr>
+		</th:block> 
+		<th:block th:if="!${flg}">
+			<nobr><p class="traffic-message-f">交通情報なし</p></nobr>
+		</th:block>
+	
+	<p class="traffic_title">ＪＲ</p>
+		<th:block th:if="${jrflg}">
+			<nobr><p class="traffic-message-t">交通情報あり</p></nobr>
+		</th:block> 
+		<th:block th:if="!${jrflg}">
+			<nobr><p class="traffic-message-f">交通情報なし</p></nobr>
+		</th:block>
+	</div>
+	</div>
+	
+	<!-- 占いメイン -->
+	<div class="hoge" name="占い">
+	<div class="main-divination">
+	<div th:object="${HoroscopeEntity.horoscopeList[0]}">
+		<table>
+			<td><nobr><p class="d-word1">今日一番</p></nobr>
+			<nobr><p class="d-word2">運のいい人は</p></nobr>
+			<!-- 1位の人物の星座を表示 -->
+			<nobr><p class="lacky-man"><span th:text="*{top}"></span></p></nobr>
+			<nobr><p class="d-word3">の方です</p></nobr></td>
+			<!-- 1位の星座img表示 -->
+			<td><img th:src="*{photopath}"></td>
+		</table>
+	</div>
+	</div>
+	</div>
+	
+	<!-- 注意報警報メイン -->
+	<div class="hoge" name="注意報警報">
+	 <div class="main-alert">
+	 	<nobr><p class="alert-title">現在の警報注意報</p></nobr>
+		
+		<table>
+		<tr>
+			<th:block th:each="alert : ${Weather_alertEntity.weather_alertnameList}">
+				<td><p th:class="${alert.alert_color}"><span th:text="${alert.name}"></span></p></td>
+			</th:block>
+		</tr>
+		</table>
+	</div>	
+	</div>
+	
+	<!-- チャートメイン -->
+	<div class="hoge" name="チャート">
+	<div class="main-chart" th:object="${ChartEntity.chartList[0]}">
+		<nobr><p class="chart-title">Bitcoin/日本円のチャート</p></nobr>
+		<!-- 現在チャート表示 -->
+		<nobr><p class="real-time-chart"><span th:text="*{bitcoin}"></span></p></nobr>
+		<!-- レートの上がり下がりの表示 -->
+		<p class="chart-difference"><span th:text="*{rate}"></span>%</p>
+	</div>
+	</div>
+	</div>
+	
 	<!-- ボタンボックス -->
 	<div class="remove-box">
 		<p id="text"></p>
 	</div>
-
+	
 	<!-- 下のスペース -->
 	<div class="bottom-space"></div>
 <script src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
 <script src="js/btn.js"></script>
 <script src="js/none.js"></script>
+<script src="js/checkbox.js"></script>
+<script src="js/change.js"></script>
 </body>
-
 </html>
