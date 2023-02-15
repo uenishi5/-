@@ -32,7 +32,7 @@ public class TrafficController {
 	@GetMapping(Mapping.MAPPING_TRAFFIC_BUS)
 	public String getTrafficData(Model model, @RequestParam("bus") int no) {
 		final TrafficEntity entity = this.trafficService.getBusdata(no);
-		final TrafficData data = entity.getTrafficList().get(0);
+		final TrafficData data = entity.getTrafficflgList().get(0);
 
 		model.addAttribute("flg", data.isAlertflg());
 		model.addAttribute("TrafficEntity", entity);
