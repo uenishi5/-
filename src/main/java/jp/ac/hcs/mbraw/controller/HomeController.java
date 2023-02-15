@@ -21,9 +21,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoListResponse;
@@ -37,6 +34,7 @@ import jp.ac.hcs.config.EntityHolder;
 import jp.ac.hcs.config.Mapping;
 import jp.ac.hcs.mbraw.DownloadHelper;
 import jp.ac.hcs.mbraw.ResponseBodyContents;
+import jp.ac.hcs.mbraw.YouTubeInstance;
 import jp.ac.hcs.mbraw.controller.chart.ChartData;
 import jp.ac.hcs.mbraw.controller.chart.ChartEntity;
 import jp.ac.hcs.mbraw.controller.chart.ChartService;
@@ -90,15 +88,13 @@ public class HomeController {
 	public String getHome(Principal principal, Model model, Pageable pageable) {
 		log.debug("GET {}", Mapping.MAPPING_ROOT);
 
-		/** 天気データを格納 */
+		// 天気データを格納
 		final WeatherEntity weatherEntity = new WeatherEntity();
 		final WeatherData weatherData = this.weatherService.getWeatherData().getWeatherList().get(0);
 		weatherEntity.getWeatherList().add(weatherData);
 		model.addAttribute("WeatherEntity", weatherEntity);
 
-		/**
-		 * 占いデータをHoroscopeServiceから取得して 占いの順位が良い1位のデータをHoroscopeEntityに格納する
-		 */
+		// 占いデータをHoroscopeServiceから取得して 占いの順位が良い1位のデータをHoroscopeEntityに格納する
 		final HoroscopeEntity horoscopeEntity = new HoroscopeEntity();
 
 		if (Objects.isNull(EntityHolder.HOROSCOPE_TODAY)) {
@@ -112,29 +108,39 @@ public class HomeController {
 		horoscopeEntity.getHoroscopeList().addAll(EntityHolder.HOROSCOPE_TODAY);
 		model.addAttribute("HoroscopeEntity", horoscopeEntity);
 
-		/** 札幌の警報を取得 */
+		// 札幌の警報を取得
 		final WeatherAlertEntity weatherAlertEntity = new WeatherAlertEntity();
 		final WeatherAlertData weatherAlertData = this.weatherAlertService.getMainWeather_alertData().getWeather_alertnameList().get(0);
 		weatherAlertEntity.getWeather_alertnameList().add(weatherAlertData);
 		model.addAttribute("Weather_alertEntity", weatherAlertEntity);
 
-		/** ビットコインチャートを取得 */
+		// ビットコインチャートを取得
 		final ChartEntity chartEntity = new ChartEntity();
 		final ChartData chartData = this.chartService.getChartData().getChartList().get(0);
 		chartEntity.getChartList().add(chartData);
 		model.addAttribute("ChartEntity", chartEntity);
 
-		/** 札幌市のバス情報取得 */
+		// 札幌市のバス情報取得
 		final TrafficData trafficData = this.trafficService.getMainTrafficData().getTrafficflgList().get(0);
 		model.addAttribute("flg", trafficData.isAlertflg());
 
-		/** Jr情報取得 */
+		// Jr情報取得
 		final boolean jrflg = this.jrService.getallJrData().getJrList().stream().anyMatch(data -> data.isAlert());
 		model.addAttribute("jrflg", jrflg);
+
+		model.asMap().forEach((k, v) -> log.debug("key={}, value={}", k, v));
 
 		return Mapping.RESOURCE_INDEX;
 	}
 
+	/**
+	 * 非同期通信専用のメソッドです。 json形式のデータは、引数のformの中身によって変化します。
+	 *
+	 * @param pageable
+	 * @param form
+	 * @param bindingResult
+	 * @return
+	 */
 	@PostMapping(Mapping.MAPPING_NEWSAPI)
 	@ResponseBody
 	public String postNewsApi(Pageable pageable, @Validated NewsForm form, BindingResult bindingResult) {
@@ -144,12 +150,16 @@ public class HomeController {
 
 		final ResponseBodyContents responseBodyContents = new ResponseBodyContents();
 
+		// 引数 form の値が正常であれば分岐がスキップできるが
+		// 何かしらの異常が存在する場合は、オブジェクト responseBodyContentsを
+		// json形式に変換しレスポンスを返す
 		if (bindingResult.hasErrors()) {
 			responseBodyContents.setErrors(bindingResult.getAllErrors());
 			return responseBodyContents.json();
 		}
 
 		// NewsApi問い合わせ
+		// もし問い合わせに失敗した場合は、空の文字列を返す。
 		try {
 			Response<Article.Response> response = NewsApiClient.EVERYTHING.ready(this.holder.getNews(), b -> form.query(b).page(pageable.getPageNumber()).pageSize(pageable.getPageSize())).execute();
 			log.debug("{}", response.raw().request().url().toString());
@@ -170,6 +180,14 @@ public class HomeController {
 		return responseBodyContents.json();
 	}
 
+	/**
+	 * 非同期通信専用のメソッドです。 json形式のデータは、引数のformの中身によって変化します。
+	 *
+	 * @param pageable
+	 * @param form
+	 * @param bindingResult
+	 * @return
+	 */
 	@PostMapping(Mapping.MAPPING_PORNHUBAPI)
 	@ResponseBody
 	public String postPornHub(Pageable pageable, @Validated PornhubForm form, BindingResult bindingResult) {
@@ -179,12 +197,16 @@ public class HomeController {
 
 		final ResponseBodyContents responseBodyContents = new ResponseBodyContents();
 
+		// 引数 form の値が正常であれば分岐がスキップできるが
+		// 何かしらの異常が存在する場合は、オブジェクト responseBodyContentsを
+		// json形式に変換しレスポンスを返す
 		if (bindingResult.hasErrors()) {
 			responseBodyContents.setErrors(bindingResult.getAllErrors());
 			return responseBodyContents.json();
 		}
 
 		// PornhubApi問い合わせ
+		// もし問い合わせに失敗した場合は、空の文字列を返す。
 		try {
 			Response<SearchResponse> response = PornhubApiClient.SEARCH.ready(b -> form.query(b).page(pageable.getPageNumber())).execute();
 			log.debug("{}", response.raw().request().url().toString());
@@ -205,6 +227,14 @@ public class HomeController {
 		return responseBodyContents.json();
 	}
 
+	/**
+	 * 非同期通信専用のメソッドです。 json形式のデータは、引数のformの中身によって変化します。
+	 *
+	 * @param pageable
+	 * @param form
+	 * @param bindingResult
+	 * @return
+	 */
 	@PostMapping(Mapping.MAPPING_YOUTUBEAPI)
 	@ResponseBody
 	public String postYoutube(Pageable pageable, @Validated YoutubeForm form, BindingResult bindingResult) {
@@ -214,6 +244,9 @@ public class HomeController {
 
 		final ResponseBodyContents responseBodyContents = new ResponseBodyContents();
 
+		// 引数 form の値が正常であれば分岐がスキップできるが
+		// 何かしらの異常が存在する場合は、オブジェクト responseBodyContentsを
+		// json形式に変換しレスポンスを返す
 		if (bindingResult.hasErrors()) {
 			responseBodyContents.setErrors(bindingResult.getAllErrors());
 			return responseBodyContents.json();
@@ -230,6 +263,13 @@ public class HomeController {
 		return responseBodyContents.json();
 	}
 
+	/**
+	 * Youtube動画をダウンロードするためのメソッドです。
+	 *
+	 * @param videoId
+	 * @param toMp3
+	 * @return
+	 */
 	@GetMapping(Mapping.MAPPING_YOUTUBE_DL)
 	public ResponseEntity<byte[]> postYoutubeDL(String videoId, boolean toMp3) {
 
@@ -273,23 +313,6 @@ public class HomeController {
 		log.debug("path={}", path);
 
 		return DownloadHelper.execute(path, url, toMp3);
-	}
-
-	public static class YouTubeInstance {
-		private static YouTube instance = null;
-
-		public static YouTube singleton() {
-			if (Objects.isNull(instance)) {
-				instance = build();
-			}
-
-			return instance;
-		}
-
-		private static YouTube build() {
-			return new YouTube.Builder(new NetHttpTransport(), GsonFactory.getDefaultInstance(),
-					request -> {}).setApplicationName("youtube-cmdline-search-sample").build();
-		}
 	}
 
 }

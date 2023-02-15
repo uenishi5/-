@@ -1,374 +1,697 @@
-<style>
-    section#test {
-        position: relative;
-        display: grid;
-        grid-template-areas:
-            "r1 r1 r1 r1 r2 r2 r3 r3 r4  r4  r5  r5  r6  r6  r7 r7"
-            "r1 r1 r1 r1 .. r8 r8 r9 r9 r10 r10 r11 r11 r12 r12  .";
-        grid-auto-rows: 1fr;
-        grid-auto-columns: 1fr;
-        transition: all;
-    }
+<!DOCTYPE html>
+<html class="top-screen" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
-    .sign {
-        aspect-ratio: 1/1;
-        border-radius: 100%;
-        border-color: black;
-        border-width: 1px;
-        border-style: solid;
+<head th:replace="common :: common-head">
+    <title>View in VSCode</title>
 
-        display: flex;
-        transition: all 1s;
-    }
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    .sign:hover {
-        background-color: aqua;
-        display: grid;
-        transition: scale(120%);
-    }
+    <link rel="stylesheet" href="../static/css/bootstrap-icons.css">
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/main.css">
+    <link rel="stylesheet" href="../static/../static/morning/main.css">
+</head>
 
-    .sign-hovered>img {
-        display: none;
-    }
+<body>
 
-    .sign-content {
-        display: none;
-        z-index: 100;
-        grid-template:
-            "a b"
-            "a c"
-            "a d";
-    }
+    <div class="modal fade" id="filterForm" tabindex="1000" aria-labelledby="filterFormLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="filterFormLabel">絞り込み</h1>
+                    <button class="btn" data-bs-dismiss="modal" aria-label="Close" type="button">Close</button>
+                </div>
+                <div class="modal-body container">
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" type="reset">Reset</button>
+                    <button class="btn" id="search-form-filter-apply" data-bs-dismiss="modal" aria-label="Close"
+                        type="button">Apply</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-    .sign.sign-hovered .sign-content {
-        position: absolute;
-        top: 0;
-        left: 0;
-        display: grid;
-    }
+    <div class="modal fade" id="item-window" tabindex="1000" aria-labelledby="item-window-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="--bs-modal-width: 75vw;">
+            <form class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title"></div>
+                    <button class="btn" data-bs-dismiss="modal" aria-label="Close" type="button">Close</button>
+                </div>
+                <div class="modal-body d-flex" id="item-window-modal-body"
+                    style="height: 75vh !important; justify-content: center;">
+                </div>
+                <div class="modal-footer">
+                    <a class="original btn ms-auto"
+                        href="https://www.wired.com/story/heres-proof-hate-speech-is-more-viral-on-elon-musks-twitter/">Original</a>
+                </div>
+            </form>
+        </div>
+    </div>
 
-    .eye {
-        justify-items: center;
-        align-items: center;
-        display: none;
-    }
+    <header class="p-4 sticky-top">
+        <div class="container">
+            <div class="row mb-2 d-grid align-items-center" id="aiueo">
+                <button id="logo" class="d-flex fs-3 btn">
+                    <div></div>
+                    <div></div>
+                </button>
+                <select id="theme-list" hidden>
+                    <option selected data-class-name="aqua" data-api-name="newsapi">ITMedia</option>
+                    <option data-class-name="red" data-api-name="youtubeapi">Youtube</option>
+                    <option data-class-name="dark" data-api-name="pornhubapi">PornHub</option>
+                </select>
+                <form id="search-form" th:action="@{/}">
 
-    .eye * {
-        display: flex;
-        aspect-ratio: 1/1;
-        margin: auto;
-        background-color: #936DFC;
-        border-radius: 100%;
-        border: 1px black solid;
+                    <input class="form-control m-1" id="search-form-query" type="text" placeholder="ITMediaで検索"
+                        autocomplete="off">
 
-        justify-content: center;
-        align-content: center;
-    }
+                    <button class="btn btn-search-form m-1" id="search-form-reset" type="reset" style="display: none;">
+                        <svg focusable="false" width="24px" height="24px" viewbox="0 0 24 24">
+                            <path
+                                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z">
+                            </path>
+                            <path d="M0 0h24v24H0z" fill="none"></path>
+                        </svg>
+                    </button>
 
-    .tooltip {
-        background: pink;
-        border-radius: 100%;
-        color: #FFF;
-    }
+                    <span style="border: 1px rgba(var(--theme-sub-color), .4) solid; height: 2rem;"></span>
 
-    .tooltip:before,
-    .tooltip:after {
-        position: absolute;
-        content: '';
-        opacity: 0;
-        transition: all 0.4s ease;
-    }
+                    <button class="btn btn-search-form m-1" id="search-form-filter" type="button" data-bs-toggle="modal"
+                        data-bs-target="#filterForm">
+                        <svg focusable="false" width="24px" height="24px" viewbox="0 0 24 24">
+                            <path
+                                d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z">
+                            </path>
+                        </svg>
+                    </button>
 
-    .tooltip:after {
-        position: absolute;
-        content: attr(title);
-        background: pink;
-        font-size: 13px;
-        font-weight: 300;
-        top: 0px;
-        left: 0px;
-        padding: 10px;
-        border-radius: 5px;
-        letter-spacing: 1px;
-        transform: translateY(20px);
-    }
+                    <button class="btn btn-search-form m-1" id="search-form-submit" type="submit" disabled="disabled">
+                        <svg focusable="false" width="24px" height="24px" viewbox="0 0 24 24">
+                            <path
+                                d="M20.49,19l-5.73-5.73C15.53,12.2,16,10.91,16,9.5C16,5.91,13.09,3,9.5,3S3,5.91,3,9.5C3,13.09,5.91,16,9.5,16 c1.41,0,2.7-0.47,3.77-1.24L19,20.49L20.49,19z M5,9.5C5,7.01,7.01,5,9.5,5S14,7.01,14,9.5S11.99,14,9.5,14S5,11.99,5,9.5z">
+                            </path>
+                            <path d="M0,0h24v24H0V0z" fill="none"></path>
+                        </svg>
+                    </button>
+                </form>
 
-    .tooltip:hover::before,
-    .tooltip:hover::after {
-        opacity: 1;
-        transform: translateY(-2px);
-    }
+                <nav id="page" aria-label="Page navigation">
+                    <ul class="pagination mb-0">
+                        <li class="page-item">
+                            <button class="page-link" id="page-item-prev" type="button" aria-hidden="true"
+                                aria-label="Previous"></button>
+                        </li>
+                        <li class="page-item">
+                            <input class="page-link" id="page-item-value" type="number" value="1" min="1" max="99"
+                                style="width: 3rem;">
+                        </li>
+                        <li class="page-item">
+                            <button class="page-link" id="page-item-next" type="button" aria-hidden="true"
+                                aria-label="Next"></button>
+                        </li>
+                    </ul>
+                </nav>
+                <div id="search-form-filter-tags" class="row g-2 ">
+                </div>
+            </div>
+
+            <div class="row mb-2 d-grid" id="tiles">
+
+                <!-- 天気メイン -->
+                <a class="col tile" id="main-weather" th:object="${WeatherEntity.weatherList[0]}" th:href="@{/Weather}">
+                    <div class="title">天気</div>
+                    <section>
+                        <div style="grid-area: a;">
+                            <img th:src="*{svg}" src="https://www.jma.go.jp/bosai/forecast/img/215.svg"
+                                data-bs-toggle="tooltip" data-bs-placement="top" th:title="*{telop}">
+                            <div th:text="*{telop}"></div>
+                        </div>
+                        <div style="grid-area: b;">
+                            <div>
+                                <span th:text="*{prefecture}">北海道</span>
+                                <span th:text="*{city}">札幌</span>
+                            </div>
+                            <div class="mt-2">
+                                <span style="font-size: larger;" th:text="|*{temperature_min}|">--</span>
+                                <span>~</span>
+                                <span style="font-size: larger;" th:text="|*{temperature_max}|">1</span>
+                                <span>℃</span>
+                            </div>
+                        </div>
+                        <div style="grid-area: c;" id="chanceOfRain">
+                            <div>降水確率</div>
+                            <div id="chanceOfRainGraph">
+                                <div class="time" style="grid-area:aa;">100%</div>
+                                <div class="time" style="grid-area: t1;">0</div>
+                                <div class="chance-rain" style="grid-area: c1;" chance-rain="100%"
+                                    data-bs-toggle="tooltip" data-bs-placement="top" th:title="*{chanceOfRain_T00_06}"
+                                    th:chance-rain="*{chanceOfRain_T00_06}">
+                                    <div></div>
+                                </div>
+                                <div class="time" style="grid-area: t2;">6</div>
+                                <div class="chance-rain" style="grid-area: c2;" chance-rain="60%"
+                                    data-bs-toggle="tooltip" data-bs-placement="top" th:title="*{chanceOfRain_T06_12}"
+                                    th:chance-rain="*{chanceOfRain_T06_12}">
+                                    <div></div>
+                                </div>
+                                <div class="time" style="grid-area: t3;">12</div>
+                                <div class="chance-rain" style="grid-area: c3;" chance-rain="40%"
+                                    data-bs-toggle="tooltip" data-bs-placement="top" th:title="*{chanceOfRain_T12_18}"
+                                    th:chance-rain="*{chanceOfRain_T12_18}">
+                                    <div></div>
+                                </div>
+                                <div class="time" style="grid-area: t4;">18</div>
+                                <div class="chance-rain" style="grid-area: c4;" chance-rain="0%"
+                                    data-bs-toggle="tooltip" data-bs-placement="top" th:title="*{chanceOfRain_T18_24}"
+                                    th:chance-rain="*{chanceOfRain_T18_24}">
+                                    <div></div>
+                                </div>
+                                <div class="time" style="grid-area: t5;">24</div>
+                            </div>
+                        </div>
+                    </section>
+                </a>
+
+                <!-- 交通情報メイン -->
+                <div class="col" id="main-traffic-jr">
+                    <div>JR交通情報</div>
+                    <!-- 運休情報の表示 -->
+                    <div th:text="${jrflg} ? あり : なし"></div>
+                </div>
+
+                <div class="col " id="main-traffic-bus">
+                    <div>バス交通情報</div>
+                    <!-- 運休情報の表示 -->
+                    <div th:text="${flg} ? あり : なし"></div>
+                </div>
+
+                <!-- 占いメイン -->
+                <div class="col tile" id="main-divination" th:object="${HoroscopeEntity}">
+                    <div class="title">占い</div>
+                    <section class="">
+                        <div class="sign" data-bs-toggle="tooltip" data-bs-placement="top" title="魚座"
+                        >
+                            <div class="icons">
+                                <div>魚座の今日の運勢</div>
+                                <img class="mt-2" src="../static/morning/pisces.svg">
+                            </div>
+
+                            <div class="mt-4 lucky-stars">
+                                <div class="stars">
+                                    <div>総合運</div>
+                                    <div starts="5" stars="1"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>恋愛運</div>
+                                    <div starts="5" stars="2"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>金運</div>
+                                    <div starts="5" stars="3"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>仕事運</div>
+                                    <div starts="5" stars="4"></div>
+                                </div>
+                            </div>
+
+                            <div class="m-4 p-4 content">
+                                <div>ずっと好きだった人が、あなたに近づいてきてくれるかも！？好きなものや趣味を伝えると、会話もスムーズに進むでしょう</div>
+                            </div>
 
 
-    #dis {
-        display: block;
-    }
+                            <div class="mt-2 lucky-item">
+                                <div>ショートブーツ</div>
+                            </div>
+                            <div class="mt-2 lucky-color">
+                                <div>ホワイト</div>
+                            </div>
+                        </div>
+                        <div class="sign sign-icon-only" data-bs-toggle="tooltip" data-bs-placement="top" title="牡羊座">
+                            <div class="icons">
+                                <div>牡羊座の今日の運勢</div>
+                                <img class="mt-2" src="../static/morning/aries.svg">
+                            </div>
 
-    .icons {
-        grid-area: a;
+                            <div class="mt-4 lucky-stars">
+                                <div class="stars">
+                                    <div>総合運</div>
+                                    <div starts="5" stars="1"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>恋愛運</div>
+                                    <div starts="5" stars="2"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>金運</div>
+                                    <div starts="5" stars="3"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>仕事運</div>
+                                    <div starts="4" stars="4"></div>
+                                </div>
+                            </div>
 
-        display: flex;
-        flex-direction: column;
+                            <div class="m-4 p-4 content">
+                                <div>新しいことをやると、ストレス解消になりそう</div>
+                                <div>雑誌やテレビで気になるグルメがあったら、ぜひお取り寄せしてみて♪</div>
+                            </div>
 
-        justify-items: center;
-        align-items: center;
-    }
 
-    .lucky-item {
-        grid-area: b;
+                            <div class="mt-2 lucky-item">
+                                <div>ロングブーツ</div>
+                            </div>
+                            <div class="mt-2 lucky-color">
+                                <div>パープル</div>
+                            </div>
+                        </div>
+                        <div class="sign sign-icon-only" data-bs-toggle="tooltip" data-bs-placement="top" title="天秤座">
+                            <div class="icons">
+                                <div>天秤座の今日の運勢</div>
+                                <img class="mt-2" src="../static/morning/libra.svg">
+                            </div>
 
-        display: flex;
-        width: 100%;
-    }
+                            <div class="mt-4 lucky-stars">
+                                <div class="stars">
+                                    <div>総合運</div>
+                                    <div starts="4" stars="1"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>恋愛運</div>
+                                    <div starts="5" stars="2"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>金運</div>
+                                    <div starts="5" stars="3"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>仕事運</div>
+                                    <div starts="4" stars="4"></div>
+                                </div>
+                            </div>
 
-    .lucky-item>div {
-        display: flex;
-        width: 100%;
-    }
+                            <div class="m-4 p-4 content">
+                                <div>恋人と話しあう時間が大切な一日です</div>
+                                <div>不満に思っていることは、この機会に伝えてみて</div>
+                                <div>きっとさらに絆が深まります♪</div>
+                            </div>
 
-    .lucky-item>div:first-child {
-        justify-content: start;
-    }
 
-    .lucky-item>div:last-child {
-        justify-content: end;
-    }
+                            <div class="mt-2 lucky-item">
+                                <div>カルボナーラ</div>
+                            </div>
+                            <div class="mt-2 lucky-color">
+                                <div>ブラック</div>
+                            </div>
+                        </div>
+                        <div class="sign sign-icon-only" data-bs-toggle="tooltip" data-bs-placement="top" title="獅子座">
+                            <div class="icons">
+                                <div>獅子座の今日の運勢</div>
+                                <img class="mt-2" src="../static/morning/leo.svg">
+                            </div>
 
-    .lucky-color {
-        grid-area: c;
+                            <div class="mt-4 lucky-stars">
+                                <div class="stars">
+                                    <div>総合運</div>
+                                    <div starts="4" stars="1"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>恋愛運</div>
+                                    <div starts="4" stars="2"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>金運</div>
+                                    <div starts="4" stars="3"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>仕事運</div>
+                                    <div starts="5" stars="4"></div>
+                                </div>
+                            </div>
 
-        display: flex;
-        width: 100%;
-    }
+                            <div class="m-4 p-4 content">
+                                <div>ショッピングでは、嬉しい出来事が</div>
+                                <div>衝動買いをしても、満足できる一日です</div>
+                                <div>家族との時間を増やすとストレス解消に☆</div>
+                            </div>
 
-    .lucky-color>div {
-        display: flex;
-        width: 100%;
-    }
 
-    .lucky-color>div:first-child {
-        justify-content: start;
-    }
+                            <div class="mt-2 lucky-item">
+                                <div>お茶漬け</div>
+                            </div>
+                            <div class="mt-2 lucky-color">
+                                <div>グレー</div>
+                            </div>
+                        </div>
+                        <div class="sign sign-icon-only" data-bs-toggle="tooltip" data-bs-placement="top" title="蟹座">
+                            <div class="icons">
+                                <div>蟹座の今日の運勢</div>
+                                <img class="mt-2" src="../static/morning/cancer.svg">
+                            </div>
 
-    .lucky-color>div:last-child {
-        justify-content: end;
-    }
+                            <div class="mt-4 lucky-stars">
+                                <div class="stars">
+                                    <div>総合運</div>
+                                    <div starts="4" stars="1"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>恋愛運</div>
+                                    <div starts="4" stars="2"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>金運</div>
+                                    <div starts="4" stars="3"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>仕事運</div>
+                                    <div starts="3" stars="4"></div>
+                                </div>
+                            </div>
 
-    .content {
-        grid-area: d;
-    }
+                            <div class="m-4 p-4 content">
+                                <div>早めのスケジュール管理が大切です</div>
+                                <div>恋人とのデートや親友とのお出かけをドタキャンしないよう、仕事や習い事の調整を</div>
+                            </div>
 
-    .lucky-stars{
-        display: flex;
-    }
 
-    .stars{
-        display: flex;
-        flex-direction: column;
+                            <div class="mt-2 lucky-item">
+                                <div>いちごジャム</div>
+                            </div>
+                            <div class="mt-2 lucky-color">
+                                <div>シルバー</div>
+                            </div>
+                        </div>
+                        <div class="sign sign-icon-only" data-bs-toggle="tooltip" data-bs-placement="top" title="双子座">
+                            <div class="icons">
+                                <div>双子座の今日の運勢</div>
+                                <img class="mt-2" src="../static/morning/gemini.svg">
+                            </div>
 
-        width: 100%;
-        align-items: center;
-    }
+                            <div class="mt-4 lucky-stars">
+                                <div class="stars">
+                                    <div>総合運</div>
+                                    <div starts="3" stars="1"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>恋愛運</div>
+                                    <div starts="4" stars="2"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>金運</div>
+                                    <div starts="4" stars="3"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>仕事運</div>
+                                    <div starts="3" stars="4"></div>
+                                </div>
+                            </div>
 
-    div[stars] {
-        display: flex;
-    }
+                            <div class="m-4 p-4 content">
+                                <div>清潔感のある服装が、あの人の目を惹きつけそう</div>
+                                <div>白いブラウスやサラサラの髪など、ベタなところを攻めてみましょう</div>
+                            </div>
 
-    div[stars]::before {
-        color: gold;
-    }
 
-    div[stars]::after {
-        color: gray;
-    }
+                            <div class="mt-2 lucky-item">
+                                <div>シャンプー</div>
+                            </div>
+                            <div class="mt-2 lucky-color">
+                                <div>レッド</div>
+                            </div>
+                        </div>
+                        <div class="sign sign-icon-only" data-bs-toggle="tooltip" data-bs-placement="top" title="射手座">
+                            <div class="icons">
+                                <div>射手座の今日の運勢</div>
+                                <img class="mt-2" src="../static/morning/sagittarius.svg">
+                            </div>
 
-    div[stars="0"]::before {
-        content: "";
-    }
+                            <div class="mt-4 lucky-stars">
+                                <div class="stars">
+                                    <div>総合運</div>
+                                    <div starts="3" stars="1"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>恋愛運</div>
+                                    <div starts="3" stars="2"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>金運</div>
+                                    <div starts="3" stars="3"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>仕事運</div>
+                                    <div starts="4" stars="4"></div>
+                                </div>
+                            </div>
 
-    div[stars="0"]::after {
-        content: "★★★★★";
-    }
+                            <div class="m-4 p-4 content">
+                                <div>ダラダラした生活を変える良いタイミング</div>
+                                <div>借りた物はすぐに返すなど、簡単な物事から意識していくことが大事です</div>
+                            </div>
 
-    div[stars="1"]::before {
-        content: "★";
-    }
 
-    div[stars="1"]::after {
-        content: "★★★★";
-    }
+                            <div class="mt-2 lucky-item">
+                                <div>焼き魚</div>
+                            </div>
+                            <div class="mt-2 lucky-color">
+                                <div>グリーン</div>
+                            </div>
+                        </div>
+                        <div class="sign sign-icon-only" data-bs-toggle="tooltip" data-bs-placement="top" title="牡牛座">
+                            <div class="icons">
+                                <div>牡牛座の今日の運勢</div>
+                                <img class="mt-2" src="../static/morning/taurus.svg">
+                            </div>
 
-    div[stars="2"]::before {
-        content: "★★";
-    }
+                            <div class="mt-4 lucky-stars">
+                                <div class="stars">
+                                    <div>総合運</div>
+                                    <div starts="3" stars="1"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>恋愛運</div>
+                                    <div starts="3" stars="2"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>金運</div>
+                                    <div starts="3" stars="3"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>仕事運</div>
+                                    <div starts="3" stars="4"></div>
+                                </div>
+                            </div>
 
-    div[stars="2"]::after {
-        content: "★★★";
-    }
+                            <div class="m-4 p-4 content">
+                                <div>恋人の家を訪ねてみると、新しい発見がありそう</div>
+                                <div>絆が深まるハプニングも期待できます</div>
+                                <div>片思いは押してみるタイミング</div>
+                            </div>
 
-    div[stars="3"]::before {
-        content: "★★★";
-    }
 
-    div[stars="3"]::after {
-        content: "★★";
-    }
+                            <div class="mt-2 lucky-item">
+                                <div>自転車</div>
+                            </div>
+                            <div class="mt-2 lucky-color">
+                                <div>イエロー</div>
+                            </div>
+                        </div>
+                        <div class="sign sign-icon-only" data-bs-toggle="tooltip" data-bs-placement="top" title="山羊座">
+                            <div class="icons">
+                                <div>山羊座の今日の運勢</div>
+                                <img class="mt-2" src="../static/morning/capricorn.svg">
+                            </div>
 
-    div[stars="4"]::before {
-        content: "★★★★";
-    }
+                            <div class="mt-4 lucky-stars">
+                                <div class="stars">
+                                    <div>総合運</div>
+                                    <div starts="3" stars="1"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>恋愛運</div>
+                                    <div starts="3" stars="2"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>金運</div>
+                                    <div starts="3" stars="3"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>仕事運</div>
+                                    <div starts="2" stars="4"></div>
+                                </div>
+                            </div>
 
-    div[stars="4"]::after {
-        content: "★";
-    }
+                            <div class="m-4 p-4 content">
+                                <div>子供っぽい服装や、流行の言葉を遣うのは、あなたにとってマイナスかも</div>
+                                <div>大人らしい振る舞いを心がければ運気アップ</div>
+                            </div>
 
-    div[stars="5"]::before {
-        content: "★★★★★";
-    }
 
-    div[stars="5"]::after {
-        content: "";
-    }
-</style>
+                            <div class="mt-2 lucky-item">
+                                <div>蛍光ペン</div>
+                            </div>
+                            <div class="mt-2 lucky-color">
+                                <div>オレンジ</div>
+                            </div>
+                        </div>
+                        <div class="sign sign-icon-only" data-bs-toggle="tooltip" data-bs-placement="top" title="乙女座">
+                            <div class="icons">
+                                <div>乙女座の今日の運勢</div>
+                                <img class="mt-2" src="../static/morning/virgo.svg">
+                            </div>
 
-<link rel="stylesheet" href="../static/css/bootstrap.min.css">
+                            <div class="mt-4 lucky-stars">
+                                <div class="stars">
+                                    <div>総合運</div>
+                                    <div starts="2" stars="1"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>恋愛運</div>
+                                    <div starts="2" stars="2"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>金運</div>
+                                    <div starts="2" stars="3"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>仕事運</div>
+                                    <div starts="3" stars="4"></div>
+                                </div>
+                            </div>
 
-<div class="eye" style="width:100%;height: 100%;" hidden>
-    <div style="width:90%;height: 90%;">
-        <div style="width:80%;height: 80%;">
-            <div style="width:70%;height: 70%;">
-                <div style="width:60%;height: 60%;">
-                    <div style="width:50%;height: 50%;background-color: black;"></div>
+                            <div class="m-4 p-4 content">
+                                <div>気になっている人との距離を感じてしまうかも</div>
+                                <div>焦らずに、相手の趣味をリサーチしてみて</div>
+                                <div>思わぬ共通点がある予感</div>
+                            </div>
+
+
+                            <div class="mt-2 lucky-item">
+                                <div>ぬいぐるみ</div>
+                            </div>
+                            <div class="mt-2 lucky-color">
+                                <div>ピンク</div>
+                            </div>
+                        </div>
+                        <div class="sign sign-icon-only" data-bs-toggle="tooltip" data-bs-placement="top" title="水瓶座">
+                            <div class="icons">
+                                <div>水瓶座の今日の運勢</div>
+                                <img class="mt-2" src="../static/morning/aquarius.svg">
+                            </div>
+
+                            <div class="mt-4 lucky-stars">
+                                <div class="stars">
+                                    <div>総合運</div>
+                                    <div starts="2" stars="1"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>恋愛運</div>
+                                    <div starts="2" stars="2"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>金運</div>
+                                    <div starts="2" stars="3"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>仕事運</div>
+                                    <div starts="2" stars="4"></div>
+                                </div>
+                            </div>
+
+                            <div class="m-4 p-4 content">
+                                <div>好きな人の前では、ちょっと控えめな自分をアピールしてみて</div>
+                                <div>ギャップを活かすことで、いい印象を与えられるはず</div>
+                            </div>
+
+
+                            <div class="mt-2 lucky-item">
+                                <div>子供の頃の写真</div>
+                            </div>
+                            <div class="mt-2 lucky-color">
+                                <div>ゴールド</div>
+                            </div>
+                        </div>
+                        <div class="sign sign-icon-only" data-bs-toggle="tooltip" data-bs-placement="top" title="蠍座">
+                            <div class="icons">
+                                <div>蠍座の今日の運勢</div>
+                                <img class="mt-2" src="../static/morning/scorpio.svg">
+                            </div>
+
+                            <div class="mt-4 lucky-stars">
+                                <div class="stars">
+                                    <div>総合運</div>
+                                    <div starts="1" stars="1"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>恋愛運</div>
+                                    <div starts="2" stars="2"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>金運</div>
+                                    <div starts="2" stars="3"></div>
+                                </div>
+                                <div class="stars">
+                                    <div>仕事運</div>
+                                    <div starts="1" stars="4"></div>
+                                </div>
+                            </div>
+
+                            <div class="m-4 p-4 content">
+                                <div>物事を成功させる秘訣は、簡単なものからコツコツやること</div>
+                                <div>尊敬している人に、アドバイスを仰ぐのも良さそうです</div>
+                            </div>
+
+
+                            <div class="mt-2 lucky-item">
+                                <div>卒業アルバム</div>
+                            </div>
+                            <div class="mt-2 lucky-color">
+                                <div>ブルー</div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- 注意報警報メイン -->
+                <div class="col" id="main-alert">
+                    <div>警報注意報</div>
+
+                    <div th:each="alert : ${Weather_alertEntity.weather_alertnameList}">
+                        <span th:text="${alert.name}"></span>
+                    </div>
+                </div>
+
+                <!-- チャートメイン -->
+                <div class="col" id="main-chart" th:object="${ChartEntity.chartList[0]}">
+                    <div>チャート</div>
+
+                    <div>Bitcoin/日本円のチャート</div>
+                    <span th:text="*{bitcoin}"></span>
+                    <span th:text="|*{rate} %|"></span>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+    </header>
 
-<section id="test" hidden>
-    <div class="tooltip sign" data-bs-toggle="tooltip" data-bs-placement="top" title="山羊座" style="grid-area: r1;">
-        <div hidden="">1</div>
-        <img src="../static/morning/capricorn.svg">
-        <span hidden="">山羊座</span>
-        <div class="sign-content">
-            <div>
-                <img class="" src="../static/morning/capricorn.svg">
-                <div></div>
-            </div>
+    <main class="p-4">
+        <div class="container h-100">
+            <div id="contents" class="row d-grid"></div>
         </div>
-    </div>
-    <div class="tooltip sign" data-bs-toggle="tooltip" data-bs-placement="top" title="水瓶座" style="grid-area: r2;">
-        <div hidden="">2</div>
-        <img src="../static/morning/aquarius.svg">
-        <span hidden="">水瓶座</span>
-    </div>
-    <div class="tooltip sign" data-bs-toggle="tooltip" data-bs-placement="top" title="双子座" style="grid-area: r3;">
-        <div hidden="">3</div>
-        <img src="../static/morning/gemini.svg">
-        <span hidden="">双子座</span>
-    </div>
-    <div class="tooltip sign" data-bs-toggle="tooltip" data-bs-placement="top" title="魚座" style="grid-area: r4;">
-        <div hidden="">4</div>
-        <img src="../static/morning/pisces.svg">
-        <span hidden="">魚座</span>
-    </div>
-    <div class="tooltip sign" data-bs-toggle="tooltip" data-bs-placement="top" title="乙女座" style="grid-area: r5;">
-        <div hidden="">5</div>
-        <img src="../static/morning/virgo.svg">
-        <span hidden="">乙女座</span>
-    </div>
-    <div class="tooltip sign" data-bs-toggle="tooltip" data-bs-placement="top" title="牡牛座" style="grid-area: r6;">
-        <div hidden="">6</div>
-        <img src="../static/morning/taurus.svg">
-        <span hidden="">牡牛座</span>
-    </div>
-    <div class="tooltip sign" data-bs-toggle="tooltip" data-bs-placement="top" title="蠍座" style="grid-area: r7;">
-        <div hidden="">7</div>
-        <img src="../static/morning/scorpio.svg">
-        <span hidden="">蠍座</span>
-    </div>
-    <div class="tooltip sign" data-bs-toggle="tooltip" data-bs-placement="top" title="射手座" style="grid-area: r8;">
-        <div hidden="">8</div>
-        <img src="../static/morning/sagittarius.svg">
-        <span hidden="">射手座</span>
-    </div>
-    <div class="tooltip sign" data-bs-toggle="tooltip" data-bs-placement="top" title="天秤座" style="grid-area: r9;">
-        <div hidden="">9</div>
-        <img src="../static/morning/libra.svg">
-        <span hidden="">天秤座</span>
-    </div>
-    <div class="tooltip sign" data-bs-toggle="tooltip" data-bs-placement="top" title="蟹座" style="grid-area: r10;">
-        <div hidden="">10</div>
-        <img src="../static/morning/cancer.svg">
-        <span hidden="">蟹座</span>
-    </div>
-    <div class="tooltip sign" data-bs-toggle="tooltip" data-bs-placement="top" title="獅子座" style="grid-area: r11;">
-        <div hidden="">11</div>
-        <img src="../static/morning/leo.svg">
-        <span hidden="">獅子座</span>
-    </div>
-    <div class="tooltip sign" data-bs-toggle="tooltip" data-bs-placement="top" title="牡羊座" style="grid-area: r12;">
-        <div hidden="">12</div>
-        <img src="../static/morning/aries.svg">
-        <span hidden="">牡羊座</span>
+    </main>
+
+    <footer>
+    </footer>
+
+    <div th:replace="common :: common-script">
+        <script type="text/javascript" src="../static/js/bootstrap.bundle.min.js"></script>
+        <script type="text/javascript" src="../static/js/jquery-3.6.0.min.js"></script>
+        <script type="text/javascript" src="../static/js/main.js"></script>
     </div>
 
-</section>
-<section id="dis">
-    <div class="icons">
-        <img src="../static/morning/aries.svg">
-        <div の今日の運勢>牡羊座の今日の運勢</div>
-    </div>
+</body>
 
-    <div class="lucky-stars">
-        <div class="stars">
-            <div>総合運</div>
-            <div th:starts="*{info.total}" stars="1"></div>
-        </div>
-        <div class="stars">
-            <div>恋愛運</div>
-            <div th:starts="*{info.love}" stars="2"></div>
-        </div>
-        <div class="stars">
-            <div>金運</div>
-            <div th:starts="*{info.gold}" stars="3"></div>
-        </div>
-        <div class="stars">
-            <div>仕事運</div>
-            <div th:starts="*{info.job}" stars="4"></div>
-        </div>
-    </div>
-
-    <div class="content">
-        あなた独自の魅力が光り、周りの人が魅了されていく日。自信をもって、自分自身のやるべきことに没頭してみて。背筋をシャンと伸ばすことで運気が上がり、気分良く一日を過ごせそうです。
-    </div>
-
-    <div class="lucky-item">
-        <div>
-            ラッキーアイテム
-        </div>
-        <div>
-            ラッピングペーパー
-        </div>
-    </div>
-    <div class="lucky-color">
-        <div>
-            ラッキーカラー
-        </div>
-        <div>
-            ワインレッド
-        </div>
-    </div>
-</section>
-
-<script type="text/javascript" src="../static/js/bootstrap.bundle.min.js"></script>
-<script type="text/javascript" src="../static/js/jquery-3.6.0.min.js"></script>
-<script>
-    // $(".sign").mouseenter(function () {
-    //     $(this).addClass("tooltip");
-    // });
-
-    // $(".sign").mouseleave(function () {
-    //     $(this).removeClass("tooltip");
-    // });
-</script>
+</html>

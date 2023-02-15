@@ -2,13 +2,6 @@ const modal_title = $("#item-window .modal-title");
 const modal_body = $("#item-window .modal-body");
 const modal_footer = $("#item-window .modal-footer");
 
-
-const body = $("body");
-const bodyHeight = body.height();
-
-const header = $("header");
-const headerHeight = header.height();
-
 const main = $("main");
 
 const date = {
@@ -228,11 +221,12 @@ $("#theme-list option").click(function () { data[$(this).data('api-name')].ajax(
 
 $(window).ready(function () {
     filter_setting("newsapi");
+    calc_main_height();
 
     const theme = $('#theme-list option:selected');
     const theme_class_name = theme.data('class-name');
 
-    body.addClass(theme_class_name);
+    $("body").addClass(theme_class_name);
 });
 
 $("#search-form-query")
@@ -269,13 +263,15 @@ $("#logo").click(function () {
     const new_theme_class_name = new_theme.data('class-name');
 
     new_theme.prop('selected', 'selected');
-    body.toggleClass(theme_class_name).toggleClass(new_theme_class_name);
+    $("body").toggleClass(theme_class_name).toggleClass(new_theme_class_name);
 
     const theme_list_selected = $('#theme-list option:selected');
 
     $("#search-form-query").attr("placeholder", theme_list_selected.text() + "で検索");
 
     filter_setting(new_theme.data("api-name"));
+
+    calc_main_height();
 });
 
 $("#search-form-filter-apply").click(function () {
@@ -327,10 +323,21 @@ function filter_setting(e) {
     $("#search-form-filter-apply").click();
 }
 
+function calc_main_height(){
+    const mainHeight = $("body").innerHeight() - $("header").outerHeight() - rem(1.5);
+    $("main").innerHeight(mainHeight);
+}
+
+function rem(rem) {
+    const fontSize = getComputedStyle(document.documentElement).fontSize;
+    return rem * parseFloat(fontSize);
+  }
+
 $("#search-form").on("submit", function (e) {
     e.preventDefault();  // デフォルトのイベント(ページの遷移やデータ送信など)を無効にする
     $("html").removeClass("top-screen");
     $('#theme-list option:selected').click();
+    calc_main_height();
 });
 
 $("#page-item-next").click(function () {
@@ -351,7 +358,7 @@ var oldScrollY = -1;
 // scrollイベントを設定
 main.scroll(function () {
 
-    const passed_point = oldScrollY > headerHeight / 4;
+    const passed_point = oldScrollY > $("header").outerHeight() / 4;
     const isScrollUp = ($(this).scrollTop() - oldScrollY) < 0;
     const isScrollDown = (oldScrollY - $(this).scrollTop()) < 0;
 
@@ -360,30 +367,43 @@ main.scroll(function () {
 
 
     if (passed_point && isScrollDown) {
-        header.addClass("scrolling");
+        $("header").addClass("scrolling");
     }
     if (isScrollUp) {
-        header.removeClass("scrolling");
+        $("header").removeClass("scrolling");
     }
+    calc_main_height();
 });
 
-var isSignClosed = true;
-$(".sign").click(function () {
+$("#sign-list .sign").click(function () {
+    $("#sign-list").hide();
 
     const that = $(this);
-    if (isSignClosed) {
-        $(".sign").each(function () {
-            $(this).hide();
-        });
 
-        that.show().removeClass("sign-icon-only").parent("section").addClass("hovering");
-    }
-    else {
-        $(".sign").each(function () {
-            $(this).show();
-        });
+    const sign_detail = $("#sign-detail");
 
-        that.addClass("sign-icon-only").parent().removeClass("hovering");
-    }
-    isSignClosed = !isSignClosed;
+    sign_detail.find(".icons div").text(that.prop("title"));
+    sign_detail.find(".icons img").prop("src", that.find("img").prop("src"));
+
+    sign_detail.find(".stars.total div:last-child").attr("stars", that.data("stars-total"));
+    sign_detail.find(".stars.love div:last-child").attr("stars", that.data("stars-love"));
+    sign_detail.find(".stars.money div:last-child").attr("stars", that.data("stars-money"));
+    sign_detail.find(".stars.job div:last-child").attr("stars", that.data("stars-job"));
+
+    console.log(sign_detail.find(".stars.job div:last-child").data("stars"));
+
+    sign_detail.find(".content").text(that.data("content"));
+
+    sign_detail.find(".lucky-item").attr("lucky-item-value", that.data("lucky-item"));
+    sign_detail.find(".lucky-color").attr("lucky-color-value", that.data("lucky-color"));
+
+    sign_detail.show();
+});
+
+$("#sign-detail").click(function(){
+    $("#sign-detail").hide();
+
+    const sign_list = $("#sign-list");
+
+    sign_list.show();
 });

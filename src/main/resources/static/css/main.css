@@ -20,6 +20,10 @@
     --bs-border-color: transparent;
     --bs-border-color-translucent: transparent;
 
+    --background-image-top-color: var(--top-color);
+    --background-image-bottom-color: var(--bottom-color);
+
+
     --search-form-width: 560px;
 }
 
@@ -28,6 +32,8 @@
     --theme-color: 125, 255, 255;
     --theme-sub-color: 15, 15, 15;
     --theme-alpha-color: 1;
+    --top-color: 255, 255, 255, 0.01;
+    --bottom-color: 255, 255, 255, 1;
 }
 
 .aqua #logo>div:first-child,
@@ -50,6 +56,8 @@
     --theme-color: 255, 125, 125;
     --theme-sub-color: 15, 15, 15;
     --theme-alpha-color: 2;
+    --top-color: 64, 32, 32, 0.1;
+    --bottom-color: 255, 225, 225, 1;
 }
 
 .red #logo {
@@ -86,6 +94,8 @@
     --theme-color: 15, 15, 15;
     --theme-sub-color: 240, 240, 240;
     --theme-alpha-color: 2;
+    --top-color: 32, 32, 64, 0.01;
+    --bottom-color: 32, 32, 64, 1;
 }
 
 .dark #logo>div:first-child,
@@ -143,8 +153,8 @@ body {
     transition: color 0.5s, background-color 1s;
 
     background-image: linear-gradient(180deg,
-            rgba(255, 255, 255, 0.01),
-            rgba(255, 255, 255, 1) 85%),
+            rgba(var(--background-image-top-color)),
+            rgba(var(--background-image-bottom-color)) 85%),
         radial-gradient(ellipse at top left,
             rgba(var(--top-left-color)),
             transparent 50%),
@@ -182,34 +192,24 @@ main {
 #tiles {
     display: none !important;
     grid-auto-columns: minmax(150px, 1fr);
-    grid-gap: 0.5rem;
+    grid-gap: 1rem;
+
+    grid-template-areas:
+        "a a"
+        "b c"
+        "d d"
+        "e f";
 }
 
 @media (min-width: 1200px) {
     #tiles {
         grid-template-areas:
-            "a a b c"
-            "d d e f";
+        "a d"
+        "b c"
+        "e f";
     }
 
-    #chanceOfRainGraph {
-        display: flex;
-    }
 }
-
-@media (max-width: 1200px) {
-    #tiles {
-        grid-template-areas:
-            "a b"
-            "c d"
-            "e f";
-    }
-
-    #chanceOfRainGraph {
-        display: none;
-    }
-}
-
 
 #tiles .col {
     border-radius: 10px;
@@ -490,7 +490,7 @@ main {
 .col.tile section {
     display: grid;
     grid-gap: 0.5rem;
-    margin: 1.5rem!important;
+    margin: 1.5rem !important;
 }
 
 .col.tile section>* {
@@ -597,18 +597,6 @@ main {
         "a c" 1fr / 1fr 1fr;
 }
 
-@media (max-width: 992px) {
-    #main-weather section {
-        grid-template:
-            "a b" 1fr
-            "a b" 1fr / 1fr 1fr;
-    }
-
-    #chanceOfRain {
-        display: none;
-    }
-}
-
 #main-traffic-jr {
     grid-area: b;
 }
@@ -621,15 +609,12 @@ main {
     grid-area: d;
 }
 
-#main-divination section {
-    grid-template-areas:
-        "r1 r2 r3  r4  r5  r6"
-        "r7 r8 r9 r10 r11 r12";
+#sign-list {
     grid-auto-rows: 1fr;
-    grid-auto-columns: 1fr;
-
-
+    grid-template-columns: repeat(auto-fit, minmax(75px, 1fr));
+    grid-gap: 1rem;
 }
+
 
 #main-alert {
     grid-area: e;
@@ -720,40 +705,19 @@ div[chance-rain="0%"]>div {
     height: 0%;
 }
 
-
-.hovering.sign.sign-icon-only {
-    display: none !important;
+.sign img {
+    width: 100%;
 }
 
-.sign.sign-icon-only .icons div {
-    display: none;
-}
-
-.sign.sign-icon-only .lucky-stars {
-    display: none;
-}
-
-.sign.sign-icon-only .lucky-item {
-    display: none;
-}
-
-.sign.sign-icon-only .lucky-color {
-    display: none;
-}
-
-.sign.sign-icon-only .content {
-    display: none;
-}
-
-.sign .content {
+.content {
     grid-area: e;
-
 
     border-color: rgba(var(--border-color));
 
     border-style: solid;
     border-left: 1px;
     border-right: 1px;
+    width: 100%;
 }
 
 .icons {
@@ -766,54 +730,61 @@ div[chance-rain="0%"]>div {
     align-items: center;
 }
 
-.lucky-item {
-    grid-area: c;
-    display: flex;
-    flex-direction: row !important;
-
-    width: 75%;
+.sign-name::after {
+    content: "の今日の運勢";
 }
 
-.lucky-item>div {
-    display: flex;
+.lucky-item {
+    grid-area: c;
 
+    display: flex;
     width: 100%;
 }
 
-.lucky-item>div:first-child {
-    justify-content: start;
+.lucky-item::before {
+    content: attr(lucky-item-label);
 }
 
-.lucky-item>div:last-child {
-    justify-content: end;
+.lucky-item::after {
+    content: attr(lucky-item-value);
 }
 
 .lucky-color {
     grid-area: d;
-    display: flex;
-    flex-direction: row !important;
 
-    width: 75%;
-}
-
-.lucky-color>div {
     display: flex;
     width: 100%;
 }
 
-.lucky-color>div:first-child {
-    justify-content: start;
+.lucky-color::before {
+    content: attr(lucky-color-label);
 }
 
-.lucky-color>div:last-child {
-    justify-content: end;
+.lucky-color::after {
+    content: attr(lucky-color-value);
+}
+
+.lucky-item,
+.lucky-color {
+    width: 75%;
+    flex-direction: row !important;
+}
+
+.lucky-color::before,
+.lucky-item::before {
+    width: 100%;
+    text-align: start;
+}
+
+.lucky-color::after,
+.lucky-item::after {
+    width: 100%;
+    text-align: end;
 }
 
 .lucky-stars {
-    display: flex;
-    flex-direction: row !important;
-    flex-wrap: wrap;
-    width: 100%;
+    justify-content: center !important;
+    width: 100% !important;
 }
 
 .stars {
@@ -889,7 +860,8 @@ div[stars="5"]::after {
     display: block;
 }
 
-#main-divination section.hovering .sign {
+
+#sign-detail {
     display: grid;
     grid-template:
         "a"
@@ -898,4 +870,5 @@ div[stars="5"]::after {
         "c"
         "d";
 
+    grid-auto-columns: 100%;
 }

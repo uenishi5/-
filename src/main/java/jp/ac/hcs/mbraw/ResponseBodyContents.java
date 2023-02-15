@@ -22,11 +22,10 @@ import com.ren130302.webapi.pornhubapi.response.SearchResponse;
 import com.ren130302.webapi.pornhubapi.response.VideoResponse;
 
 import lombok.Data;
-import lombok.NonNull;
 import lombok.Value;
 
 /**
- * API通信した後、必要な情報を格納を行いResponseBodyとしてレスポンスするためのクラスです。
+ * API通信した後、必要な情報の格納後レスポンスボディ部にjson形式のデータを挿入するためのクラスです。
  *
  *
  * @author s20203029
@@ -56,20 +55,13 @@ public class ResponseBodyContents {
 	@Value(staticConstructor = "create")
 	public static class Content {
 
-		private final @NonNull String originalUrl;
-		private final @NonNull String iconUrl;
-		private final @NonNull String title;
-		private final @NonNull String source;
-		private final @NonNull String publishBy;
-		private final @NonNull String publishAt;
+		private final String originalUrl;
+		private final String iconUrl;
+		private final String title;
+		private final String source;
+		private final String publishBy;
+		private final String publishAt;
 
-		public static String getTimeAgo(DateTime dateTime) {
-			final Period period = new Period(dateTime, DateTime.now());
-
-			final String timeAgo = DateUtils.of(period).add(Unit.YEARS, "year", "years").add(Unit.MONTHS, "month", "months").add(Unit.WEEKS, "week", "weeks").add(Unit.DAYS, "day", "days").add(Unit.HOURS, "hour", "hours").add(Unit.MINUTES, "minute", "minutes").add(Unit.SECONDS, "second", "seconds").print();
-			final String output = timeAgo.isBlank() ? "today" : String.format("%s %s", timeAgo, "ago");
-			return output;
-		}
 	}
 
 	public String json() {
@@ -83,6 +75,20 @@ public class ResponseBodyContents {
 	}
 
 	public static class Utils {
+
+		public static String getTimeAgo(String dateTime) {
+			return getTimeAgo(DateTime.parse(dateTime));
+		}
+
+		public static String getTimeAgo(DateTime dateTime) {
+			final Period period = new Period(dateTime, DateTime.now());
+
+			final String timeAgo = DateUtils.of(period).add(Unit.YEARS, "year", "years").add(Unit.MONTHS, "month", "months").add(Unit.WEEKS, "week", "weeks").add(Unit.DAYS, "day", "days").add(Unit.HOURS, "hour", "hours").add(Unit.MINUTES, "minute", "minutes").add(Unit.SECONDS, "second", "seconds").print();
+			final String output = timeAgo.isBlank() ? "today" : String.format("%s %s", timeAgo, "ago");
+
+			return output;
+		}
+
 		public static Content map(SearchResult searchResult) {
 			final ResourceId resourceId = searchResult.getId();
 			final SearchResultSnippet searchResultSnippet = searchResult.getSnippet();
@@ -93,7 +99,7 @@ public class ResponseBodyContents {
 			final String title = searchResultSnippet.getTitle();
 			final String source = String.format("https://www.youtube.com/embed/%s", resourceId.getVideoId());
 			final String publishBy = searchResultSnippet.getChannelTitle();
-			final String publishAt = searchResultSnippet.getPublishedAt().toString();
+			final String publishAt = getTimeAgo(searchResultSnippet.getPublishedAt().toString());
 
 			return Content.create(originalUrl, iconUrl, title, source, publishBy, publishAt);
 		}
@@ -104,7 +110,7 @@ public class ResponseBodyContents {
 			final String title = article.getTitle();
 			final String source = article.getUrl();
 			final String publishBy = article.getAuthor();
-			final String publishAt = article.getPublishedAt();
+			final String publishAt = getTimeAgo(article.getPublishedAt());
 
 			return Content.create(originalUrl, iconUrl, title, source, publishBy, publishAt);
 		}
@@ -114,8 +120,8 @@ public class ResponseBodyContents {
 			final String iconUrl = videoResponse.getThumb();
 			final String title = videoResponse.getTitle();
 			final String source = String.format("https://jp.pornhub.com/embed/%s", videoResponse.getVideoId());
-			final String publishBy = convertDate(videoResponse.getPublishDate());
-			final String publishAt = videoResponse.getPornstars().isEmpty() ? "" : videoResponse.getPornstars().get(0).getPornstarName();
+			final String publishBy = videoResponse.getPornstars().isEmpty() ? "" : videoResponse.getPornstars().get(0).getPornstarName();
+			final String publishAt = getTimeAgo(convertDate(videoResponse.getPublishDate()));
 
 			return Content.create(originalUrl, iconUrl, title, source, publishBy, publishAt);
 		}

@@ -6,8 +6,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.ac.hcs.config.Mapping;
+import lombok.extern.slf4j.Slf4j;
 
 /** 警報注意報のコントローラー */
+@Slf4j
 @Controller
 public class WeatherAlertController {
 
@@ -16,6 +18,8 @@ public class WeatherAlertController {
 
 	@RequestMapping(Mapping.MAPPING_WEATHER_ALERT)
 	public String getMainData(Model model) {
+		log.debug("GET {}", Mapping.MAPPING_WEATHER_ALERT);
+
 		final WeatherAlertEntity entity = this.weatherAlertService.getWeather_alertData();
 		final WeatherAlertData data = entity.getWeather_alertnameList().get(0);
 		final String name = data.getName();
@@ -33,6 +37,9 @@ public class WeatherAlertController {
 		System.out.println(entity);
 
 		model.addAttribute("Weather_alert", entity);
+
+		model.asMap().forEach((k, v) -> log.debug("key={}, value={}", k, v));
+
 		return Mapping.RESOURCE_WEATHER_ALERT;
 	}
 

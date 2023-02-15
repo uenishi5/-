@@ -148,6 +148,15 @@ public class DownloadHelper {
 
 		REQUEST.remove(sha256hex);
 
+		try {
+			// 0byteでダウンロード開始されるため
+			// １秒待機させてから次の仕事をさせる
+			Thread.sleep(1000L);
+		}
+		catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
 		System.out.println("Download complete");
 		return sendToClient(path.toFile());
 	}

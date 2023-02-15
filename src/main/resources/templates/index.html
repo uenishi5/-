@@ -177,90 +177,85 @@
                 </a>
 
                 <!-- 交通情報メイン -->
-                <div class="col" id="main-traffic-jr">
-                    <div>JR交通情報</div>
+                <div class="col tile" id="main-traffic-jr">
+                    <div class="title">JR交通情報</div>
                     <!-- 運休情報の表示 -->
-                    <div th:text="${jrflg} ? あり : なし"></div>
+                    <section>
+                        <div th:text="${jrflg} ? あり : なし"></div>
+                    </section>
                 </div>
 
-                <div class="col " id="main-traffic-bus">
-                    <div>バス交通情報</div>
+                <div class="col tile" id="main-traffic-bus">
+                    <div class="title">バス交通情報</div>
                     <!-- 運休情報の表示 -->
-                    <div th:text="${flg} ? あり : なし"></div>
+                    <section>
+                        <div th:text="${flg} ? あり : なし"></div>
+                    </section>
                 </div>
 
                 <!-- 占いメイン -->
                 <div class="col tile" id="main-divination" th:object="${HoroscopeEntity}">
                     <div class="title">占い</div>
-                    <section>
-                        <div class="sign sign-icon-only" th:each="horo, stat : *{horoscopeList}" th:object="${horo}"
-                            data-bsdisplay:none; -toggle="tooltip" data-bs-placement="top" th:title="*{info.sign}"
-                            th:style="|grid-area: r*{info.rank};|">
-                            <div class="icons">
-                                <div th:text="|*{info.sign}の今日の運勢|"></div>
-                                <img class="mt-2" th:src="*{sign.resourceSvg}">
-                            </div>
+                    <section id="sign-list">
+                        <div class="sign" th:each="horo, stat : *{horoscopeList}" th:object="${horo}"
+                            data-toggle="tooltip" data-bs-placement="top" th:title="*{info.sign}"
+                            th:data-stars-total="*{info.total}" th:data-stars-love="*{info.love}"
+                            th:data-stars-money="*{info.money}" th:data-stars-job="*{info.job}"
+                            th:data-content="*{info.content}" th:data-lucky-item="*{info.item}"
+                            th:data-lucky-color="*{info.color}">
+                            <img th:src="*{sign.resourceSvg}">
+                            <div th:text="*{info.sign}"></div>
+                        </div>
+                    </section>
+                    <section id="sign-detail" style="display:none;">
+                        <div class="icons">
+                            <div class="sign-name"></div>
+                            <img class="mt-2">
+                        </div>
 
-                            <div class="mt-4 lucky-stars">
-                                <div class="stars">
-                                    <div>総合運</div>
-                                    <div th:starts="*{info.total}" stars="1"></div>
-                                </div>
-                                <div class="stars">
-                                    <div>恋愛運</div>
-                                    <div th:starts="*{info.love}" stars="2"></div>
-                                </div>
-                                <div class="stars">
-                                    <div>金運</div>
-                                    <div th:starts="*{info.money}" stars="3"></div>
-                                </div>
-                                <div class="stars">
-                                    <div>仕事運</div>
-                                    <div th:starts="*{info.job}" stars="4"></div>
-                                </div>
+                        <div class="mt-4 lucky-stars">
+                            <div class="stars total">
+                                <div>総合運</div>
+                                <div></div>
                             </div>
-
-                            <div class="m-4 p-4 content">
-                                <div th:each="line : *{info.content.split('。')}" th:text="${line}"></div>
+                            <div class="stars love">
+                                <div>恋愛運</div>
+                                <div></div>
                             </div>
-                            
-
-                            <div class="mt-2 lucky-item">
-                                <div>
-                                    ラッキーアイテム
-                                </div>
-                                <div th:text="*{info.item}">
-                                    ラッピングペーパー
-                                </div>
+                            <div class="stars money">
+                                <div>金運</div>
+                                <div></div>
                             </div>
-                            <div class="mt-2 lucky-color">
-                                <div>
-                                    ラッキーカラー
-                                </div>
-                                <div th:text="*{info.color}">
-                                    ワインレッド
-                                </div>
+                            <div class="stars job">
+                                <div>仕事運</div>
+                                <div></div>
                             </div>
                         </div>
+
+                        <div class="my-4 p-4 content"></div>
+                        <div class="mt-2 lucky-item" lucky-item-label="ラッキーアイテム" lucky-item-value="ほうき"></div>
+                        <div class="mt-2 lucky-color" lucky-color-label="ラッキーカラー" lucky-color-value="赤"></div>
                     </section>
                 </div>
 
                 <!-- 注意報警報メイン -->
-                <div class="col" id="main-alert">
-                    <div>警報注意報</div>
-
-                    <div th:each="alert : ${Weather_alertEntity.weather_alertnameList}">
-                        <span th:text="${alert.name}"></span>
-                    </div>
+                <div class="col title" id="main-alert">
+                    <div class="title">警報注意報</div>
+                    <section>
+                        <div th:each="alert : ${Weather_alertEntity.weather_alertnameList}">
+                            <span th:text="${alert.name}"></span>
+                        </div>
+                    </section>
                 </div>
 
                 <!-- チャートメイン -->
-                <div class="col" id="main-chart" th:object="${ChartEntity.chartList[0]}">
-                    <div>チャート</div>
-
-                    <div>Bitcoin/日本円のチャート</div>
-                    <span th:text="*{bitcoin}"></span>
-                    <span th:text="|*{rate} %|"></span>
+                <div class="col tile" id="main-chart" th:object="${ChartEntity.chartList[0]}">
+                    <div class="title">チャート</div>
+                    <section>
+                        <div>Bitcoin/日本円</div>
+                        <span th:text="*{bitcoin}"></span>
+                        <span th:text="|*{rate} %|"></span>
+                    </section>
                 </div>
             </div>
         </div>
