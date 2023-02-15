@@ -69,11 +69,11 @@
 
 				<div class="weather-box">
 					<!-- 日付の表示 -->
-					
+
 					<p class="weather-day">
-				
-					<script src="morning/today.js"></script>
-					の天気
+
+						<script src="morning/today.js"></script>
+						の天気
 					</p>
 					<hr>
 					<div class="weather-detailbox">
@@ -87,16 +87,22 @@
 						<!-- 詳細の天気の表示 -->
 
 						<div class="detail-temp" style="text-align: center;">
-							<ul class="temp">
-								<!-- 最高気温表示 -->
-								<li class="high-temperature">最高気温：<span
-									th:text="${weather.temperature_max}"></span>℃
-								</li>
-								<!-- 最低気温表示 -->
-								<li class="low-temperature">最低気温：<span
-									th:text="${weather.temperature_min}"></span>℃
-								</li>
-							</ul>
+							<div class="temp">
+								<div class="high-temperature">
+									<!-- 最高気温表示 -->
+									<div class="left">最高気温：</div>
+									<div class="right">
+										<span th:text="${weather.temperature_max}"></span>℃
+									</div>
+								</div>
+								<div class="low-temperature">
+									<!-- 最低気温表示 -->
+									<div class="left">最低気温：</div>
+									<div class="right">
+										<span th:text="${weather.temperature_min}"></span>℃
+									</div>
+								</div>
+							</div>
 						</div>
 						<div class="detail-rain" style="text-align: center;">
 							<!-- 降水量表示 -->
@@ -119,8 +125,6 @@
 						</div>
 					</div>
 				</div>
-
-
 			</th:block>
 		</div>
 	</div>

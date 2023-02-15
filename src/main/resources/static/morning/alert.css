@@ -15,10 +15,23 @@
 	border: solid 3px #000000;
 	margin-bottom: 20px;
 }
+.telop{
+	margin-top: 10px;
+}
+.weather-telopbox{
+	padding:0.3em 0.6em;
+	margin: 100px auto auto auto;
+	width: 800px;
+	height: 40px;
+	background: #e5eaf7;
+	border-top: solid 1px #bbc7e3;
+	font-weight: 700;
+}
 /* コメントのずらし */
 .comment-block{
 	margin-left: auto;
 	margin-right: auto;
+	padding-left: 50px;
 	width: 800px;
 }
 /* 現在の警報注意報デザイン */
@@ -51,11 +64,15 @@ th {
 --------------*/
 /* 説明の箱 */
 .alert-explanation {
-	width: min(100%,600px);
+	width: 600px;
+	padding: 15px;
    	margin-left: auto;
    	margin-right: auto;
-	border: solid 3px #000000;
 	margin-bottom: 20px;
+	background-color: #f3f3f3;
+}
+.alert-explanation ul{
+	padding-left: 10px;
 }
 /* ------------------------- 
 	災害の警告パターンの色別

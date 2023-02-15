@@ -22,7 +22,7 @@ public class TrafficController {
 		log.debug("GET {}", Mapping.MAPPING_TRAFFIC);
 
 		final TrafficEntity entity = this.trafficService.getTrafficFlg();
-		final TrafficData data = entity.getTrafficList().get(0);
+		final TrafficData data = entity.getTrafficflgList().get(0);
 		model.addAttribute("trafficflgList", data.getTrafficFlgList());
 		System.out.println(data.getTrafficFlgList());
 		// //結果を取得
@@ -39,7 +39,7 @@ public class TrafficController {
 		log.debug("GET {}", Mapping.MAPPING_TRAFFIC_BUS);
 
 		final TrafficEntity entity = this.trafficService.getBusdata(no);
-		final TrafficData data = entity.getTrafficList().get(0);
+		final TrafficData data = entity.getTrafficflgList().get(0);
 
 		model.addAttribute("flg", data.isAlertflg());
 		model.addAttribute("TrafficEntity", entity);

@@ -18,7 +18,7 @@ import jp.ac.hcs.mbraw.controller.weather_alert.WeatherAlertData.UpperAlertData;
 @Service
 public class WeatherAlertService {
 
-	private static String URL = "https://typhoon.yahoo.co.jp/weather/jp/warn/25/25206/";
+	private static String URL = "https://typhoon.yahoo.co.jp/weather/jp/warn/1b/1100/";
 
 	/** メイン画面用警報・注意報取得 */
 	public WeatherAlertEntity getMainWeather_alertData() {
