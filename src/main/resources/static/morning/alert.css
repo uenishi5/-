@@ -55,10 +55,7 @@ th {
     border: 1px solid #000;
     margin-right: 10px;
 }
-/* ゆとり作成 */
-.alert-type span{
-	margin: 1px;
-}
+
 /* ------------
 	説明エリア
 --------------*/
@@ -81,6 +78,7 @@ th {
 .special-alarm {
 	background-color: black;
 	color: white;
+	width:100%;
 }
 /* 警報デザイン */
 .alarm {
