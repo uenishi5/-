@@ -257,12 +257,17 @@ function rem(rem) {
 
 $(window).ready(function () {
     const localStorage_theme = localStorage.getItem("theme");
-    const theme_api_name = localStorage_theme ? localStorage_theme : data[0].sname;
+    const theme_api_name = localStorage_theme ? localStorage_theme : data.newsapi.sname;
     const theme_class_name = data[theme_api_name].theme_color;
+    const placeholder = localStorage_theme ? data[localStorage_theme].placeholder : data.newsapi.placeholder;
+
+    if(!localStorage_theme){
+        localStorage.setItem("theme", "newsapi");
+    }
 
     filter_setting(theme_api_name);
     calc_main_height();
-    $("#search-form-query").attr("placeholder", data[localStorage_theme].placeholder);
+    $("#search-form-query").attr("placeholder", placeholder);
     $("body").addClass(theme_class_name);
 });
 
@@ -270,8 +275,8 @@ $("#logo").click(function () {
     const localStorage_theme = localStorage.getItem("theme");
 
     const theme = $("#theme-list option[data-api-name=" + localStorage_theme + "]");
-    const theme_api_name = theme.data('api-name');
-    const theme_class_name = data[theme_api_name].theme_color;
+    const theme_api_name = data[localStorage_theme].sname;
+    const theme_class_name = data[localStorage_theme].theme_color;
 
     const next_theme = theme.next();
     const next_theme_api_name = next_theme.data('api-name');
