@@ -3,7 +3,6 @@ package jp.ac.hcs.mbraw;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,6 +14,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +48,7 @@ public class DownloadHelper {
 		}
 	}
 
-	public static Process download(String url, boolean toMp3) throws IOException {
+	public static Process download(String url, boolean toMp3) throws Exception {
 		// コマンド実行のためのビルダー
 		final ProcessBuilder builder = new ProcessBuilder();
 		final List<String> command = new ArrayList<>();
@@ -58,12 +58,8 @@ public class DownloadHelper {
 		builder.redirectError(ProcessBuilder.Redirect.INHERIT);
 
 		// 使用するOSによって実行するコマンドファイルを変更する
-		final String executeFile = isWindows() ? "yt-dlp.exe"
-				: isMac() ? "yt-dlp_macos"
-				: "yt-dlp";
+		command.add(Paths.get("cmds", getExecuteFile()).toString());
 
-		// 実行するコマンドの設定
-		command.add(Paths.get("cmds", executeFile).toString());
 		// -v : debug mode
 		// -x : (--extract-audio) で音声のみダウンロード
 		// --audio-format mp3: mp3 形式にフォーマット
@@ -109,7 +105,7 @@ public class DownloadHelper {
 		try {
 			process = download(url, toMp3);
 		}
-		catch (IOException e) {
+		catch (Exception e) {
 			e.printStackTrace();
 			REQUEST.put(sha256hex, ERROR);
 		}
@@ -152,30 +148,24 @@ public class DownloadHelper {
 		return sendToClient(path.toFile());
 	}
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		download("https://jp.pornhub.com/view_video.php?viewkey=ph615a85ea5ca11", false);
 
 		String absPath = Paths.get("cmds").toAbsolutePath().toString();
 		System.out.println(absPath);
 	}
 
-	private static String OS = System.getProperty("os.name").toLowerCase();
-
-	public static boolean isWindows() {
-		return (OS.indexOf("win") >= 0);
-	}
-
-	public static boolean isMac() {
-		return (OS.indexOf("mac") >= 0);
-	}
-
-	public static boolean isUnix() {
-		return (OS.indexOf("nix") >= 0
-				|| OS.indexOf("nux") >= 0
-				|| OS.indexOf("aix") > 0);
-	}
-
-	public static boolean isSolaris() {
-		return (OS.indexOf("sunos") >= 0);
+	public static String getExecuteFile() throws Exception {
+		if (SystemUtils.IS_OS_WINDOWS)
+			return "yt-dlp.exe";
+		else if (SystemUtils.IS_OS_MAC) {
+			return "yt-dlp_macos";
+		}
+		else if (SystemUtils.IS_OS_UNIX) {
+			return "yt-dlp";
+		}
+		else {
+			throw new Exception("Unsupported OS" + SystemUtils.OS_NAME);
+		}
 	}
 }
