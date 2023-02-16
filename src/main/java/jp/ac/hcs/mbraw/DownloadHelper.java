@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.io.IOUtils;
-import org.springframework.boot.system.SystemProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -58,13 +57,9 @@ public class DownloadHelper {
 		builder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
 		builder.redirectError(ProcessBuilder.Redirect.INHERIT);
 
-		// 使用しているOSを調べる
-		final String osName = SystemProperties.get("os.name");
-		final boolean isWindows = osName.startsWith("Windows");
-		final boolean isMacOS = osName.startsWith("MacOS");
 		// 使用するOSによって実行するコマンドファイルを変更する
-		final String executeFile = isWindows ? "yt-dlp.exe"
-				: isMacOS ? "yt-dlp_macos"
+		final String executeFile = isWindows() ? "yt-dlp.exe"
+				: isMac() ? "yt-dlp_macos"
 				: "yt-dlp";
 
 		// 実行するコマンドの設定
@@ -162,5 +157,25 @@ public class DownloadHelper {
 
 		String absPath = Paths.get("cmds").toAbsolutePath().toString();
 		System.out.println(absPath);
+	}
+
+	private static String OS = System.getProperty("os.name").toLowerCase();
+
+	public static boolean isWindows() {
+		return (OS.indexOf("win") >= 0);
+	}
+
+	public static boolean isMac() {
+		return (OS.indexOf("mac") >= 0);
+	}
+
+	public static boolean isUnix() {
+		return (OS.indexOf("nix") >= 0
+				|| OS.indexOf("nux") >= 0
+				|| OS.indexOf("aix") > 0);
+	}
+
+	public static boolean isSolaris() {
+		return (OS.indexOf("sunos") >= 0);
 	}
 }
