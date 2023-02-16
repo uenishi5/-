@@ -62,42 +62,42 @@
 							<nobr>石狩・北広島・千歳・江別</nobr>
 						</p></th>
 					<td><nobr>
-							<button value="0" name="bus" th:if="!${trafficflgList[0]}">
+							<button value="0" name="bus" th:if="${trafficflgList[0].trafficflg}">
 								<img src="morning/warning.png" width="20px" height="20px">札幌北・石狩方面
 							</button>
-							<button value="0" name="bus" th:if="${trafficflgList[0]}">
+							<button value="0" name="bus" th:if="!${trafficflgList[0].trafficflg}">
 								札幌北・石狩方面</button>
 						</nobr></td>
 
 					<td><nobr>
-							<button value="1" name="bus" th:if="!${trafficflgList[1]}">
+							<button value="1" name="bus" th:if="${trafficflgList[1].trafficflg}">
 								<img src="morning/warning.png" width="20px" height="20px">札幌南・北広島・千歳・江別方面
 							</button>
-							<button value="1" name="bus" th:if="${trafficflgList[1]}">
+							<button value="1" name="bus" th:if="!${trafficflgList[1].trafficflg}">
 								札幌南・北広島・千歳・江別方面</button>
 						</nobr></td>
 				</tr>
 				<tr>
 					<th><p>小樽</p></th>
 					<td>
-						<button value="2" name="bus" th:if="!${trafficflgList[2]}">
+						<button value="2" name="bus" th:if="${trafficflgList[2].trafficflg}">
 							<img src="morning/warning.png" width="20px" height="20px">小樽市内線
 						</button>
-						<button value="2" name="bus" th:if="${trafficflgList[2]}">小樽市内線</button>
+						<button value="2" name="bus" th:if="!${trafficflgList[2].trafficflg}">小樽市内線</button>
 					</td>
-					<td><button value="3" name="bus" th:if="!${trafficflgList[3]}">
+					<td><button value="3" name="bus" th:if="${trafficflgList[3].trafficflg}">
 							<img src="morning/warning.png" width="20px" height="20px">小樽郊外線
 						</button>
-						<button value="3" name="bus" th:if="${trafficflgList[3]}">小樽郊外線</button>
+						<button value="3" name="bus" th:if="!${trafficflgList[3].trafficflg}">小樽郊外線</button>
 					</td>
 				</tr>
 				<tr class="last">
 					<th><p>滝川・岩見沢</p></th>
-					<td><button value="4" name="bus"th:if="!${trafficflgList[4]}"><img src="morning/warning.png" width="20px" height="20px">滝川地区</button>
-					<button value="4" name="bus"th:if="${trafficflgList[4]}">滝川地区</button>
+					<td><button value="4" name="bus"th:if="${trafficflgList[4].trafficflg}"><img src="morning/warning.png" width="20px" height="20px">滝川地区</button>
+					<button value="4" name="bus"th:if="!${trafficflgList[4].trafficflg}">滝川地区</button>
 					</td>
-					<td><button value="5" name="bus"th:if="!${trafficflgList[5]}"><img src="morning/warning.png" width="20px" height="20px">岩見沢地区</button>
-					<button value="5" name="bus"th:if="${trafficflgList[5]}">岩見沢地区</button>
+					<td><button value="5" name="bus"th:if="${trafficflgList[5].trafficflg}"><img src="morning/warning.png" width="20px" height="20px">岩見沢地区</button>
+					<button value="5" name="bus"th:if="!${trafficflgList[5].trafficflg}">岩見沢地区</button>
 					</td>
 				</tr>
 			</table>
