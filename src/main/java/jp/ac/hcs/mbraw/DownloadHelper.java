@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,22 +62,13 @@ public class DownloadHelper {
 		final String osName = SystemProperties.get("os.name");
 		final boolean isWindows = osName.startsWith("Windows");
 		final boolean isMacOS = osName.startsWith("MacOS");
-		System.out.println(String.format("OS name=%s, isWindows=%b", osName, isWindows));
-
 		// 使用するOSによって実行するコマンドファイルを変更する
-		if (isWindows) {
-			command.add("cmds\\yt-dlp.exe");
-		}
-		else if(isMacOS) {
-			command.add("cmds\\yt-dlp_macos");
-		}
-		else {
-			command.add("cmds\\yt-dlp");
-		}
-
-		System.out.println(String.format("Directory=%s", builder.directory()));
+		final String executeFile = isWindows ? "yt-dlp.exe"
+				: isMacOS ? "yt-dlp_macos"
+				: "yt-dlp";
 
 		// 実行するコマンドの設定
+		command.add(Paths.get("cmds", executeFile).toString());
 		// -v : debug mode
 		// -x : (--extract-audio) で音声のみダウンロード
 		// --audio-format mp3: mp3 形式にフォーマット
@@ -86,7 +78,6 @@ public class DownloadHelper {
 		// ファイル名をidにする
 		command.add("--output");
 		command.add("~/downloads/%(id)s.%(ext)s");
-
 
 		// mp3に変換するコマンド
 		if (toMp3) {
@@ -103,7 +94,6 @@ public class DownloadHelper {
 		// 一連のコマンドをプロセスビルダーに設定をして
 		// 実行するコマンドを出力
 		builder.command(command);
-		builder.command().forEach(System.out::println);
 
 		// コマンドを実行する
 		return builder.start();
@@ -166,8 +156,11 @@ public class DownloadHelper {
 		System.out.println("Download complete");
 		return sendToClient(path.toFile());
 	}
-	
+
 	public static void main(String[] args) throws IOException {
-		download("https://jp.pornhub.com/view_video.php?viewkey=ph615a85ea5ca11",false);
+		download("https://jp.pornhub.com/view_video.php?viewkey=ph615a85ea5ca11", false);
+
+		String absPath = Paths.get("cmds").toAbsolutePath().toString();
+		System.out.println(absPath);
 	}
 }
