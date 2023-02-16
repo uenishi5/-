@@ -1,6 +1,6 @@
 window.onload = $(function(){
 	var moji = "testID"
-    var tmp = document.getElementsByClassName("hoge") ;
+    var tmp = document.getElementsByClassName("morning") ;
 
     for(var i=0;i<=tmp.length-1;i++){
         //id追加

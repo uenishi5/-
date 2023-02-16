@@ -57,7 +57,7 @@
 	
 	<div class="contents">
 	<!-- 天気メイン -->
-	<div class="hoge" name="天気" style="display:inline;">
+	<div class="morning" name="天気" style="display:inline;">
 	<div class="main-weather" th:object="${WeatherEntity.weatherList[0]}">
 		<table>
 			<!-- 天気img表示 -->
@@ -75,7 +75,7 @@
 	</div>
 	
 	<!-- 交通情報メイン -->
-	<div class="hoge" name="交通情報">
+	<div class="morning" name="交通情報">
 	<div class="main-traffic">
 	<!-- 運休情報の表示 -->
 	
@@ -98,7 +98,7 @@
 	</div>
 	
 	<!-- 占いメイン -->
-	<div class="hoge" name="占い">
+	<div class="morning" name="占い">
 	<div class="main-divination">
 	<div th:object="${HoroscopeEntity.horoscopeList[0]}">
 		<table>
@@ -115,7 +115,7 @@
 	</div>
 	
 	<!-- 注意報警報メイン -->
-	<div class="hoge" name="注意報警報">
+	<div class="morning" name="注意報警報">
 	 <div class="main-alert">
 	 	<nobr><p class="alert-title">現在の警報注意報</p></nobr>
 		
@@ -130,7 +130,7 @@
 	</div>
 	
 	<!-- チャートメイン -->
-	<div class="hoge" name="チャート">
+	<div class="morning" name="チャート">
 	<div class="main-chart" th:object="${ChartEntity.chartList[0]}">
 		<nobr><p class="chart-title">Bitcoin/日本円のチャート</p></nobr>
 		<!-- 現在チャート表示 -->
@@ -149,9 +149,8 @@
 	<!-- 下のスペース -->
 	<div class="bottom-space"></div>
 <script src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
-<script src="js/btn.js"></script>
-<script src="js/none.js"></script>
-<script src="js/checkbox.js"></script>
+<script src="js/btn-add.js"></script>
+<script src="js/btn-id-add.js"></script>
 <script src="js/change.js"></script>
 </body>
 </html>
