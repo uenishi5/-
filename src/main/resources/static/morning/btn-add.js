@@ -1,5 +1,5 @@
 window.onload = $(function(){
-	    var cnt = $(".hoge").length;
+	    var cnt = $(".morning").length;
 	    var i = 0;	
 	    
 	    const text = document.getElementById('text');
