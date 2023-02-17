@@ -36,26 +36,26 @@
 	<div class="title-space"></div>
 		
 	<!-- チャート情報context -->
-	<div class="chart-context" th:object="${ChartEntity.chartList[0]}">
+	<div class="chart-context">
 		<nobr><p class="subtitle">・ビットコイン（Bitcoin）/日本円のチャート</p></nobr>
 		<!-- 現在チャートの表示 -->
-		<p class="chart-value"><span th:text="*{bitcoin}"></span></p>
-		<p class="chart-difference"><span th:text="*{rate}"></span>%</p>
+		<p class="chart-value"><span th:text="${chartEntity.bitcoin}"></span></p>
+		<p class="chart-difference"><span th:text="${chartEntity.rate}"></span>%</p>
 	</div>
 	
 	<!-- レートの上がり下がりの表示 -->
-	<div class="rising-and-falling" th:object="${ChartEntity.chartList[0]}">
+	<div class="rising-and-falling">
 	
 		<p class="value-name">最高値(24時間)</p>
 		<p class="value-name">最安値(24時間)</p>      
 		<p class="value-name">時間総額</p> 
 	
 	<!-- 最高値 -->
-		<p><span th:text="*{maxrate}"></span></p>
+		<p><span th:text="${chartEntity.maxRate}"></span></p>
 	<!-- 最安値 -->
-		<p><span th:text="*{minrate}"></span></p> 
+		<p><span th:text="${chartEntity.minRate}"></span></p> 
 	<!-- 時価総額 -->
-		<p><span th:text="*{market_capitalization}"></span></p>
+		<p><span th:text="${chartEntity.marketCapitalization}"></span></p>
 			
 		<p>円</p>
 		<p>円</p>
