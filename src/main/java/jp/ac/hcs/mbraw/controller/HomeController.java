@@ -32,10 +32,10 @@ import jp.ac.hcs.mbraw.DownloadHelper;
 import jp.ac.hcs.mbraw.ResponseBodyContents;
 import jp.ac.hcs.mbraw.YouTubeInstance;
 import jp.ac.hcs.mbraw.controller.chart.ChartData;
-import jp.ac.hcs.mbraw.controller.chart.ChartEntity;
 import jp.ac.hcs.mbraw.controller.chart.ChartService;
 import jp.ac.hcs.mbraw.controller.horoscope.HoroscopeEntity;
 import jp.ac.hcs.mbraw.controller.horoscope.HoroscopeService;
+import jp.ac.hcs.mbraw.controller.jr.JrData;
 import jp.ac.hcs.mbraw.controller.jr.JrService;
 import jp.ac.hcs.mbraw.controller.traffic.TrafficData;
 import jp.ac.hcs.mbraw.controller.traffic.TrafficService;
@@ -82,7 +82,7 @@ public class HomeController {
 
 	@GetMapping(Mapping.MAPPING_ROOT)
 	public String getHome(Principal principal, Model model, Pageable pageable) {
-		log.debug("GET {}", Mapping.MAPPING_ROOT);
+		HomeController.log.debug("GET {}", Mapping.MAPPING_ROOT);
 
 		// 天気データを格納
 		final WeatherEntity weatherEntity = new WeatherEntity();
@@ -111,20 +111,18 @@ public class HomeController {
 		model.addAttribute("Weather_alertEntity", weatherAlertEntity);
 
 		// ビットコインチャートを取得
-		final ChartEntity chartEntity = new ChartEntity();
-		final ChartData chartData = this.chartService.getChartData().getChartList().get(0);
-		chartEntity.getChartList().add(chartData);
-		model.addAttribute("ChartEntity", chartEntity);
+		final AttributeEntity<ChartData> chartEntity = this.chartService.getChartData();
+		chartEntity.addAttribute(model);
 
 		// 札幌市のバス情報取得
 		final TrafficData trafficData = this.trafficService.getMainTrafficData().getTrafficflgList().get(0);
 		model.addAttribute("flg", trafficData.isAlertflg());
 
 		// Jr情報取得
-		final boolean jrflg = this.jrService.getallJrData().getJrList().stream().anyMatch(data -> data.isAlert());
+		final boolean jrflg = this.jrService.getallJrData().getJrList().stream().anyMatch(JrData::isAlert);
 		model.addAttribute("jrflg", jrflg);
 
-		model.asMap().forEach((k, v) -> log.debug("key={}, value={}", k, v));
+		model.asMap().forEach((k, v) -> HomeController.log.debug("key={}, value={}", k, v));
 
 		return Mapping.RESOURCE_INDEX;
 	}
@@ -140,9 +138,9 @@ public class HomeController {
 	@PostMapping(Mapping.MAPPING_NEWSAPI)
 	@ResponseBody
 	public String postNewsApi(Pageable pageable, @Validated NewsForm form, BindingResult bindingResult) {
-		log.debug("POST {}", Mapping.MAPPING_NEWSAPI);
-		log.debug("Request params:{}", form);
-		log.debug("page={}, size={}", pageable.getPageNumber(), pageable.getPageSize());
+		HomeController.log.debug("POST {}", Mapping.MAPPING_NEWSAPI);
+		HomeController.log.debug("Request params:{}", form);
+		HomeController.log.debug("page={}, size={}", pageable.getPageNumber(), pageable.getPageSize());
 
 		final ResponseBodyContents responseBodyContents = new ResponseBodyContents();
 
@@ -158,14 +156,14 @@ public class HomeController {
 		// もし問い合わせに失敗した場合は、空の文字列を返す。
 		try {
 			Response<Article.Response> response = NewsApiClient.EVERYTHING.ready(this.holder.getNews(), b -> form.query(b).page(pageable.getPageNumber()).pageSize(pageable.getPageSize())).execute();
-			log.debug("{}", response.raw().request().url().toString());
+			HomeController.log.debug("{}", response.raw().request().url().toString());
 
 			if (response.isSuccessful()) {
 				final Article.Response articleResponse = Objects.nonNull(response.body()) ? response.body() : new Article.Response();
 				return ResponseBodyContents.Utils.map(articleResponse).json();
 			}
 			else {
-				log.debug("{}", response.errorBody().string());
+				HomeController.log.debug("{}", response.errorBody().string());
 			}
 		}
 		catch (IOException e) {
@@ -187,9 +185,9 @@ public class HomeController {
 	@PostMapping(Mapping.MAPPING_PORNHUBAPI)
 	@ResponseBody
 	public String postPornHub(Pageable pageable, @Validated PornhubForm form, BindingResult bindingResult) {
-		log.debug("POST {}", Mapping.MAPPING_PORNHUBAPI);
-		log.debug("Request params:{}", form);
-		log.debug("page={}, size={}", pageable.getPageNumber(), pageable.getPageSize());
+		HomeController.log.debug("POST {}", Mapping.MAPPING_PORNHUBAPI);
+		HomeController.log.debug("Request params:{}", form);
+		HomeController.log.debug("page={}, size={}", pageable.getPageNumber(), pageable.getPageSize());
 
 		final ResponseBodyContents responseBodyContents = new ResponseBodyContents();
 
@@ -205,14 +203,14 @@ public class HomeController {
 		// もし問い合わせに失敗した場合は、空の文字列を返す。
 		try {
 			Response<SearchResponse> response = PornhubApiClient.SEARCH.ready(b -> form.query(b).page(pageable.getPageNumber())).execute();
-			log.debug("{}", response.raw().request().url().toString());
+			HomeController.log.debug("{}", response.raw().request().url().toString());
 
 			if (response.isSuccessful()) {
 				final SearchResponse searchResponse = Objects.nonNull(response.body()) ? response.body() : new SearchResponse();
 				return ResponseBodyContents.Utils.map(searchResponse).json();
 			}
 			else {
-				log.debug("{}", response.errorBody().string());
+				HomeController.log.debug("{}", response.errorBody().string());
 			}
 
 		}
@@ -234,9 +232,9 @@ public class HomeController {
 	@PostMapping(Mapping.MAPPING_YOUTUBEAPI)
 	@ResponseBody
 	public String postYoutube(Pageable pageable, @Validated YoutubeForm form, BindingResult bindingResult) {
-		log.debug("POST {}", Mapping.MAPPING_YOUTUBEAPI);
-		log.debug("Request params:{}", form);
-		log.debug("page={}, size={}", pageable.getPageNumber(), pageable.getPageSize());
+		HomeController.log.debug("POST {}", Mapping.MAPPING_YOUTUBEAPI);
+		HomeController.log.debug("Request params:{}", form);
+		HomeController.log.debug("page={}, size={}", pageable.getPageNumber(), pageable.getPageSize());
 
 		final ResponseBodyContents responseBodyContents = new ResponseBodyContents();
 
@@ -277,7 +275,7 @@ public class HomeController {
 		final String filename = String.format("%s.%s", form.getVideoId(), extension);
 		final Path path = FileSystems.getDefault().getPath(Paths.get(System.getProperty("user.home"), "downloads", filename).toAbsolutePath().toString());
 
-		log.debug("path={}", path);
+		HomeController.log.debug("path={}", path);
 
 		return DownloadHelper.execute(path, form.getUrl(), form.isToMp3());
 	}

@@ -16,6 +16,7 @@ import jp.ac.hcs.mbraw.controller.AttributeEntity;
 @Service
 public class ChartService {
 
+	private static final String CHART_ENTITY = "ChartEntity";
 	private static final String URL = "https://bitflyer.com/ja-jp/bitcoin-chart";
 
 	public AttributeEntity<ChartData> getChartData() {
@@ -23,7 +24,7 @@ public class ChartService {
 
 		if (Objects.isNull(document)) {
 			// 通信に失敗した場合は、ChartEntityクラスのエラー専用のオブジェクトを返す
-			return ChartData.error();
+			return AttributeEntity.set(ChartService.CHART_ENTITY, ChartData.error());
 		}
 
 		// 通信成功したのでデータを設定する
@@ -48,10 +49,10 @@ public class ChartService {
 
 		data.setBitcoin(bitcoin);
 		data.setRate(rate);
-		data.setMaxrate(maxrate);
-		data.setMinrate(minrate);
+		data.setMaxRate(maxrate);
+		data.setMinRate(minrate);
 		data.setMarketCapitalization(market_capitalization);
 
-		return new AttributeEntity<ChartData>(, data);
+		return AttributeEntity.set(ChartService.CHART_ENTITY, data);
 	}
 }

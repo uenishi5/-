@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import lombok.NonNull;
 import lombok.Value;
 
-@Value
+@Value(staticConstructor = "set")
 public class AttributeEntity<
 	T> {
 
@@ -21,5 +21,14 @@ public class AttributeEntity<
 		}
 
 		model.addAttribute(this.getAttributeName(), this.getResponseEntity().get());
+	}
+
+	public static <
+		T> AttributeEntity<T> set(String attributeName, T responseEntity) {
+		return AttributeEntity.set(attributeName, Optional.of(responseEntity));
+	}
+
+	public static AttributeEntity<?> empty() {
+		return AttributeEntity.set("", Optional.empty());
 	}
 }

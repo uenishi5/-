@@ -1,6 +1,5 @@
 package jp.ac.hcs.mbraw.controller.chart;
 
-import jp.ac.hcs.mbraw.controller.AttributeEntity;
 import lombok.Data;
 
 @Data
@@ -23,13 +22,13 @@ public class ChartData {
 	/** エラーキャッチフラグ */
 	private boolean hasError = false;
 
-	public static AttributeEntity<ChartData> error() {
-		final ChartData chartData = new ChartData();
+	public static ChartData error() {
+		final ChartData data = new ChartData();
 
-		chartData.setMaxRate("取得できませんでした");
-		chartData.setMinRate("取得できませんでした");
-		chartData.setMarketCapitalization("取得出来ませんでした");
+		data.setMaxRate("取得できませんでした");
+		data.setMinRate("取得できませんでした");
+		data.setMarketCapitalization("取得出来ませんでした");
 
-		return chartData;
+		return data;
 	}
 }

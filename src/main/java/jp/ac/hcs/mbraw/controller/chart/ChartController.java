@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import jp.ac.hcs.config.Mapping;
+import jp.ac.hcs.mbraw.controller.AttributeEntity;
 import lombok.extern.slf4j.Slf4j;
 
 /** チャート情報を表示するコントローラー */
@@ -18,13 +19,13 @@ public class ChartController {
 
 	@GetMapping(Mapping.MAPPING_CHART)
 	public String getMainData(Model model) {
-		log.debug("GET {}", Mapping.MAPPING_CHART);
+		ChartController.log.debug("GET {}", Mapping.MAPPING_CHART);
 
-		final ChartEntity entity = this.chartService.getChartData();
+		final AttributeEntity<ChartData> entity = this.chartService.getChartData();
 
-		model.addAttribute("ChartEntity", entity);
+		entity.addAttribute(model);
 
-		model.asMap().forEach((k, v) -> log.debug("key={}, value={}", k, v));
+		model.asMap().forEach((k, v) -> ChartController.log.debug("key={}, value={}", k, v));
 
 		return Mapping.RESOURCE_CHART;
 	}
