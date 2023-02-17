@@ -184,7 +184,7 @@ public class HomeController {
 	 */
 	@PostMapping(Mapping.MAPPING_PORNHUBAPI)
 	@ResponseBody
-	public String postPornHub(Pageable pageable, @Validated PornhubForm form, BindingResult bindingResult) {
+	public String postPornHubApi(Pageable pageable, @Validated PornhubForm form, BindingResult bindingResult) {
 		HomeController.log.debug("POST {}", Mapping.MAPPING_PORNHUBAPI);
 		HomeController.log.debug("Request params:{}", form);
 		HomeController.log.debug("page={}, size={}", pageable.getPageNumber(), pageable.getPageSize());
@@ -231,7 +231,7 @@ public class HomeController {
 	 */
 	@PostMapping(Mapping.MAPPING_YOUTUBEAPI)
 	@ResponseBody
-	public String postYoutube(Pageable pageable, @Validated YoutubeForm form, BindingResult bindingResult) {
+	public String postYoutubeApI(Pageable pageable, @Validated YoutubeForm form, BindingResult bindingResult) {
 		HomeController.log.debug("POST {}", Mapping.MAPPING_YOUTUBEAPI);
 		HomeController.log.debug("Request params:{}", form);
 		HomeController.log.debug("page={}, size={}", pageable.getPageNumber(), pageable.getPageSize());
