@@ -6,7 +6,7 @@
 	<title>View in VSCode</title>
 
 	<meta charset="UTF-8">
-	
+
 	<title>MBraw</title>
 
 	<!-- モバイル設定 -->
@@ -74,10 +74,12 @@
 	<header class="p-4 sticky-top">
 		<div class="container">
 			<div class="row mb-2 d-grid align-items-center" id="aiueo">
-				<button id="logo" class="d-flex fs-3 btn">
-					<div></div>
-					<div></div>
-				</button>
+				<span id="logo" class="d-flex">
+					<button class="btn fs-3 fw-bolder">
+						<div></div>
+						<div></div>
+					</button>
+				</span>
 				<select id="theme-list" hidden>
 					<option selected data-api-name="newsapi"></option>
 					<option data-api-name="youtubeapi"></option>
@@ -281,8 +283,11 @@
 	</header>
 
 	<main class="p-4">
-		<div class="container h-100">
-			<div id="contents" class="row d-grid"></div>
+		<div id="contents" class="container h-100">
+			<div class="row"></div>
+		</div>
+		<div id="settings" class="container h-100">
+			<div class="row"></div>
 		</div>
 	</main>
 

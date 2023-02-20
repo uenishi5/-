@@ -96,9 +96,9 @@ const data = {
                 }
             })
                 .done(function (response) {
-                    $("#contents").children().remove();
+                    $("#contents > .row").children().remove();
                     response.contents.forEach(content => {
-                        $("#contents")
+                        $("#contents > .row")
                             .append($("<button>", { "class": "col item btn", "data-bs-toggle": "modal", "data-bs-target": "#item-window" })
                                 .click(function () {
                                     modal_title.children().remove();
@@ -140,9 +140,9 @@ const data = {
                 }
             })
                 .done(function (response) {
-                    $("#contents").children().remove();
+                    $("#contents > .row").children().remove();
                     response.contents.forEach(content => {
-                        $("#contents")
+                        $("#contents > .row")
                             .append($("<button>", { "class": "col item btn", "data-bs-toggle": "modal", "data-bs-target": "#item-window" })
                                 .click(function () {
                                     modal_title.children().remove();
@@ -185,9 +185,9 @@ const data = {
                 }
             })
                 .done(function (response) {
-                    $("#contents").children().remove();
+                    $("#contents > .row").children().remove();
                     response.contents.forEach(content => {
-                        $("#contents")
+                        $("#contents > .row")
                             .append($("<button>", { "class": "col item btn", "data-bs-toggle": "modal", "data-bs-target": "#item-window" })
                                 .click(function () {
                                     modal_title.children().remove();
@@ -271,7 +271,7 @@ $(window).ready(function () {
     $("body").addClass(theme_class_name);
 });
 
-$("#logo").click(function () {
+$("#logo button").click(function () {
     const localStorage_theme = localStorage.getItem("theme");
 
     const theme = $("#theme-list option[data-api-name=" + localStorage_theme + "]");
