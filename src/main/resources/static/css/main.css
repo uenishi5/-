@@ -445,10 +445,12 @@ main {
 .col.item {
     grid-template: "a a" auto "b b" auto "c d" auto / 1fr 1fr !important;
 
+    /* 
     border-radius: 10px;
     border-style: solid;
     border-width: 1px;
-    border-color: rgba(var(--border-color));
+    border-color: rgba(var(--border-color)); 
+    */
 }
 
 .col.item .iconUrl {
