@@ -36,17 +36,17 @@
     --bottom-color: 255, 255, 255, 0.5;
 }
 
-.aqua #logo button >div:first-child,
-.aqua #logo button >div:last-child {
+.aqua #logo button>div:first-child,
+.aqua #logo button>div:last-child {
     padding: 0 0.5rem;
 }
 
-.aqua #logo button >div:first-child::after {
+.aqua #logo button>div:first-child::after {
     content: url("../ITMedia.svg");
     /* でかさ調整できない */
 }
 
-.aqua #logo button >div:last-child::after {
+.aqua #logo button>div:last-child::after {
     content: "IT Media";
     white-space: nowrap;
 }
@@ -60,20 +60,20 @@
     --bottom-color: 255, 225, 225, 0.5;
 }
 
-.red #logo button   {
+.red #logo button {
     align-content: end;
 }
 
-.red #logo button >div:first-child,
-.red #logo button >div:last-child {
+.red #logo button>div:first-child,
+.red #logo button>div:last-child {
     padding: 0 0.25rem;
 }
 
-.red #logo button >div:first-child {
+.red #logo button>div:first-child {
     font-size: small;
 }
 
-.red #logo button >div:first-child::after {
+.red #logo button>div:first-child::after {
     content: "▶";
 
     font-size: larger;
@@ -85,7 +85,7 @@
     border-radius: 10px;
 }
 
-.red #logo button >div:last-child::after {
+.red #logo button>div:last-child::after {
     content: "YouTube";
 }
 
@@ -98,16 +98,16 @@
     --bottom-color: 32, 32, 64, 1;
 }
 
-.dark #logo button >div:first-child,
-.dark #logo button >div:last-child {
+.dark #logo button>div:first-child,
+.dark #logo button>div:last-child {
     padding: 0 0.25rem;
 }
 
-.dark #logo button >div:first-child::after {
+.dark #logo button>div:first-child::after {
     content: "Porn";
 }
 
-.dark #logo button >div:last-child::after {
+.dark #logo button>div:last-child::after {
     content: "hub";
 
     color: black;
@@ -143,7 +143,7 @@ body {
     --alpha1: 0.5;
     /*0.5*/
 
-    width: 100%;
+    width: 100vw;
     height: 100vh;
 
     overflow: hidden;
@@ -225,7 +225,8 @@ main {
     background-color: transparent;
     font-weight: bolder;
 }
-#logo button{
+
+#logo button {
     display: flex;
     align-items: center;
 }
@@ -324,7 +325,7 @@ main {
     align-items: center;
 }
 
-#contents > div{
+#contents>div {
     display: grid !important;
     grid-gap: 2rem;
     grid-template-columns: repeat(auto-fill, minmax(var(--min-width), 1fr));
@@ -348,16 +349,15 @@ main {
     margin-bottom: 10rem;
 }
 
-.top-screen #logo button  {
-    width: auto;
+.top-screen #logo{
     justify-content: center;
-
-    margin-bottom: 3rem;
-    margin-left: auto;
-    margin-right: auto;
 }
 
-.top-screen #logo button  div::after {
+.top-screen #logo button {
+    width: auto;
+}
+
+.top-screen #logo button div::after {
     font-size: xxx-large;
     font-weight: bolder;
 }
@@ -473,9 +473,9 @@ main {
 .col.item .title {
     grid-area: b;
     align-self: start;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .col.item .publishBy {
@@ -559,9 +559,9 @@ main {
 @media (max-width: 1200px) {
     #aiueo {
         grid-template-areas:
-            "a c"
-            "b b"
-            "d d" !important;
+            "a . c"
+            "b b b"
+            "d d d" !important;
     }
 
     #aiueo #page>ul {
@@ -788,9 +788,10 @@ div[chance-rain="0%"]>div {
 .lucky-color::before,
 .lucky-item::before,
 .lucky-color::after,
-.lucky-item::after{
+.lucky-item::after {
     width: 100%;
 }
+
 .lucky-color::before,
 .lucky-item::before {
     text-align: start;
@@ -811,7 +812,8 @@ div[chance-rain="0%"]>div {
     grid-auto-columns: 1fr;
 }
 
-@media (min-width: 1200px), (min-width: 992px) {
+@media (min-width: 1200px),
+(min-width: 992px) {
     .lucky-stars {
         grid-template-areas:
             "a b c d";
@@ -838,62 +840,62 @@ div[stars] {
     display: flex;
 }
 
-div[stars]::before {
-    color: gold;
-}
+    div[stars]::before {
+        color: gold;
+    }
 
-div[stars]::after {
-    color: gray;
-}
+    div[stars]::after {
+        color: gray;
+    }
 
-div[stars="0"]::before {
-    content: "";
-}
+    div[stars="0"]::before {
+        content: "";
+    }
 
-div[stars="0"]::after {
-    content: "★★★★★";
-}
+    div[stars="0"]::after {
+        content: "★★★★★";
+    }
 
-div[stars="1"]::before {
-    content: "★";
-}
+    div[stars="1"]::before {
+        content: "★";
+    }
 
-div[stars="1"]::after {
-    content: "★★★★";
-}
+    div[stars="1"]::after {
+        content: "★★★★";
+    }
 
-div[stars="2"]::before {
-    content: "★★";
-}
+    div[stars="2"]::before {
+        content: "★★";
+    }
 
-div[stars="2"]::after {
-    content: "★★★";
-}
+    div[stars="2"]::after {
+        content: "★★★";
+    }
 
-div[stars="3"]::before {
-    content: "★★★";
-}
+    div[stars="3"]::before {
+        content: "★★★";
+    }
 
-div[stars="3"]::after {
-    content: "★★";
-}
+    div[stars="3"]::after {
+        content: "★★";
+    }
 
-div[stars="4"]::before {
-    content: "★★★★";
-}
+    div[stars="4"]::before {
+        content: "★★★★";
+    }
 
-div[stars="4"]::after {
-    content: "★";
-}
+    div[stars="4"]::after {
+        content: "★";
+    }
 
-div[stars="5"]::before {
-    content: "★★★★★";
-}
+    div[stars="5"]::before {
+        content: "★★★★★";
+    }
 
-div[stars="5"]::after {
-    content: "";
-}
-
+    div[stars="5"]::after {
+        content: "";
+    }
+F
 #main-divination section.hovering {
     display: block;
 }

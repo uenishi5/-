@@ -20,57 +20,43 @@ public class WeatherAlertService {
 
 	private static String URL = "https://typhoon.yahoo.co.jp/weather/jp/warn/1b/1100/";
 
-	/** メイン画面用警報・注意報取得 */
-	public WeatherAlertEntity getMainWeather_alertData() {
+	/**
+	 * URL(https://typhoon.yahoo.co.jp/weather/jp/warn/1b/1100/)に接続してスクレイピングを行う。
+	 * 
+	 * 
+	 * @param isMain メイン画面用にデータを変換をするか
+	 * @return isMainがtrueの場合は、メイン画面に合わせた必要最低限のデータを返す。
+	 */
+	public WeatherAlertEntity getWeatherAlertEntity(boolean isMain) {
 		final Document document = HttpConnectUtils.getDocument(URL);
 
 		if (Objects.isNull(document)) {
 			return WeatherAlertEntity.error();
 		}
 
-		final WeatherAlertEntity entity = new WeatherAlertEntity();
-
-		final Elements getalert = document.select(".warnDetail_head");
-		final String[] alert = getalert.text().split(" ");
-		if (alert[1].equals("発表なし")) {
-			WeatherAlertData data = new WeatherAlertData();
-			data.setName(alert[1]);
-			entity.getWeather_alertnameList().add(data);
-			data.setAlert_color(AlertColor.WHITE);
+		WeatherAlertEntity weatherAlertEntity = null;
+		
+		if (isMain) {
+			weatherAlertEntity = this.mappingForMain(document);
+		} else {
+			weatherAlertEntity = this.mapping(document);
 		}
-		else {
-			int alertcount = alert.length;
-			for (int idx = 1; idx < alertcount; idx++) {
-				WeatherAlertData data = new WeatherAlertData();
-				if ((alert[idx].matches(".*注意報"))) {
-					data.setName(alert[idx].replace("注意報", ""));
-
-					data.setAlert_color(AlertColor.YELLOW);
-				}
-				else if ((alert[idx].matches(".*警報"))) {
-					data.setName(alert[idx].replace("警報", ""));
-
-					data.setAlert_color(AlertColor.RED);
-				}
-				else if ((alert[idx].matches(".*特別警報"))) {
-					data.setName(alert[idx].replace("特別警報", ""));
-
-					data.setAlert_color(AlertColor.BLACK);
-				}
-				entity.getWeather_alertnameList().add(data);
-			}
+		
+		
+		// スクレイピング処理ご無事に変換できてる場合なら
+		// nullが入っていないはずである
+		// それ以外の場合は null が入ってる可能性がある
+		// この分岐で確認する　戻り値にはエラー専用のオブジェクトを設定する。
+		if (Objects.isNull(weatherAlertEntity)) {
+			return WeatherAlertEntity.error();
 		}
-		return entity;
+		
+		return weatherAlertEntity;
 	}
 
 	/** 警報注意報を取得するメソッド */
-	public WeatherAlertEntity getWeather_alertData() {
-		final Document document = HttpConnectUtils.getDocument(URL);
 
-		if (Objects.isNull(document)) {
-			return WeatherAlertEntity.error();
-		}
-
+	private WeatherAlertEntity mapping(Document document) {
 		final WeatherAlertEntity entity = new WeatherAlertEntity();
 		Elements getalert = document.select(".warnDetail_head");
 		Elements getalert2 = document.select(".warnDetail_timeTable");
@@ -94,8 +80,7 @@ public class WeatherAlertService {
 			data.setName(alert[1]);
 			data.setAlert_color(AlertColor.WHITE);
 			entity.getWeather_alertnameList().add(data);
-		}
-		else { // 警報が存在する場合、中に入る
+		} else { // 警報が存在する場合、中に入る
 			String[] alertdata = getalert2.text().split(" ");
 			int alertcount = alert.length;
 			int alertlength = alertdata.length;
@@ -113,12 +98,10 @@ public class WeatherAlertService {
 				if ((alert[idx].matches(".*注意報"))) { // 注意報の場合、文字列から注意報を削除して、黄色をセットする
 					data.setName(alert[idx].replace("注意報", ""));
 					data.setAlert_color(AlertColor.YELLOW);
-				}
-				else if ((alert[idx].matches(".*警報"))) { // 警報の場合、文字列から警報を削除して、赤色をセットする
+				} else if ((alert[idx].matches(".*警報"))) { // 警報の場合、文字列から警報を削除して、赤色をセットする
 					data.setName(alert[idx].replace("警報", ""));
 					data.setAlert_color(AlertColor.RED);
-				}
-				else if ((alert[idx].matches(".*特別警報"))) { // 特別警報の場合、文字列から特別警報を削除して、黒色をセットする
+				} else if ((alert[idx].matches(".*特別警報"))) { // 特別警報の場合、文字列から特別警報を削除して、黒色をセットする
 					data.setName(alert[idx].replace("特別警報", ""));
 					data.setAlert_color(AlertColor.BLACK);
 				}
@@ -137,8 +120,7 @@ public class WeatherAlertService {
 				alertnamecount = 5;
 				alertlabel = 7;
 				// 2段目の表が存在する場合、添え字を調整して日付をdataにセットする
-			}
-			else if (weatherflg) {
+			} else if (weatherflg) {
 				for (int idx = 0, arrayIdx = 4; idx < 4; idx++, arrayIdx++) {
 					date.getLowerAlertList().get(idx).setAlertData(days[arrayIdx]);
 				}
@@ -207,7 +189,8 @@ public class WeatherAlertService {
 						// 不具合があった場合、添え字を調整してエラーフラグをtrueにする
 						if (alertdata[alertlabel].equals("発表なし")) {
 
-							addAlertData(AlertColor.WHITE, alertdatalist, alertclasslist, errorflg, alertnamecount, alertlabel, alertdata);
+							addAlertData(AlertColor.WHITE, alertdatalist, alertclasslist, errorflg, alertnamecount,
+									alertlabel, alertdata);
 							// 要素をdatalistにセットする
 							// alertdatalist.add(alertdata[alertlabel]);
 							// // 要素に対応した色をclasslistにセットする
@@ -218,33 +201,32 @@ public class WeatherAlertService {
 							// alertlabel = alertlabel + 1;
 							// alertnamecount = alertnamecount - 1;
 							// 以下のelse if文は上記と同様の動作
-						}
-						else if (alertdata[alertlabel].equals("注意報級")) {
-							addAlertData(AlertColor.YELLOW, alertdatalist, alertclasslist, errorflg, alertnamecount, alertlabel, alertdata);
+						} else if (alertdata[alertlabel].equals("注意報級")) {
+							addAlertData(AlertColor.YELLOW, alertdatalist, alertclasslist, errorflg, alertnamecount,
+									alertlabel, alertdata);
 							// alertdatalist.add(alertdata[alertlabel]);
 							// alertclasslist.add(AlertColor.YELLOW);
 							// errorflg = true;
 							// alertlabel = alertlabel + 1;
 							// alertnamecount = alertnamecount - 1;
-						}
-						else if (alertdata[alertlabel].equals("警報級")) {
-							addAlertData(AlertColor.RED, alertdatalist, alertclasslist, errorflg, alertnamecount, alertlabel, alertdata);
+						} else if (alertdata[alertlabel].equals("警報級")) {
+							addAlertData(AlertColor.RED, alertdatalist, alertclasslist, errorflg, alertnamecount,
+									alertlabel, alertdata);
 							// alertdatalist.add(alertdata[alertlabel]);
 							// alertclasslist.add(AlertColor.RED);
 							// errorflg = true;
 							// alertlabel = alertlabel + 1;
 							// alertnamecount = alertnamecount - 1;
-						}
-						else if (alertdata[alertlabel].equals("特別警報級")) {
-							addAlertData(AlertColor.BLACK, alertdatalist, alertclasslist, errorflg, alertnamecount, alertlabel, alertdata);
+						} else if (alertdata[alertlabel].equals("特別警報級")) {
+							addAlertData(AlertColor.BLACK, alertdatalist, alertclasslist, errorflg, alertnamecount,
+									alertlabel, alertdata);
 							// alertdatalist.add(alertdata[alertlabel]);
 							// alertclasslist.add(AlertColor.BLACK);
 							// errorflg = true;
 							// alertlabel = alertlabel + 1;
 							// alertnamecount = alertnamecount - 1;
 							// ここまで
-						}
-						else {
+						} else {
 							alertlabel = alertlabel + 1; // 不具合が存在しなかった場合、添え字を調整する
 						}
 						// 不具合が存在しなかった場合、通常通りに要素を取得する
@@ -264,8 +246,7 @@ public class WeatherAlertService {
 							// }
 						}
 						// １～９の要素の場合
-					}
-					else {
+					} else {
 						// 要素をdatalistにセットする
 						alertdatalist.add(alertdata[alertlabel]);
 
@@ -330,8 +311,7 @@ public class WeatherAlertService {
 					// 添え字の調整
 					alertnamecount = alertnamecount + 21;
 					alertlabel = alertlabel + 3;
-				}
-				else {
+				} else {
 					break;
 				}
 			}
@@ -410,10 +390,45 @@ public class WeatherAlertService {
 		// 例外処理 entity.setError(true);
 
 		return entity;
-
 	}
 
-	public static void addAlertData(AlertColor alertColor, List<String> alertdatalist, List<AlertColor> alertclasslist, boolean errorflg, int alertnamecount, int alertlabel, String[] alertdata) {
+	/** メイン画面用警報・注意報取得 */
+
+	private WeatherAlertEntity mappingForMain(Document document) {
+		final WeatherAlertEntity entity = new WeatherAlertEntity();
+
+		final Elements getalert = document.select(".warnDetail_head");
+		final String[] alert = getalert.text().split(" ");
+		if (alert[1].equals("発表なし")) {
+			WeatherAlertData data = new WeatherAlertData();
+			data.setName(alert[1]);
+			entity.getWeather_alertnameList().add(data);
+			data.setAlert_color(AlertColor.WHITE);
+		} else {
+			int alertcount = alert.length;
+			for (int idx = 1; idx < alertcount; idx++) {
+				WeatherAlertData data = new WeatherAlertData();
+				if ((alert[idx].matches(".*注意報"))) {
+					data.setName(alert[idx].replace("注意報", ""));
+
+					data.setAlert_color(AlertColor.YELLOW);
+				} else if ((alert[idx].matches(".*警報"))) {
+					data.setName(alert[idx].replace("警報", ""));
+
+					data.setAlert_color(AlertColor.RED);
+				} else if ((alert[idx].matches(".*特別警報"))) {
+					data.setName(alert[idx].replace("特別警報", ""));
+
+					data.setAlert_color(AlertColor.BLACK);
+				}
+				entity.getWeather_alertnameList().add(data);
+			}
+		}
+		return entity;
+	}
+
+	public static void addAlertData(AlertColor alertColor, List<String> alertdatalist, List<AlertColor> alertclasslist,
+			boolean errorflg, int alertnamecount, int alertlabel, String[] alertdata) {
 		alertdatalist.add(alertdata[alertlabel]);
 		alertclasslist.add(alertColor);
 		errorflg = true;

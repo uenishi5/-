@@ -2,7 +2,7 @@ package jp.ac.hcs.mbraw.controller.chart;
 
 import lombok.Data;
 
-@Data
+@Data(staticConstructor = "empty")
 public class ChartData {
 	/** ビットコインの現在価値を格納 */
 	private String bitcoin;

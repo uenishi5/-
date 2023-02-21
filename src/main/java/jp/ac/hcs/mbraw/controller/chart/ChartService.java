@@ -28,7 +28,7 @@ public class ChartService {
 		}
 
 		// 通信成功したのでデータを設定する
-		final ChartData data = new ChartData();
+		final ChartData data = ChartData.empty();
 
 		/** 現在のビットコインの価値と、前回との差を取得する */
 		final Elements bitcoin_rate = document.select(".p-currencyInfo__head");

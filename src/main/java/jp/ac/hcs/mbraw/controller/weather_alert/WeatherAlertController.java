@@ -20,7 +20,7 @@ public class WeatherAlertController {
 	public String getMainData(Model model) {
 		log.debug("GET {}", Mapping.MAPPING_WEATHER_ALERT);
 
-		final WeatherAlertEntity entity = this.weatherAlertService.getWeather_alertData();
+		final WeatherAlertEntity entity = this.weatherAlertService.getWeatherAlertEntity(false);
 		final WeatherAlertData data = entity.getWeather_alertnameList().get(0);
 		final String name = data.getName();
 		if (!(name.equals("発表なし"))) {

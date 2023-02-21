@@ -31,7 +31,6 @@ import jp.ac.hcs.config.Mapping;
 import jp.ac.hcs.mbraw.DownloadHelper;
 import jp.ac.hcs.mbraw.ResponseBodyContents;
 import jp.ac.hcs.mbraw.YouTubeInstance;
-import jp.ac.hcs.mbraw.controller.chart.ChartData;
 import jp.ac.hcs.mbraw.controller.chart.ChartService;
 import jp.ac.hcs.mbraw.controller.horoscope.HoroscopeEntity;
 import jp.ac.hcs.mbraw.controller.horoscope.HoroscopeService;
@@ -106,13 +105,12 @@ public class HomeController {
 
 		// 札幌の警報を取得
 		final WeatherAlertEntity weatherAlertEntity = new WeatherAlertEntity();
-		final WeatherAlertData weatherAlertData = this.weatherAlertService.getMainWeather_alertData().getWeather_alertnameList().get(0);
+		final WeatherAlertData weatherAlertData = this.weatherAlertService.getWeatherAlertEntity(true).getWeather_alertnameList().get(0);
 		weatherAlertEntity.getWeather_alertnameList().add(weatherAlertData);
 		model.addAttribute("Weather_alertEntity", weatherAlertEntity);
 
 		// ビットコインチャートを取得
-		final AttributeEntity<ChartData> chartEntity = this.chartService.getChartData();
-		chartEntity.addAttribute(model);
+		this.chartService.getChartData().addAttribute(model);
 
 		// 札幌市のバス情報取得
 		final TrafficData trafficData = this.trafficService.getMainTrafficData().getTrafficflgList().get(0);
