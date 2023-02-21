@@ -725,7 +725,7 @@ div[chance-rain="0%"]>div {
 }
 
 .content {
-    grid-area: e;
+    grid-area: c;
 
     border-color: rgba(var(--border-color));
 
@@ -749,9 +749,7 @@ div[chance-rain="0%"]>div {
     content: "の今日の運勢";
 }
 
-.lucky-item {
-    grid-area: c;
-
+.lucky-info > div {
     display: flex;
     width: 100%;
 }
@@ -762,13 +760,6 @@ div[chance-rain="0%"]>div {
 
 .lucky-item::after {
     content: attr(lucky-item-value);
-}
-
-.lucky-color {
-    grid-area: d;
-
-    display: flex;
-    width: 100%;
 }
 
 .lucky-color::before {
@@ -814,10 +805,16 @@ div[chance-rain="0%"]>div {
 
 @media (min-width: 1200px),
 (min-width: 992px) {
-    .lucky-stars {
-        grid-template-areas:
-            "a b c d";
+    #sign-detail {
+        grid-template:
+            "a c" auto
+            "b d" auto/ 1fr 1fr !important;
     }
+    .content{
+        border-top: 0px;
+        border-bottom: 0px;
+    }
+    
 }
 
 .stars.total {
@@ -895,7 +892,7 @@ div[stars] {
     div[stars="5"]::after {
         content: "";
     }
-F
+
 #main-divination section.hovering {
     display: block;
 }
@@ -906,9 +903,70 @@ F
     grid-template:
         "a"
         "b"
-        "e"
         "c"
         "d";
 
     grid-auto-columns: 100%;
 }
+
+.lucky-info{
+    grid-area: d;
+}
+
+#main-chart section{
+    white-space: nowrap;
+    display: grid;
+    grid-template-areas: "a b";
+}
+
+#main-chart section div {
+    width: auto;
+    text-align: center;
+}
+
+@media (max-width: 1200px){
+    #main-chart section{
+        grid-template-areas: 
+            "a"
+            "b";
+    }
+
+    .chart-info *{
+        width: 100% !important;
+    }
+
+        .chart-info > div > div:first-child {
+            text-align: start !important;
+        }
+        .chart-info > div > div:last-child {
+            text-align: end !important;
+        }
+}
+
+
+@media (max-width: 768px){
+    .chart-info{
+        display: none !important;
+    }
+}
+
+.chart-head{
+    grid-area: a;
+}
+
+.chart-info{
+    grid-area: b;
+    margin-top: 0.5rem;
+}
+    .chart-info > div{
+        display:flex;
+        flex-direction: row !important;
+    }
+    @media (min-width: 1200px){
+        .chart-info > div{
+            margin-top: 0.5rem;
+            flex-direction: column !important;
+            text-align: center !important; 
+        }
+    }
+    

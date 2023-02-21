@@ -23,7 +23,7 @@ public class ChartController {
 
 		final AttributeEntity<ChartData> entity = this.chartService.getChartData();
 
-		model.addAttribute("chartEntity",entity.getResponseEntity().get());
+		entity.addAttribute(model);
 
 		model.asMap().forEach((k, v) -> ChartController.log.debug("key={}, value={}", k, v));
 

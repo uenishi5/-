@@ -39,8 +39,8 @@
 	<div class="chart-context">
 		<nobr><p class="subtitle">・ビットコイン（Bitcoin）/日本円のチャート</p></nobr>
 		<!-- 現在チャートの表示 -->
-		<p class="chart-value"><span th:text="${chartEntity.bitcoin}"></span></p>
-		<p class="chart-difference"><span th:text="${chartEntity.rate}"></span>%</p>
+		<p class="chart-value"><span th:text="${ChartEntity.bitcoin}"></span></p>
+		<p class="chart-difference"><span th:text="${ChartEntity.rate}"></span>%</p>
 	</div>
 	
 	<!-- レートの上がり下がりの表示 -->
@@ -51,11 +51,11 @@
 		<p class="value-name">時間総額</p> 
 	
 	<!-- 最高値 -->
-		<p><span th:text="${chartEntity.maxRate}"></span></p>
+		<p><span th:text="${ChartEntity.maxRate}"></span></p>
 	<!-- 最安値 -->
-		<p><span th:text="${chartEntity.minRate}"></span></p> 
+		<p><span th:text="${ChartEntity.minRate}"></span></p> 
 	<!-- 時価総額 -->
-		<p><span th:text="${chartEntity.marketCapitalization}"></span></p>
+		<p><span th:text="${ChartEntity.marketCapitalization}"></span></p>
 			
 		<p>円</p>
 		<p>円</p>

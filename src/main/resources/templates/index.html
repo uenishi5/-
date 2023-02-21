@@ -249,13 +249,15 @@
 							</div>
 							<div class="stars job">
 								<div>仕事運</div>
-								<div></div>
+								<div starts="5"></div>
 							</div>
 						</div>
-
+						
 						<div class="my-4 p-4 content"></div>
-						<div class="mt-2 lucky-item" lucky-item-label="ラッキーアイテム" lucky-item-value="ほうき"></div>
-						<div class="mt-2 lucky-color" lucky-color-label="ラッキーカラー" lucky-color-value="赤"></div>
+						<div class="lucky-info">
+							<div class="mt-2 lucky-item" lucky-item-label="ラッキーアイテム" lucky-item-value="ほうき"></div>
+							<div class="mt-2 lucky-color" lucky-color-label="ラッキーカラー" lucky-color-value="赤"></div>
+						</div>
 					</section>
 				</div>
 
@@ -273,9 +275,26 @@
 				<div class="col tile" id="main-chart" th:object="${ChartEntity}">
 					<div class="title">チャート</div>
 					<section>
-						<div>Bitcoin/日本円</div>
-						<span th:text="*{bitcoin}"></span>
-						<span th:text="*{rate}"></span>
+						<div class="chart-head">
+							<div>Bitcoin/日本円</div>
+							<span th:text="*{bitcoin}"></span>
+							<span th:text="*{rate}"></span>
+						</div>
+
+						<div class="chart-info">
+							<div>
+								<div>最高値(24時間)</div>
+								<div th:text="*{maxRate}"></div>
+							</div>
+							<div>
+								<div>最安値(24時間)</div>
+								<div th:text="*{minRate}"></div>
+							</div>
+							<div>
+								<div>時間総額</div>
+								<div th:text="*{marketCapitalization}"></div>
+							</div>
+						</div>
 					</section>
 				</div>
 			</div>
