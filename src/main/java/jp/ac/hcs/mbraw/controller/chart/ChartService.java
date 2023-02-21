@@ -1,5 +1,6 @@
 package jp.ac.hcs.mbraw.controller.chart;
 
+import java.util.List;
 import java.util.Objects;
 
 import org.jsoup.nodes.Document;
@@ -8,11 +9,13 @@ import org.springframework.stereotype.Service;
 
 import jp.ac.hcs.mbraw.HttpConnectUtils;
 import jp.ac.hcs.mbraw.controller.AttributeEntity;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Bitcoinのチャート情報を取得するサービス
  *
  */
+@Slf4j
 @Service
 public class ChartService {
 
@@ -31,27 +34,30 @@ public class ChartService {
 		final ChartData data = ChartData.empty();
 
 		/** 現在のビットコインの価値と、前回との差を取得する */
-		final Elements bitcoin_rate = document.select(".p-currencyInfo__head");
+		// css(. p-currencyInfo__head) を指定されているタグを取得
+		final Elements elementHeadRate = document.select(".p-currencyInfo__head");
+		log.debug(elementHeadRate.text());
 
 		/** 過去２４時間の最高値と最低値、時価総額を取得する */
-		final Elements max_minrate = document.select(".p-currencyInfo__info");
-
+		final Elements elementInfoRate = document.select(".p-currencyInfo__info");
+		log.debug(elementInfoRate.text());
+		
+		
 		/** 現在のビットコインの価値と、前回との差を格納する */
-		final String[] bitcoin_ratelist = bitcoin_rate.text().split(" ");
-		final String bitcoin = bitcoin_ratelist[0].replace("※", " ");
-		final String rate = bitcoin_ratelist[1];
+		final String bitcoin = 	elementHeadRate.select(".p-currencyInfo__price.c-text--number").eachText().get(0).replace("※","");
+		final String rate = 	elementHeadRate.select(".c-rate.up.p-currencyInfo__rate").eachText().get(0);
 
 		/** 過去２４時間の最高値と最低値、時価総額を格納する */
-		final String[] max_minratelist = max_minrate.text().split(" ");
-		final String maxrate = max_minratelist[3];
-		final String minrate = max_minratelist[5];
-		final String market_capitalization = max_minratelist[7];
+		final List<String> infoRateList =elementInfoRate.select(".p-currencyInfo__table__td").eachText();
+		final String maxRate = infoRateList.get(0);
+		final String minRate = infoRateList.get(1);
+		final String marketCapitalization = infoRateList.get(2);
 
 		data.setBitcoin(bitcoin);
 		data.setRate(rate);
-		data.setMaxRate(maxrate);
-		data.setMinRate(minrate);
-		data.setMarketCapitalization(market_capitalization);
+		data.setMaxRate(maxRate);
+		data.setMinRate(minRate);
+		data.setMarketCapitalization(marketCapitalization);
 
 		return AttributeEntity.set(ChartService.CHART_ENTITY, data);
 	}
